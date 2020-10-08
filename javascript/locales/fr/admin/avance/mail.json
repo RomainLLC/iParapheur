@@ -1,0 +1,17 @@
+{
+  "Admin": {
+    "Avance": {
+      "Mail": {
+        "title": "Configuration du connecteur mail-Service",
+        "enable": "Activer le connecteur",
+        "disable": "Désactiver le connecteur",
+        "id": "Identifiant de connexion",
+        "passwd": "Mot de passe",
+        "msg_server": "Serveur de Messagerie",
+        "server_port": "Port du serveur",
+        "base_directory": "Répertoire de base",
+        "save": "Enregistrer la configuration"
+      }
+    }
+  }
+}

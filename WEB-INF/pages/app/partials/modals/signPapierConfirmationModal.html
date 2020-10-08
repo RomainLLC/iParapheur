@@ -1,0 +1,23 @@
+<div class="modal-header">
+    <h3>{{'signPapeConfirmationModal.paper_signature_confirmation' | translate}}</h3>
+</div>
+<div class="modal-body row">
+    <p>{{'signPapeConfirmationModal.do_you_really_want_change_signature_to_paper_signature' | translate}}</p>
+    <p>{{'signPapeConfirmationModal.link_to_the_document_to_print' | translate}} :
+        <a target="_blank" href="{{context}}/proxy/alfresco/api/node/workspace/SpacesStore/{{dossier.documents[0].id}}/content/{{dossier.documents[0].name}}">
+            <i class="fa fa-file"></i>
+            {{dossier.documents[0].name}}
+        </a>
+    </p>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-warning" ng-click="cancel()">
+        <i class="fa fa-times-circle-o"></i>
+        {{'Back' | translate}}
+    </button>
+    <button class="btn btn-primary" ng-click="ok()">
+        <i class="fa fa-check"></i>
+        {{'Confirm' | translate}}
+    </button>
+</div>

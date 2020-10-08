@@ -1,0 +1,30 @@
+{
+  "archives": {
+    "are_you_sure_you_want_to_delete_the_filter_": "Are you sure you want to delete the filter : ",
+    "None": "None",
+    "type": "from type",
+    "subtype": "from subtype",
+    "active_filter": "Active filter",
+    "save_current_filter": "Saving current filter",
+    "delete_selected_filter": "Deleting selected filter",
+    "select_a_filter_to_edit": "Select a filter to edit",
+    "select_a_filter_to_create": "Select a filter to create",
+    "current_advanced_filder": "Current advanced filter",
+    "available_filters": "Available filters",
+    "creation_date": "Creation date",
+    "choose_a_name_for_your_filter": "Choose a name for your filter",
+    "saving_filter": "Saving filter",
+    "deleting_filter_": "Deleting filter : ",
+    "from": "From",
+    "until": "until",
+    "searching": "Searching",
+    "in": "in",
+    "current_page": "Current page",
+    "apply_filter": "Apply filter",
+    "No_filter": "No filter",
+    "Unsaved_filter": "Unsaved filter",
+    "with": "with",
+    "true": "true",
+    "false": "falsa"
+  }
+}

@@ -1,0 +1,132 @@
+<div >
+    <div class="container-fluid">
+    <h2 class="underscore">{{'Options.Notif_Title' | translate}}</h2>
+    <form ng-class="{launched: !notifications.changed}">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="block">
+                        {{'Notif_Mail' | translate}}
+                        <i class="fa fa-info-circle" tooltip="{{'Notif_Helper' | translate}}"></i>
+                        <input type="text" ng-change="notifications.cronDidChange()" class="form-control col-md-12" ng-model="notifications.mail" id="email" name="email" />
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="small"><strong>{{'Notif_Freq' | translate}}</strong></h3>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <div class="radio">
+                            <label>
+                                <input class="unvalidate" ng-change="notifications.cronDidChange()" type="radio" name="notif-radio" id="radio-never" value="never" ng-model="notifications.mode" />
+                                {{'Notif_None' | translate}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <div class="radio">
+                            <label>
+                                <input class="unvalidate" ng-change="notifications.cronDidChange()" type="radio" name="notif-radio" id="radio-always" value="always" ng-model="notifications.mode" />
+                                {{'Notif_Unit' | translate}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <div class="radio">
+                            <label>
+                                <input class="unvalidate" ng-change="notifications.cronDidChange()" type="radio" name="notif-abo-radio" value="hourly" ng-model="notifications.mode">
+                                {{'Notif_Every' | translate}}
+                            </label>
+                            <div style="width:auto; display:inline-block;">
+                                <select class="unvalidate form-control" ng-change="notifications.cronDidChange()" ng-model="notifications.cron.hourly">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="6">6</option>
+                                    <option value="12">12</option>
+                                </select>
+                            </div>
+                            {{'Notif_Hour' | translate}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <div class="radio">
+                            <label>
+                                <input class="unvalidate" ng-change="notifications.cronDidChange()" type="radio" name="notif-abo-radio" value="daily" ng-model="notifications.mode">
+                                {{'Notif_daily' | translate}}
+                            </label>
+                            <div style="width:auto; display:inline-block;">
+                                <select class="unvalidate form-control" ng-change="notifications.cronDidChange()" ng-model="notifications.cron.daily">
+                                    <option value="0">0h</option>
+                                    <option value="1">1h</option>
+                                    <option value="2">2h</option>
+                                    <option value="3">3h</option>
+                                    <option value="4">4h</option>
+                                    <option value="5">5h</option>
+                                    <option value="6">6h</option>
+                                    <option value="7">7h</option>
+                                    <option value="8">8h</option>
+                                    <option value="9">9h</option>
+                                    <option value="10">10h</option>
+                                    <option value="11">11h</option>
+                                    <option value="12">12h</option>
+                                    <option value="13">13h</option>
+                                    <option value="14">14h</option>
+                                    <option value="15">15h</option>
+                                    <option value="16">16h</option>
+                                    <option value="17">17h</option>
+                                    <option value="18">18h</option>
+                                    <option value="19">19h</option>
+                                    <option value="20">20h</option>
+                                    <option value="21">21h</option>
+                                    <option value="22">22h</option>
+                                    <option value="23">23h</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <div class="radio">
+                            <label>
+                                <input class="unvalidate" ng-change="notifications.cronDidChange()" type="radio" name="notif-abo-radio" value="weekly" ng-model="notifications.mode">
+                                {{'Notif_weekly' | translate}}
+                            </label>
+                            <div style="width:auto; display:inline-block;">
+                                <select class="unvalidate form-control" ng-change="notifications.cronDidChange()" ng-model="notifications.cron.weekly">
+                                    <option value="1">{{'Mon' | translate}}</option>
+                                    <option value="2">{{'Tue' | translate}}</option>
+                                    <option value="3">{{'Wed' | translate}}</option>
+                                    <option value="4">{{'Thu' | translate}}</option>
+                                    <option value="5">{{'Fri' | translate}}</option>
+                                    <option value="6">{{'Sat' | translate}}</option>
+                                    <option value="7">{{'Sun' | translate}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span ng-click="notifications.saveCronPrefs()" class="btn btn-primary">
+            <i class="fa fa-floppy-o"></i>
+            {{'Options.Dash_Save' | translate}}</span>
+        <button class="btn btn-primary" disabled>
+            <i class="fa fa-floppy-o"></i>
+            {{'Options.Dash_Save' | translate}}</button>
+        <span class="alert alert-success" ng-show="!notifications.changed && notifications.saved">{{'Options.Dash_Success' | translate}}</span>
+        <span class="alert alert-danger" ng-show="!notifications.changed && notifications.error">{{notifications.error}}</span>
+    </form>
+    </div>
+</div>

@@ -1,0 +1,15 @@
+{
+  "chainModal": {
+    "circuit_chaining": "Enchaîner un circuit",
+    "type_selection": "Selection du Type",
+    "subtype_selection": "Selection du Sous-Type",
+    "you_should_set_metadata_before_reloading_the_circuit": "Merci de renseigner les métadonnées avant de pouvoir recharger le circuit",
+    "circuit_selection_script_detected": "Script de sélection de circuit détecté.",
+    "reload_circuit": "Recharger le circuit",
+    "type": "Type",
+    "subtype": "Sous-Type",
+    "validation_circuit": "Circuit de validation",
+    "once_chain_set_you_have_to_validate_the_folder_transfer_it": "Une fois l'enchainement de circuit effectué, vous devrez valider le dossier pour qu'il soit inséré dans le circuit.",
+    "chain_circuit": "Enchaîner un circuit"
+  }
+}

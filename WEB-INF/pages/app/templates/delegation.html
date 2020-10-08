@@ -1,0 +1,104 @@
+<div class="container delegationPage">
+    <div ng-if="!loaded">
+        <div style="top:100px;" class="nextDossierInfo">
+        <span class="text text-info">
+            <i class="fa fa-info-circle"></i> {{'delegation.Retrieving_current_delegation' | translate}}
+        </span>
+            <span style="position: relative; width: 0px; z-index: 2000000000; right: 120px; top: 100px;" us-spinner="{radius:20, width:8, length: 16}" ></span>
+        </div>
+    </div>
+
+    <div class="page-header" ng-if="loaded">
+        <h1>{{'delegation.Delegation' | translate}}</h1>
+    </div>
+
+    <div class="col-md-3">
+        <legend>Etat actuel :
+            <span ng-if="delegationEnabled">
+                <span class="label label-success" ng-if="when === 'present'">{{'Activated' | translate}}</span>
+                <span class="label label-warning" ng-if="when === 'past'">{{'delegation.Past' | translate}}</span>
+                <span class="label label-info" ng-if="when === 'future'">{{'delegation.Upcoming' | translate}}</span>
+            </span>
+            <span class="label label-danger" ng-show="!delegationEnabled">{{'Desactivated' | translate}}</span>
+        </legend>
+    </div>
+
+    <div class="col-md-9" ng-if="loaded">
+        <div>
+            <label style="" ng-class="delegationActivated ? 'text-danger' : 'text-success'" for="activatedDelegation">
+                <i ng-if="!delegationActivated" class="fa fa-2x fa-toggle-off"></i>
+                <i ng-if="delegationActivated" class="fa fa-2x fa-toggle-on"></i>
+                <span ng-if="!delegationActivated">{{'Admin.Bureaux.BuMod_Deleg_Enable' | translate}}</span>
+                <span ng-if="delegationActivated">Désactiver la délégation</span>
+                <input style="display: none;" class="unvalidate" id="activatedDelegation" type="checkbox" ng-click="selectedDelegation.idCible = undefined" ng-model="delegationActivated">
+            </label>
+        </div>
+        <form name="delegation" ng-show="delegationActivated">
+            <div class="form-group">
+                <label class="control-label" for="parapheurCible">{{'delegation.Target_desk' | translate}}</label>
+                <div class="input-group">
+                    <div class="right-inner-addon">
+                        <i class="fa fa-question-circle" tooltip-trigger="click" tooltip-placement="bottom" tooltip="{{'Admin.Dossiers.Find_Desk_Info' | translate}}"></i>
+                        <input id="parapheurCible" type="text" class="form-control unvalidate" ng-model="selectedBureauForDelegation" placeholder="{{'Admin.Dossiers.Find_Desk' | translate}}"
+                               typeahead="b as b.title for b in bureau.associes | filter:$viewValue | limitTo:5"
+                               typeahead-on-select="checkDelegation($item)"
+                               name="parapheurCible" required>
+                    </div>
+
+                    <span class="input-group-addon" style="opacity:0.7;" ng-class="!!selectedBureauForDelegation.id ? 'label-success' : 'label-warning'">
+                        {{!!selectedBureauForDelegation.id ? ('Admin.Dossiers.Find_Desk_Sel' | translate) : ('Admin.Dossiers.Find_Desk_None' | translate)}}
+                    </span>
+                </div>
+            </div>
+            <div class="form-group" >
+                <label class="control-label" for="delegationFrom">{{'delegation.Start_date' | translate}}</label>
+                    <div class="input-group col-md-6">
+                        <input type="text" id="delegationFrom" ng-change="checkDelegation()" min-date="0" from="true" name="delegationFrom" linked="#delegationTo" return-format="timestamp" ng-model="selectedDelegation['date-debut-delegation']" class="form-control unvalidate" ip-datepicker ng-required="delegationActivated" readonly='true'/>
+                        <span ng-if="!!selectedDelegation['date-debut-delegation']" ng-click="selectedDelegation['date-debut-delegation'] = undefined"
+                              class="pointer input-group-addon">
+                            <i class="fa fa-times"></i>
+                        </span>
+                        <label for="delegationFrom" ng-if="!selectedDelegation['date-debut-delegation']" class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </label>
+                    </div>
+                    <div class="input-help">
+                        <h4 ng-show="delegation.delegationFrom.$error.required">{{'delegation.At_least_one_date_is_required' | translate}}</h4>
+                    </div>
+            </div>
+            <div class="form-group" >
+                <label class="control-label" for="delegationTo">{{'delegation.End_date' | translate}}</label>
+                <div class="controls">
+                    <div class="input-group validation-control">
+                        <input type="text" id="delegationTo" ng-change="checkDelegation()" min-date="0" name="delegationTo" linked="#delegationFrom" return-format="timestamp" ng-model="selectedDelegation['date-fin-delegation']" class="form-control unvalidate" ip-datepicker ng-required="!selectedDelegation['date-debut-delegation'] && delegationActivated" readonly='true'/>
+                        <span ng-if="!!selectedDelegation['date-fin-delegation']" ng-click="selectedDelegation['date-fin-delegation'] = undefined"
+                              class="pointer input-group-addon">
+                            <i class="fa fa-times"></i>
+                        </span>
+                        <label for="delegationTo" ng-if="!selectedDelegation['date-fin-delegation']" class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </label>
+                    </div>
+                    <div class="input-help">
+                        <h4 ng-show="delegation.delegationTo.$error.required">{{'delegation.At_least_one_date_is_required' | translate}}</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="checkbox" ng-show="delegationActivated">
+                <label for="dossiersActuels">
+                    <input type="checkbox" class="unvalidate" id="dossiersActuels" ng-model="selectedDelegation['deleguer-presents']">
+                    {{'delegation.Current_folders' | translate}}
+                </label>
+            </div>
+        </form>
+        <span class="text-danger" ng-if="selectedDelegation.willItLoop"><i class="fa fa-warning"></i> {{'delegation.Warning_delegation_cycle' | translate}}</span>
+        <span class="btn btn-info" ng-click="save()" ng-disabled="selectedDelegation.willItLoop || !delegation.$valid">
+            <i class="fa fa-floppy-o"></i>
+            {{'Save' | translate}}
+        </span>
+        <span class="text text-success" ng-if="saved">
+            <i class="fa fa-check"></i> {{'delegation.Delegation_saved' | translate}}
+        </span>
+    </div>
+
+</div>

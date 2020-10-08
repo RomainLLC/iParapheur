@@ -1,0 +1,49 @@
+
+
+<div ng-if="config.isAdmin || config.isAdminFonctionnel()" class="adminMenu label-info">
+   <span><i class="fa fa-bars"></i> Menu</span>
+</div>
+<h1 class="underscore">
+    <i class='fa fa-wrench'></i>
+    {{'adminNavbar.Administration' | translate}}
+</h1>
+<div class="bs-sidebar affix" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li ng-if="config.isAdmin" ng-class="{active:pagename() == '/admin/informations'}">
+            <a href="#/admin/informations"><i class="fa fa-tachometer"></i> {{'adminNavbar.Server_information' | translate}}</a>
+        </li>
+        <li ng-if="config.isAdmin" ng-class="{active:pagename() == '/admin/utilisateurs'}">
+            <a href="#/admin/utilisateurs"><i class="fa fa-user"></i> {{'adminNavbar.Users' | translate}}</a>
+        </li>
+        <li ng-if="config.isAdmin" ng-class="{active:pagename() == '/admin/groupes'}">
+            <a href="#/admin/groupes"><i class="fa fa-group"></i> {{'adminNavbar.Groups' | translate}}</a>
+        </li>
+        <li ng-if="config.isAdmin || config.isAdminFonctionnel()" ng-class="{active:pagename() == '/admin/bureaux'}">
+            <a href="#/admin/bureaux"><i class="fa fa-desktop"></i> {{'adminNavbar.Desks' | translate}}</a>
+        </li>
+        <li ng-if="config.isAdmin || config.isAdminCircuits()" ng-class="{active:pagename() == '/admin/circuits'}">
+            <a href="#/admin/circuits"><i class="fa fa-road"></i> {{'adminNavbar.Circuits' | translate}}</a>
+        </li>
+        <li ng-if="config.isAdmin" ng-class="{active:pagename() == '/admin/typologie'}">
+            <a href="#/admin/typologie"><i class="fa fa-book"></i> {{'adminNavbar.Folders_typology' | translate}}</a>
+        </li>
+        <li ng-if="config.isAdmin || config.isAdminFonctionnel()" ng-class="{active:pagename() == '/admin/dossiers'}">
+            <a href="#/admin/dossiers"><i class="fa fa-folder-open-o"></i> {{'adminNavbar.Folders' | translate}}</a>
+        </li>
+        <li ng-if="config.isAdmin" ng-class="{active:pagename() == '/admin/stats'}">
+            <a href="#/admin/stats"><i class="fa fa-bar-chart-o"></i> {{'adminNavbar.Statistics' | translate}}</a>
+        </li>
+        <li ng-if="config.isAdmin" ng-class="{active:pagename() == '/admin/avance'}">
+            <a href="#/admin/avance"><i class="fa fa-cog"></i> {{'adminNavbar.Advanced' | translate}}</a>
+        </li>
+        <li ng-if="config.isAdmin && !config.tenant && isMTEnabled" ng-class="{active:pagename() == '/admin/tenants'}">
+            <a href="#/admin/tenants"><i class="fa fa-building"></i> {{'adminNavbar.Collectivities' | translate}}</a>
+        </li>
+        <!--li ng-if="config.isAdmin && properties['parapheur.ihm.admin.mode.advanced'] === 'true'" ng-class="{active:pagename() == '/admin/nodebrowser'}">
+            <a href="#/admin/nodebrowser"><i class="fa fa-terminal"></i> Node Browser</a>
+        </li-->
+        <li ng-if="config.isAdmin && properties['parapheur.ihm.admin.mode.advanced'] === 'true'" ng-class="{active:pagename() == '/admin/script'}">
+            <a href="#/admin/script"><i class="fa fa-terminal"></i> {{'adminNavbar.Script_execution' | translate}}</a>
+        </li>
+    </ul>
+</div>

@@ -1,0 +1,16 @@
+{
+  "delegation": {
+    "Retrieving_current_delegation": "Retrieving current delegation...",
+    "Delegation": "Delegation",
+    "Activate_the_delegation": "Activate the delegation",
+    "Upcoming": "Upcoming",
+    "Past": "Past",
+    "End_date": "End date",
+    "Start_date": "Start date",
+    "At_least_one_date_is_required": "At least one date is required.",
+    "Target_desk": "Target desk",
+    "Current_folders": "Current folders",
+    "Warning_delegation_cycle": "Warning : Delegation cycle ! This configuration won't be saved.",
+    "Delegation_saved": "Delegation saved"
+  }
+}

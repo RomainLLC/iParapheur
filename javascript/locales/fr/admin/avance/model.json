@@ -1,0 +1,15 @@
+{
+  "Admin": {
+    "Avance": {
+      "Model": {
+        "title": "Gestion des modèles",
+        "reload_all": "Réinitialiser tous les modèles",
+        "reload": "Réinitialiser le modèle",
+        "reload_all_done": "Tous les modèles ont été réinitialisés",
+        "reload_done": "Modèle __var__ réinitialisé",
+        "saved": "Modèle sauvegardé",
+        "save": "Enregistrer"
+      }
+    }
+  }
+}

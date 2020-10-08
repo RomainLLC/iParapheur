@@ -1,0 +1,67 @@
+<div class="modal-header">
+    <h3>{{'colorationModal.color_creation_for_the_dashboard' | translate}}</h3>
+</div>
+<div class="modal-body row">
+
+    <div class="col-md-6">
+        <div class="col-md-12">
+            <label for="property">{{'colorationModal.property' | translate}}</label>
+            <select id="property" class="form-control unvalidate" ng-model="coloration.property" required="required" ng-options="prop as (prop.i18n | i18n) for prop in properties">
+            </select>
+        </div>
+
+        <div class="row">
+            <div class="col-md-5" ng-if="coloration.property">
+                <label for="test">Test</label>
+                <input id="test" class="form-control unvalidate" ng-model="tmp.value" type="text">
+            </div>
+            <div class="col-md-5">
+                <label for="comparator">{{'colorationModal.comparator' | translate}}</label>
+                <select id="comparator" class="form-control unvalidate" ng-model="tmp.comparator">
+                    <option>=</option>
+                    <option>!=</option>
+                    <option ng-show="canCompare">></option>
+                    <option ng-show="canCompare"><</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <input type="button" class="btn btn-success" ng-click="addToTest()" value="+" ng-disabled="!tmp.value">
+            </div>
+        </div>
+
+
+        <div class="col-md-12">
+            <h4>{{'colorationModal.current_conditions' | translate}}</h4>
+            <p ng-if="coloration.test.length === 0">{{'None_fp' | translate}}</p>
+            <ul>
+                <li ng-repeat="test in coloration.test">
+                    <span>{{test.comparator}}</span> {{test.value}} <span ng-click="removeCondition($index)" class="fa fa-trash-o right"></span>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="col-md-6">
+
+        <label for="colorBack">{{'Preview' | translate}}</label>
+        <p style="background-color: {{coloration.backgroundColor}}; color:{{coloration.textColor}};">
+            {{'colorationModal.text_sample' | translate}}
+        </p>
+
+        <label for="colorText">{{'colorationModal.text_color' | translate}}</label>
+        <input id="colorText" class="form-control unvalidate" colorpicker="rgba" ng-model="coloration.textColor" type="text">
+
+        <label for="colorBack">{{'colorationModal.background_color' | translate}}</label>
+        <input id="colorBack" class="form-control unvalidate" colorpicker="rgba" ng-model="coloration.backgroundColor" type="text">
+
+
+    </div>
+
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-warning" ng-click="cancel()">{{'Cancel' | translate}}</button>
+    <button class="btn btn-primary" ng-click="ok()">{{'Save' | translate}}</button>
+</div>

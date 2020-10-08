@@ -1,0 +1,640 @@
+{
+    "app": {
+        "alert": {
+            "title": {
+                "error": "An error occured during request",
+                "saveDashbord": "The dashboard has changed",
+                "saveArchives": "The archives' page has changed",
+                "passwordConfirm": "The two password are not the same",
+                "savePassword": "The password has been changed",
+                "passwordError": "An error occurs while changing the password !",
+                "saveTheme": "The theme has changed !",
+                "saveLanguage": "New language saved !",
+                "saveNotifications": "Notifications preferences saved !",
+                "saveMeta": "Meta-data saved !",
+                "notHasBureau": "You didn't select an office",
+                "oneBureau": "You have only one office",
+                "cantAccess": "You didn't have the permissions to access this folder"
+            },
+            "message": {
+                "error": "An error occured",
+                "saveDashbord": "Dashboard preferences saved",
+                "saveArchives": "Archives preferences saved",
+                "passwordConfirm": "Please enter the two same passwords",
+                "savePassword": "Congratulations !",
+                "passwordError": "Please verify you password",
+                "saveTheme": "New Theme saved",
+                "saveLanguage": "The language has changed !",
+                "saveNotifications": "Notifications frequency has been changed !",
+                "saveMeta": "Your changes has been taken into account",
+                "redirect": "Redirecting...",
+                "selectOneBureau": "Selecting office...",
+                "canvasNoDocument": "There is no document on this folder.<br/>You can add a document to has a visual on this screen.",
+                "canvasNoImages": "",
+                "createNoImages": ""
+            }
+        },
+        "general": {
+            "savefile": "Saving...",
+            "deleting": "Deleting...",
+            "updating": "Updating...",
+            "type": "Type",
+            "subtype": "Subtype",
+            "validation": {
+                "course": "Validation course",
+                "visa": "Visa",
+                "signature": "Signature",
+                "archive": "Archive"
+            },
+            "page": {
+                "next": "Next page",
+                "previous": "Previous page"
+            },
+            "actions": {
+                "read": "",
+                "notifs": "",
+                "chain": "",
+                "notifOnly": "",
+                "print": "Print",
+                "email": "Send e-mail",
+                "emailSec": "",
+                "remorse": "Remorse",
+                "paperSignature": "Paper signature",
+                "delete": "Delete",
+                "sendToSecretariat": "Send to secretariat",
+                "reject": "Reject",
+                "validateSign": "Validate / Signature",
+                "raz": "Correct",
+                "archive": "Archive",
+                "edit": "Edit",
+                "avisComp": "",
+                "changeSign": "",
+                "papier": "",
+                "validateTdt": "",
+                "journalEvent": "",
+                "addSign": "",
+                "tdt": "Send to TdT"
+            },
+            "error": {
+                "ajaxTitle": "Error!",
+                "ajaxFull": "There was an error during the request!"
+            }
+        },
+        "bureau": {
+            "fileToDo": "File to do : __count__",
+            "fileToDo_plural": "Files to do : __count__",
+            "fileToDo_plural_1": "",
+            "fileLate": "File late : __count__",
+            "fileLate_plural": "Files late : __count__",
+            "fileToTransmit": "",
+            "fileToTransmit_plural": "",
+            "fileReturned": "File returned : __count__",
+            "fileReturned_plural": "Files returned : __count__",
+            "fileToArchive": "File to archive : __count__",
+            "fileToArchive_plural": "Files to archive : __count__",
+            "filePrint": "File to print : __count__",
+            "filePrint_plural": "Files to print : __count__",
+            "fileSecretariat": "File to read / annotate : __count__",
+            "fileSecretariat_plural": "Files to read / annotate : __count__"
+        },
+        "about": {
+            "title": "About",
+            "copyright": [
+                "Copyright &copy; 2012-2013, ADULLACT-Projet <br/>",
+                "Initiated by ADULLACT-Projet S.A. <br/>",
+                "Developed by ADULLACT-Projet S.A."
+            ],
+            "releaseNotes40": [
+                "Notice de version 4.0 : <br/><ul>",
+                "<li>navigation ergonomique multi-rôles (plusieurs bureaux par compte utilisateur)</li>",
+                "<li>tableau de bord personnalisable, avec filtres multi-critères</li>",
+                "<li>capacité de travailler par lot (visa, signature, rejet, archivage)</li>",
+                "<li>consultation de dossier focalisée sur la pièce principale, avec des fonctionnalités innovantes : annotations graphiques sur l'aperçu de document en ligne</li>",
+                "<li>suppléances (délégation) programmables, et notifications personnalisables</li>",
+                "<li>navigateur d'archives i-Parapheur</li>",
+                "<li>création de dossier simplifiée, avec glisser-déposer de document dans l'interface</li>",
+                "<li>moteur d'affichage Web 2.0 (technologies Twitter-bootstrap, jQuery, HTML5)</li></ul>"
+            ],
+            "licenceTitle": "Licence info and terms of service",
+            "agplpart1": [
+                "IPARAPHEUR-WEB is free software: you can redistribute it and/or modify",
+                "it under the terms of the <a target='_blank' href='//www.gnu.org/licenses/agpl-3.0.html'>GNU Affero General Public License</a> as published by",
+                "the Free Software Foundation, either version 3 of the License, or",
+                "(at your option) any later version."
+            ],
+            "agplpart2": [
+                "IPARAPHEUR-WEB is distributed in the hope that it will be useful,",
+                "but WITHOUT ANY WARRANTY; without even the implied warranty of",
+                "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the",
+                "<a target='_blank' href='//www.gnu.org/licenses/agpl-3.0.html'>GNU Affero General Public License</a> for more details."
+            ]
+        },
+        "topbar": {
+            "archiveexplorer": "Archive explorer",
+            "dashboard": "Dashboard",
+            "newfolder": "Create File",
+            "admin": {
+                "title": "Administration",
+                "stats": "Statistics",
+                "others": "Others"
+            },
+            "search": "Search",
+            "choosedesk": "Choose Desk",
+            "user": {
+                "options": " Options",
+                "about": " About",
+                "admin": "",
+                "disconnect": " Disconnect",
+                "delegation": " Delegation"
+            },
+            "filters": "Filters"
+        },
+        "dashboard": {
+            "filtreactif": {
+                "title": "",
+                "folders": "",
+                "type": "",
+                "soustype": "",
+                "from": "",
+                "to": "",
+                "recherche": "",
+                "recherchetitre": "",
+                "recherchecontenu": ""
+            },
+            "table": {
+                "name": "  Name",
+                "typesubtype": "  Type / Subtype",
+                "currentparapheur": "Current desk",
+                "state": "State",
+                "senddate": "  Sent on",
+                "limitdate": "  Limit date",
+                "pending": "Pending"
+            },
+            "filters": {
+                "title": "Filters",
+                "savedfilters": "Saved filters :",
+                "savePromp": "",
+                "load": {
+                    "simple": "Load",
+                    "detailed": "Load the selected filter"
+                },
+                "save": {
+                    "simple": "Save",
+                    "detailed": "Save the current filter"
+                },
+                "delete": {
+                    "simple": "Delete",
+                    "detailed": "Delete the current filter"
+                },
+                "content": "",
+                "plainText": "",
+                "creationdate": "Creation date",
+                "from": "From",
+                "to": "To",
+                "seefiles": "See next files :",
+                "files": {
+                    "title": "Files",
+                    "enpreparation": "Transmitting",
+                    "atraiter": "To treat",
+                    "aarchiver": "To archive",
+                    "retournes": "Returned",
+                    "encours": "In progress",
+                    "avenir": "To come",
+                    "recuperables": "Recoverable",
+                    "enretard": "Late",
+                    "arelire": "To read",
+                    "aimprimer": "To print",
+                    "delegues": "",
+                    "allCorbeilles": "",
+                    "allBureaux": ""
+                },
+                "dofilter": "Filter",
+                "reinitfilter": "Reset",
+                "close": "<strong>&times;</strong> Close",
+                "custom": "Filter not saved"
+            },
+            "late": "Late",
+            "delegation": {
+                "title": "Delegations",
+                "incoming": "Incoming",
+                "outgoing": "Outgoing"
+            },
+            "error": {
+                "ajaxTitle": "",
+                "ajaxFull": ""
+            }
+        },
+        "modal": {
+            "titleRead": "",
+            "titleVisa": "Stamp file",
+            "titleVisa_plural": "Stamp files",
+            "titleSign": "Sign file",
+            "titleSign_plural": "Sign files",
+            "titleVisaSign": "Stamp / Sign files",
+            "titleReject": "Reject files",
+            "titleSecretary": "Send back to boss",
+            "titleMail": "Send mail",
+            "titleMailSec": "",
+            "titleNotifs": "",
+            "titleAvisComp": "",
+            "titleChangeSign": "",
+            "titlePrint": "",
+            "titlePapier": "",
+            "titleArchive": "",
+            "titleS2lowActes": "Envoi du dossier vers la plateforme S²LOW (Actes)",
+            "titleS2lowHelios": "Envoi du dossier vers la plateforme S²LOW (Helios)",
+            "titleFastHelios": "Envoi du dossier vers la plateforme FAST (Helios)",
+            "titleJournal": "",
+            "titleConfirm": "",
+            "read": "",
+            "download": "",
+            "xemelios": "",
+            "nature": "",
+            "classification": "",
+            "numero": "",
+            "date": "",
+            "objet": "",
+            "enableNotifs": "",
+            "avaibleNotifs": "",
+            "saveNotif": "",
+            "privateannotation": "Private annotation",
+            "publicannotation": "Public annotation",
+            "motifRejet": "",
+            "currentfiles": "Current files",
+            "visa": "Stamp",
+            "sign": "Sign",
+            "tdt": "Send TDT",
+            "secretary": "Send back",
+            "visaSign": "Stamp / Sign",
+            "archive": "",
+            "archiveName": "",
+            "reject": "Reject",
+            "papier": "",
+            "close": "Cancel",
+            "cancel": "",
+            "sendToMail": "To : ",
+            "mailObject": "Object : ",
+            "mailMessage": "Message : ",
+            "annexes": "Appendices include",
+            "allAnnexes": "Appendices include",
+            "mail": "Send",
+            "bureaucible": "",
+            "CCMail": "",
+            "CCIMail": "",
+            "passwordMail": "",
+            "cleanPassMail": "",
+            "consecutivesteps": "Consecutive visa steps",
+            "validateallsteps": "Validate consecutive steps",
+            "validateallwarning": "the annotations will be written on the last step",
+            "titulaire": "Holder",
+            "printIncludeFirstPage": "Imprimer le bordereau de signature"
+        },
+        "apercu": {
+            "disableedit": "Disable annotations edition",
+            "lock": "Edition locked",
+            "unlock": "Edition unlocked",
+            "enableedit": "Enable annotations edition",
+            "annotindex": "Annotations index",
+            "customfilters": "Custom filters",
+            "customlist": "Custom list",
+            "list": "List",
+            "fileactions": "Actions on file",
+            "maindocument": "Main Document",
+            "validationcourse": "Validation course",
+            "annotate": "Annotate",
+            "previous": "Previous",
+            "next": "Next",
+            "firstpage": "First Page",
+            "lastpage": "Last Page",
+            "filters": {
+                "title": "Filters available :",
+                "without": "Without filtre",
+                "custom": "Custom filter",
+                "corbeilleSelect": "",
+                "filterSelect": ""
+            },
+            "addfile": "Add file",
+            "details": "Details of the file",
+            "tdtname": "TDT Name",
+            "tdtprotocol": "TDT Protocol",
+            "creating": "<h5>File being created<br/>Please add a document to the file to get a glimpse</h5>",
+            "generating": "<h5>Document being generated<br/>Please reload the page in a few seconds</h5>",
+            "the": "The ",
+            "at": " at ",
+            "by": " by ",
+            "saveDash": "",
+            "fullScreen": "",
+            "clear": "",
+            "refresh": "",
+            "reload": "",
+            "generate": "",
+            "generateinprogress": ""
+        },
+        "ajax": {
+            "success": "Success",
+            "error": "Error",
+            "successmsg": "The action on following files has been successful:",
+            "errormsg": "Error on file ",
+            "reload": "",
+            "msg": {
+                "autorisation": "You don't have the right to do that.",
+                "nameerror": "Name already in use",
+                "circuit": "Circuit not defined",
+                "metadata": "Please fill all the mandatory metadata",
+                "type": "Type / Subtype not defined",
+                "document": "Please give at least one document",
+                "annotpub": "Public annotation is mandatory for reject",
+                "fileExist": "This filename already exist"
+            },
+            "actions": {
+                "secretary": "",
+                "mail": "",
+                "mailsec": "",
+                "reject": "",
+                "signpapier": "",
+                "visa": "",
+                "signature": "",
+                "archivage": "",
+                "delete": "",
+                "remorse": "",
+                "raz": "",
+                "aviscomp": "",
+                "changesign": "",
+                "archive": "",
+                "create": "",
+                "redirectapercu": ""
+            }
+        },
+        "nouveau": {
+            "infos": {
+                "xpathSig": "",
+                "title": "Informations",
+                "filename": "File's name",
+                "type": "Type",
+                "subtype": "Subtype",
+                "visibility": {
+                    "title": "Visibility",
+                    "public": "Public",
+                    "confidential": "Confidential",
+                    "group": "Group"
+                },
+                "optional": "Optional Informations",
+                "limitdate": "Limit date",
+                "papersignature": "Paper signature"
+            },
+            "specialChar": "",
+            "infoUpload": "You can upload multiple files at once, browsing your computer or directly using drag and drop. The first document in the list will be the main document.",
+            "infoUploadMainDoc": "",
+            "mainfile": "Documents",
+            "appendix": "Appendix",
+            "addfile": "Add file",
+            "submit": "Submit",
+            "reset": "Reset",
+            "meta": "Metadata",
+            "browse": "Browse",
+            "delete": "Delete",
+            "required": "Required field",
+            "return": {
+                "error": "Error",
+                "exception": "Excepion has been thrown. ",
+                "auth_begin": "You don't have the right to do that ",
+                "auth_end": ". Redirecting...",
+                "name_begin": "Unable to save the file ",
+                "name_end": ", a file with the same name already exist.",
+                "ext_begin": "File extension ",
+                "ext_end": " not supported.",
+                "warning": "Warning",
+                "visual": "Please provide a visual file ",
+                "visualbtn": "Add a visual file"
+            }
+        },
+        "options": {
+            "tab": {
+                "infos": "Informations",
+                "theme": "Skin",
+                "customize": "Customize",
+                "archives": "",
+                "notifications": "Notifications",
+                "signature": "Signature",
+                "lang": "Language"
+            },
+            "password": {
+                "changepass": "Change my password",
+                "old": "Old password",
+                "new": "New password",
+                "confirm": ""
+            },
+            "theme": {
+                "choose": "Choose skin",
+                "apply": "Apply skin choice"
+            },
+            "dashboard": {
+                "numberresult": "Results number / page :",
+                "customize": "Customize dashboard",
+                "archives": "",
+                "reorder": "Choose and reorder rows (Drag and Drop):",
+                "shownrows": "Shown rows",
+                "hiddenrows": "Hidden rows",
+                "save": "Save",
+                "displaydelegation": "",
+                "columns": {
+                    "titre": "Name",
+                    "actionDemandee": "Status",
+                    "type": "Type",
+                    "parapheurCourant": "Current *parapheur*",
+                    "dateLimite": "Limit date",
+                    "dateEmission": "Sent date"
+                },
+                "columnsarchives": {
+                    "titre": "",
+                    "archivepar": "",
+                    "type": "",
+                    "dateCreation": "",
+                    "telechargements": ""
+                }
+            },
+            "notifications": {
+                "title": "Notifications",
+                "email": "Notification e-mail",
+                "dailyreport": "Daily report",
+                "unitreport": "Unit reports",
+                "save": "Save",
+                "details": "",
+                "quotidien": "",
+                "hebdo": "",
+                "lundi": "",
+                "mardi": "",
+                "mercredi": "",
+                "jeudi": "",
+                "vendredi": "",
+                "samedi": "",
+                "dimanche": ""
+            },
+            "signature": {
+                "change": "Change signature",
+                "actual": "Current signature",
+                "noscan": "You don't have any signature file."
+            },
+            "lang": {
+                "change": "Change language",
+                "available": "Available language",
+                "apply": "Set language",
+                "en": "",
+                "fr": ""
+            }
+        },
+        "admin": {
+            "tab": {
+                "utilisateurs": "Users",
+                "groupes": "Groups",
+                "bureaux": "Desks",
+                "circuits": "Workflows",
+                "typologie": "Typology",
+                "dossiers": "folders",
+                "stats": "Statistics",
+                "avance": "Advanced"
+            },
+            "user": {
+                "title" : {
+                    "create" : "Nouvel utilisateur",
+                    "edit" : "Modifier un utilisateur"
+                },
+                "tab": {
+                    "general": "General",
+                    "password": "Password",
+                    "certificat": "Connexion certificate",
+                    "scan": "Signature scan",
+                    "admin": "Administration permissions",
+                    "bureaux": "Desks"
+                },
+                "search": "Search users",
+                "general": {
+                    "username": "Username",
+                    "firstname": "First name",
+                    "lastname": "Last name",
+                    "email": "Email",
+                    "actions": "Actions"
+                },
+                "password": {
+                    "new" : "New password",
+                    "confirm" : "Confirm password",
+                    "change" : "Change password"
+                },
+                "certificat" : {
+                    "change" : "Select a certificate",
+                    "save" : "Save the certificate",
+                    "delete" : "Delete the certificate",
+                    "fileError" : "The selected file is not a .pem, .cer or .crt certificate",
+                    "inUse" : "already uses this certificate, save will disassociate it from this user",
+
+                    "issuerName" : "Issuer",
+                    "id" : "ID du certificat",
+                    "subject" :"ID du certificat",
+                    "o" : "Organisation",
+                    "email" : "Contact",
+                    "serial" : "Numéro de série",
+                    "start" : "Début de validité",
+                    "end" : "Fin de validité",
+                    "download" :"Download the certificate",
+                    "none": "No certificate for this user"
+                },
+                "signature" : {
+                    "change" : "Select an image",
+                    "save" : "Save signature",
+                    "delete" : "Delete signature",
+                    "fileError" : "The selected file is not a JPG, PNG nor GIF image.",
+                    "none": "No signature image for this user"
+                },
+                "admin" : {
+                    "admin" : "Administrator",
+                    "fonctionnel" : "Fonctionnal administrator",
+                    "aucun" : "No administrator permission"
+                },
+                "bureaux" : {
+                    "filtrer" : "Filter desks",
+                    "proprietaire" : "owner",
+                    "secretaire" : "secretary",
+                    "dissocier" : "Dissociate from desk"
+                },
+                "save" : "Save",
+                "cancel" : "Cancel"
+            }
+        },
+        "login": {
+            "subtitle": "Enter your credentials :",
+            "username": "Username",
+            "password": "Password",
+            "errormsg": "The username and the password don't match.",
+            "submit": "Login"
+        },
+        "archives": {
+            "filters": {
+                "available": "Available filters",
+                "searchLabel": "Search on field ",
+                "search": "Search :",
+                "added": "Added filters",
+                "saveCond": "Save condition",
+                "exact": "Exactly",
+                "content": "Containing",
+                "delCond": "Delete condition",
+                "general": "General",
+                "meta": "Metadata",
+                "or": " or ",
+                "and": " and ",
+                "from": "from ",
+                "to": "to ",
+                "between": "between ",
+                "true": "true",
+                "false": "false"
+            },
+            "name": "Name",
+            "created": "Archived by",
+            "typeSub": "Type / Subtype",
+            "creationDate": "Creation date",
+            "download": "Download",
+            "creator": "Archived by",
+            "signatures": "Signatures",
+            "original": "Original document"
+        },
+        "delegation": {
+            "suppleant": "Substitute",
+            "from": "From",
+            "to": "To",
+            "current": "Include current files",
+            "save": "  Save delegation",
+            "delete": "",
+            "none": "None",
+            "encours": "Ongoing",
+            "passe": "Past",
+            "avenir": "To come",
+            "remove": {
+                "title": "Removing delegation",
+                "success": "Success",
+                "error": "Error"
+            },
+            "set": {
+                "title": "Saving delegation",
+                "success": "Save complete",
+                "error": "Error"
+            },
+            "ajax": {
+                "boucle": "You can't delegate rights for this desk, you already are a delegate.",
+                "title": "Ajax error",
+                "error": "Error from ajax request"
+            },
+            "modals" : {
+                "confirm" : {
+                    "confirm" : "Confirm",
+                    "cancel" : "Cancel"
+                },
+                "simpleConfirmation" : {
+                    "deleteUser" : {
+                        "title" : "Delete user",
+                        "message" : "Confirm deletion?",
+                        "warning" : "This user is owner or secretary of a desk. Confirm deletion?"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,29 @@
+{
+  "actions": {
+    "sendToSecretariat": "Send to secretariat",
+    "print": "Print",
+    "sendByMail": "Send by mail",
+    "chainCircuit": "Chain circuits",
+    "notifyAndAddConsultationCredentials": "Notify and add consultation credentials",
+    "transferFolderToSign": "Transfer forlder to sign",
+    "transferFolderToValid": "Transfer forlder to validate",
+    "askingForAdditionalOpinion": "Asking for additionnal opinion",
+    "eventLog": "Event log",
+    "addSignatureToFolder": "Add signature to folder",
+    "expectedExentions": "Expected extensions",
+    "signatureSaved": "Signature saved",
+    "returnFolder": "Return folder",
+    "showSecureMailInformations": "Show secure mail informations",
+    "readingRequired": "Reading required",
+    "applyRemorseRight": "Apply remorse right",
+    "correctAndReissue": "Correct and reissue",
+    "edit": "Edit",
+    "sendToHeliosTdt": "Send to TdT (Helios)",
+    "sendToActesTdt":"Send to TdT (Actes)",
+    "paperSignature": "Paper signature",
+    "reject": "Reject",
+    "archive": "Archive",
+    "sendBySecureMail": "Send by secure mail",
+    "delete": "Delete"
+  }
+}

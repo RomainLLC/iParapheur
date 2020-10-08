@@ -1,0 +1,53 @@
+<div class="modal-header">
+    <h3>{{title | i18n}}</h3>
+</div>
+<div class="modal-body row">
+    <p class="text-info"><i class="fa fa-warning"></i> {{message  | i18n}}</p>
+    <div class="col-md-12">
+        <form novalidate name="pesProperties" class="form-horizontal" ng-submit="ok()">
+            <div class="form-group">
+                <label for="id">{{'pesPropertiesTenant.policy_identifier_id' | translate}}</label>
+                <input class="form-control validation-control" type="text" id="id" name="id" ng-model="properties.policyIdentifierID" required="required">
+                <div class="input-help">
+                    <span class="error" ng-show="pesProperties.id.$error.required">{{'Mandatory' | translate}}</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="desc">{{'pesPropertiesTenant.policy_identifier_description' | translate}}</label>
+                <input class="form-control validation-control" type="text" id="desc" name="desc" ng-model="properties.policyIdentifierDescription" required="required">
+                <div class="input-help">
+                    <span class="error" ng-show="pesProperties.desc.$error.required">{{'Mandatory' | translate}}</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="digest">{{'pesPropertiesTenant.policy_digest' | translate}}</label>
+                <input class="form-control validation-control" type="text" id="digest" name="digest" ng-model="properties.policyDigest" required="required">
+                <div class="input-help">
+                    <span class="error" ng-show="pesProperties.digest.$error.required">{{'Mandatory' | translate}}</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="uri">{{'pesPropertiesTenant.sp_uri' | translate}}</label>
+                <input class="form-control validation-control" type="text" id="uri" name="uri" ng-model="properties.spuri" required="required">
+                <div class="input-help">
+                    <span class="error" ng-show="pesProperties.uri.$error.required">{{'Mandatory' | translate}}</span>
+                </div>
+            </div>
+            <!-- Pour l'envoi du formulaire avec touche entrée -->
+            <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/>
+        </form>
+    </div>
+
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-warning" ng-click="cancel()">
+        <i class="fa fa-times-circle"></i>
+        {{'Back' | translate}}</button>
+    <button type="submit" class="btn btn-primary" ng-disabled="!pesProperties.$valid" ng-click="ok()">
+        <i class="fa fa-floppy-o"></i>
+        {{'Save' | translate}}</button>
+</div>

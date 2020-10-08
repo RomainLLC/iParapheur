@@ -1,0 +1,19 @@
+<div style="position:relative;">
+    <ul class="liste-bureaux">
+        <li class="bureaux-animate" ng-repeat="bureau in orderedBureaux">
+            <div bureau on-select="selectBureau(bureau)" is-thumbnail="true" b="bureau"></div>
+        </li>
+    </ul>
+
+    <div style="position:absolute; top:-30px; right:30px">
+        <span class="text-info" ng-if="orderedBureaux.length === 1">
+            <i class="fa fa-info-circle"> {{'bureau.you_only_have_one_desk_automatic_selection_' | translate}}</i>
+        </span>
+
+        <span class="text-info" ng-if="orderedBureaux.length === 0">
+            <i class="fa fa-info-circle"> {{'bureau.no_desk' | translate}}</i>
+        </span>
+    </div>
+</div>
+
+

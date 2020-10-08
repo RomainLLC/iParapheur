@@ -1,0 +1,12 @@
+<div id="annotations" class="well dashlet" ng-show="hasAnnotPub">
+    <h3 ng-click="element.show = !element.show" class="pointer text-info">{{'annotations.publicAnnotations' | translate}}</h3>
+    <div class="dashlet-content" bn-slide-show="element.show">
+        <div ng-repeat="etape in dossier.circuit.etapes" ng-if="!!etape.annotPub">
+            <span ng-bind-html="etape.annotPub"></span>
+            <blockquote style="padding: 0;">
+                <small ng-if="etape.dateValidation != null">{{('annotations.-person-the-date-' | translate).replace("-date-", (etape.dateValidation | date:('annotations.dateFormat' | translate))).replace("-person-", etape.signataire)}}</small>
+                <small ng-if="etape.dateValidation == null">Par {{etape.signataire}}, étape courrante</small>
+            </blockquote>
+        </div>
+    </div>
+</div>

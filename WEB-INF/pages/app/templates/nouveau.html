@@ -1,0 +1,553 @@
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="col-md-8">
+            <form name='nouveau' novalidate>
+                <legend>{{'app.nouveau.infos.title' |i18n}}</legend>
+                <div class="col-md-6 spanright">
+                    <div class="form-group col-md-8 mandatory-group">
+                        <label for="titre">
+                            {{'app.nouveau.infos.filename' | i18n}}
+                        </label>
+                        <span class="fa fa-warning label label-danger"> {{'Mandatory' | translate}}</span>
+                        <input type="text" ng-focus="focusTitle()" ng-blur="blurTitle()" ng-model="dossier.title"
+                               id="titre" name="titre" class="form-control" required/>
+                    </div>
+
+                    <div class="form-group col-md-8">
+                        <label for="visibility">
+                            {{'app.nouveau.infos.visibility.title' | i18n}}
+                        </label>
+                        <select class="unvalidate form-control" id="visibility" ng-model="dossier.visibility"
+                                ng-options="visible.value as visible.text for visible in visibilityChoices">
+                            <option value="public">{{'app.nouveau.infos.visibility.public' | i18n}}</option>
+                            <option value="confidentiel">{{'app.nouveau.infos.visibility.confidential' | i18n}}</option>
+                            <option value="group">{{'app.nouveau.infos.visibility.group' | i18n}}</option>
+                        </select>
+                    </div>
+
+                    <!-- Config dossier & metadonnees -->
+
+                    <div class="form-group col-md-8">
+                        <label style="width: 100%;" class="control-label" for="date-limite">{{'app.nouveau.infos.limitdate' | i18n}}
+                            <div class="input-group">
+                                <input readonly="true" ip-datepicker return-format="timestamp" type="text" id="date-limite"
+                                       ng-model="dossier.dateLimite" class="form-control unvalidate">
+                                <span ng-if="!dossier.dateLimite" class="pointer input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                                <span ng-if="!!dossier.dateLimite" ng-click="dossier.dateLimite = undefined" class="pointer input-group-addon">
+                                    <i class="fa fa-times"></i>
+                                </span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div ng-if="circuit.sigFormat == 'XAdES/enveloped'" class="form-group col-md-8 mandatory-group">
+                        <label for="xpath"><i class="fa fa-question-circle" tooltip-trigger="mouseenter"
+                                              tooltip-placement="right"
+                                              tooltip="{{'nouveau.Xpath_Help' | translate}}"></i>
+                            {{'app.nouveau.infos.xpathSig' | i18n}}</label>
+                        <span class="fa fa-warning label label-danger"> {{'Mandatory' | translate}}</span>
+                        <input class="form-control" placeholder="." ng-model="dossier['xPathSignature']" id="xpath"
+                               type="text" required>
+                    </div>
+                    <div ng-if="!circuit.isDigitalSignatureMandatory" class="form-group col-md-8">
+                        <div class="controls">
+                            <label class="control-label checkbox" for="signature-papier-ck">
+                                <input ng-model="dossier.isSignPapier" id="signature-papier-ck" type="checkbox"
+                                       class="unvalidate">
+                                <span>{{'app.nouveau.infos.papersignature' | i18n}}</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <br>
+                        <legend ng-show="metaInfos.length > 0" class="mini">{{'app.nouveau.meta' | i18n}}</legend>
+                        <div>
+                            <div ng-switch on="metaInfo.type" class="control-group"
+                                 ng-repeat="(metaName, metaInfo) in metaInfos">
+                                <div class="form-group"
+                                     ng-class="{true:'mandatory-group', false:''}[metaInfo.mandatory === 'true']"
+                                     ng-switch-when="DATE" ng-hide="metaInfo.values">
+                                    <label class="control-label" for="{{metaInfo.id}}">{{metaInfo.realName}}</label>
+                                    <span class="fa fa-warning label label-danger"
+                                          ng-show="{{metaInfo.mandatory === 'true'}}"> {{'Mandatory' | translate}}</span>
+
+                                    <div class="input-group">
+                                        <input ng-change="metaChanged()" ng-cloak="" ip-id="metaInfo.id"
+                                               return-format="timestamp" readonly="true" ip-datepicker type="text"
+                                               ng-class="{true:'', false:'unvalidate'}[metaInfo.mandatory === 'true']"
+                                               ng-model="dossier.metadatas[metaInfo.id].value" class="form-control"
+                                               ng-required="metaInfo.mandatory === 'true' && !metaInfo.values">
+                                        <span ng-click="dossier.metadatas[metaInfo.id].value = ''"
+                                              class="pointer input-group-addon">X</span>
+                                    </div>
+                                </div>
+                                <div class="form-group"
+                                     ng-class="{true:'mandatory-group', false:''}[metaInfo.mandatory === 'true']"
+                                     ng-switch-when="STRING" ng-hide="metaInfo.values">
+                                    <label class="control-label" for="{{metaInfo.id}}">{{metaInfo.realName}}</label>
+                                    <span class="fa fa-warning label label-danger"
+                                          ng-show="{{metaInfo.mandatory === 'true'}}"> {{'Mandatory' | translate}}</span>
+                                    <input ng-cloak type="text" ng-change="metaChanged()" id="{{metaInfo.id}}"
+                                           ng-model="dossier.metadatas[metaInfo.id].value"
+                                           ng-class="{true:'', false:'unvalidate'}[metaInfo.mandatory === 'true']"
+                                           class="form-control"
+                                           ng-required="metaInfo.mandatory === 'true'  && !metaInfo.values">
+                                </div>
+                                <div class="form-group"
+                                     ng-class="{true:'mandatory-group', false:''}[metaInfo.mandatory === 'true']"
+                                     ng-switch-when="URL" ng-hide="metaInfo.values">
+                                    <label class="control-label" for="{{metaInfo.id}}">{{metaInfo.realName}}</label>
+                                    <span class="fa fa-warning label label-danger"
+                                          ng-show="{{metaInfo.mandatory === 'true'}}"> {{'Mandatory' | translate}}</span>
+                                    <input ng-cloak type="text" ng-change="metaChanged()" id="{{metaInfo.id}}"
+                                           ng-model="dossier.metadatas[metaInfo.id].value"
+                                           ng-class="{true:'', false:'unvalidate'}[metaInfo.mandatory === 'true']"
+                                           class="form-control"
+                                           ng-required="metaInfo.mandatory === 'true'  && !metaInfo.values">
+                                </div>
+                                <div class="form-group mandatory-group"
+                                     ng-switch-when="INTEGER" ng-hide="metaInfo.values">
+                                    <label class="control-label" for="{{metaInfo.id}}">{{metaInfo.realName}}</label>
+                                    <span class="fa fa-warning label label-danger"
+                                          ng-if="metaInfo.mandatory === 'true'"> {{'Mandatory' | translate}}</span>
+                                    <span class="label label-info">
+                                                                <i class="fa-info-circle fa"></i>
+                                                                {{'Admin.Typologie.Ty_Sub_Meta_Int'
+                                                                | translate}}
+                                                            </span>
+                                    <input type="text" integer ng-change="metaChanged()" id="{{metaInfo.id}}"
+                                           ng-model="dossier.metadatas[metaInfo.id].value"
+                                           class="form-control"
+                                           ng-required="metaInfo.mandatory === 'true'  && !metaInfo.values">
+                                </div>
+                                <div class="form-group mandatory-group"
+                                     ng-switch-when="DOUBLE" ng-hide="metaInfo.values">
+                                    <label class="control-label" for="{{metaInfo.id}}">{{metaInfo.realName}}</label>
+                                    <span ng-if="metaInfo.mandatory === 'true'"
+                                          class="fa fa-warning label label-danger"> {{'Mandatory' | translate}}</span>
+                                    <span class="label label-info">
+                                                                <i class="fa-info-circle fa"></i>
+                                                                {{'Admin.Typologie.Ty_Sub_Meta_Double'
+                                                                | translate}}
+                                                            </span>
+                                    <input type="text" decimal ng-change="metaChanged()" id="{{metaInfo.id}}"
+                                           ng-model="dossier.metadatas[metaInfo.id].value"
+                                           class="form-control"
+                                           ng-required="metaInfo.mandatory === 'true'  && !metaInfo.values">
+                                </div>
+                                <div class="form-group"
+                                     ng-class="{true:'mandatory-group', false:''}[metaInfo.mandatory === 'true']"
+                                     ng-switch-when="BOOLEAN">
+                                    <label class="control-label" for="{{metaInfo.id}}">{{metaInfo.realName}}</label>
+                                    <span class="fa fa-warning label label-danger"
+                                          ng-show="{{metaInfo.mandatory === 'true'}}"> {{'Mandatory' | translate}}</span>
+                                    <select id="{{metaInfo.id}}" ng-change="metaChanged()"
+                                            ng-model="dossier.metadatas[metaInfo.id].value"
+                                            ng-class="{true:'', false:'unvalidate'}[metaInfo.mandatory === 'true']"
+                                            class="form-control" ng-required="metaInfo.mandatory === 'true'">
+                                        <option ng-hide="metaInfo.mandatory === 'true'" value=""></option>
+                                        <option value="true">Oui</option>
+                                        <option value="false">Non</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" ng-show="metaInfo.values">
+                                    <label class="control-label" for="{{metaInfo.id}}">{{metaInfo.realName}}</label>
+                                    <span class="fa fa-warning label label-danger float-right"
+                                          ng-show="{{metaInfo.mandatory === 'true'}}"> {{'Mandatory' | translate}}</span>
+                                    <select id="{{metaInfo.id}}" ng-change="metaChanged()"
+                                            ng-change="valuesMetaUndefined(metaInfo.id)"
+                                            ng-model="dossier.metadatas[metaInfo.id].value"
+                                            ng-class="{true:'', false:'unvalidate'}[metaInfo.mandatory === 'true']"
+                                            class="form-control"
+                                            ng-required="metaInfo.mandatory === 'true'  && metaInfo.values">
+                                        <option ng-hide="metaInfo.mandatory === 'true'" value=""></option>
+                                        <option ng-repeat="value in metaInfo.values" ng-value="value">{{value}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <!-- selection & affichage circuit -->
+                    <div class="form-group col-md-8">
+                        <label for="select-type">{{'app.nouveau.infos.type' | i18n}}</label>
+                        <select class="form-control" id="select-type" ng-disabled="flags.disabled"
+                                ng-model="dossier.type" ng-change="dossier.sousType = ''"
+                                ng-options="value.id as value.id for value in typo | orderBy:'id'" required>
+                            <option value="">-- {{'nouveau.Type_selection' | translate}} --</option>
+                        </select>
+
+                        <div class="input-help">
+                            <h4>Requis</h4>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-8">
+                        <label for="select-sous-type">{{'app.nouveau.infos.subtype' | i18n}}</label>
+                        <select class="form-control" id="select-sous-type" ng-disabled="flags.disabled"
+                                ng-model="dossier.sousType"
+                                ng-options="value for value in (typo | findWithId:dossier.type).sousTypes | orderBy:'toString()'"
+                                required>
+                            <option value="">-- {{'nouveau.SubType_selection' | translate}} --</option>
+                        </select>
+
+                        <div class="input-help">
+                            <h4>{{'Mandatory' | translate}}</h4>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-8">
+                        <!-- Affichage circuit +  si script de séléction, reload proposé ? -->
+                        <legend ng-show="!empty(circuit)" class="mini">
+                            <i class="fa fa-road"></i>
+                            {{'app.general.validation.course' | i18n}}
+                        </legend>
+                        <div>
+                            <p class="label label-info label-block" ng-show="circuit.hasSelectionScript">
+                                {{'nouveau.Circuit_selection_script_detected' | translate}}
+                                {{'nouveau.You_need_to_fill_form_before_reloading_circuit' | translate}}
+                            </p>
+                            <span ng-disabled="!nouveau.$valid" style="display:block;" ng-click="upgrade()"
+                                  ng-show="circuit.hasSelectionScript && (metaHasChange || dossier.documents[0].id != null)"
+                                  class="btn btn-primary">{{'nouveau.Display_circuit_preview' | translate}}</span>
+                            <ol>
+                                <li ng-if="!circuit.hasSelectionScript" ng-repeat="etape in circuit.etapes">
+                                    <i class="fa-fw fa-lg" ng-class="getIconClass(etape.actionDemandee)" tooltip="{{getActionTooltip(etape.actionDemandee)}}"></i>
+                                    <span ng-if="etape.transition === 'VARIABLE'" class="little-select">
+                                        <i class="fa fa-fw" tooltip-trigger="mouseenter"
+                                           tooltip="Sélectionner un acteur pour l'étape variable"
+                                           ng-class="acteursVariables[$index] ? 'text-success fa-check-square-o' : 'fa-question'"></i>
+                                        <select required class="unvalidate"
+                                                ng-options="acteur.id as acteur.name for acteur in currentBureau.associes"
+                                                ng-model="acteursVariables[$index]">
+                                            <option value=""></option>
+                                        </select>
+                                    </span>
+                                    <span ng-if="isPreviousVariable($index)">
+                                        <i class="fa fa-info-circle fa-fw text-info"
+                                           tooltip="Circuit à étape variable, la cible 'Chef de...' sera affichée après la création de dossier"></i> Chef de...
+                                    </span>
+                                    <span ng-if="etape.transition !== 'VARIABLE' && !isPreviousVariable($index)">
+                                        {{etape.parapheurName}}
+                                    </span>
+                                </li>
+                                <li ng-if="circuit.hasSelectionScript" ng-repeat="etape in dossier.circuit.etapes">
+                                    <i class="fa-fw fa-lg" ng-class="getIconClass(etape.actionDemandee)" tooltip="{{getActionTooltip(etape.actionDemandee)}}"></i>
+                                    {{etape.parapheurName}}
+                                </li>
+                                <li ng-if="circuit.hasSelectionScript && !dossier.circuit && circuit.etapes"
+                                    ng-repeat="etape in circuit.etapes">
+                                    <i class="fa-fw fa-lg" ng-class="getIconClass(etape.actionDemandee)" tooltip="{{getActionTooltip(etape.actionDemandee)}}"></i>
+                                    {{etape.parapheurName}}
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div dropzone class="fade mainDocDrop dropzone"
+             ng-class="(circuit.isMultiDocument && (!isMainDocumentListFull())) ? 'mainDocDrop' : 'allDropZone'">
+            <div class="indropzone">
+                <span ng-if="circuit.isMultiDocument">
+                    {{'nouveau.Drop_main_documents_here' | translate}}
+                </span>
+                <span ng-if="!circuit.isMultiDocument">
+                    {{'nouveau.Drop_documents_here' | translate}}
+                </span>
+            </div>
+        </div>
+        <div ng-if="circuit.isMultiDocument" dropzone class="fade annDocDrop dropzone"
+             ng-class="(circuit.isMultiDocument && (isMainDocumentListFull())) ? 'allDropZone' : ''">
+            <div class="indropzone">
+                <span>{{'nouveau.Drop_annexes_here' | translate}}</span>
+            </div>
+        </div>
+
+        <div class="col-md-4 filesHandler">
+            <legend>{{'app.nouveau.mainfile' | i18n}}</legend>
+            <span ng-if="docsExists" class="text-info"><i class="fa fa-info-circle"></i> {{'nouveau.There_is_an_uploaded_document_already' | translate}}</span>
+
+            <!-- Gestion documents & sauvegarde -->
+            <form fileupload="document|zip"
+                  main-document="isMainDocument()"
+                  signature-format="getSignatureFormat()"
+                  protocol="getProtocol()"
+                  wrong-type="wrongType(ext, isValid, isAuthorized)"
+                  check-if-exist="checkIfExist(name)"
+                  exist-file="existFile(name)"
+                  fileinput="#docinput"
+                  dropzone=".mainDocDrop"
+                  file-added="addDocument(files, circuit.isMultiDocument || dossier.documents[0].id == null)"
+                  upload-success="documentAdded(data, index)"
+                  upload-finish="uploadFinished(data, index)"
+                  upload-error="uploadError(data, index)"
+                  action="{{addDocumentUrl}}"
+                  method="POST"
+                  enctype="multipart/form-data">
+                <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+                <div class="fileupload-buttonbar">
+                    <div tooltip="{{!circuit.isMultiDocument && dossier.documents.length > 0 ? 'Vous ne pouvez ajouter qu\'un seul document principal sur cette typologie' : ''}}" class="fileinput-button">
+                    <!-- The fileinput-button span is used to style the file input field as button -->
+                        <span style="margin-right:10px; z-index:100;" class="btn btn-success fileinput-button force-display"
+                              ng-disabled="(circuit.isMultiDocument && isMainDocumentListFull()) || (!circuit.isMultiDocument && dossier.documents.length > 0)">
+                            <i class="icon-plus icon-white"></i>
+                            <span><i class="fa fa-plus-circle"></i> {{'nouveau.Adding_a_main_document' | translate}}</span>
+                            <input ui-multiple="dossier.documents.length > 0" id="docinput" type="file" name="file">
+                        </span>
+                    </div>
+                    <input type="hidden" name="reloadMainDocument" value="false">
+                    <input type="hidden" name="isMainDocument" ng-value="isMainDocument()">
+                    <input type="hidden" name="browser" value="notIe">
+                    <input type="hidden" name="dossier" value="{{dossier.id}}">
+                </div>
+            </form>
+            <!-- Ajout de pièce annexe dans le cas du multi-document -->
+            <form fileupload="document|zip"
+                  main-document="false"
+                  signature-format="getSignatureFormat()"
+                  protocol="getProtocol()"
+                  dropzone=".annDocDrop"
+                  wrong-type="wrongType(ext, isValid, isAuthorized)"
+                  check-if-exist="checkIfExist(name)"
+                  exist-file="existFile(name)"
+                  fileinput="#docinputAnnexe"
+                  file-added="addDocument(files, false)"
+                  upload-success="documentAdded(data, index)"
+                  upload-finish="uploadFinished(data, index)"
+                  upload-error="uploadError(data, index)"
+                  action="{{addDocumentUrl}}"
+                  method="POST"
+                  enctype="multipart/form-data">
+                <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+                <div class="fileupload-buttonbar" >
+                    <!-- The fileinput-button span is used to style the file input field as button -->
+                    <div tooltip="{{!circuit.isMultiDocument && dossier.documents.length < 1 ? 'Merci d\'ajouter un document principal avant d\'ajouter une annexe' : ''}}" class="fileinput-button">
+                        <span class="btn btn-info fileinput-button force-display"
+                              ng-disabled="!circuit.isMultiDocument && dossier.documents.length < 1">
+                            <i class="icon-plus icon-white"></i>
+                            <span><i class="fa fa-plus"></i> {{'nouveau.Adding_an_annex' | translate}}</span>
+                            <input ui-multiple="dossier.documents.length > 0" id="docinputAnnexe" type="file" name="file">
+                        </span>
+                    </div>
+
+                    <input type="hidden" name="reloadMainDocument" value="false">
+                    <input type="hidden" name="isMainDocument" value="false">
+                    <input type="hidden" name="browser" value="notIe">
+                    <input type="hidden" name="dossier" value="{{dossier.id}}">
+                </div>
+            </form>
+            <form ng-if="dossier.documents.length > 0 && extension(dossier.documents[0].name).toLowerCase() === 'xml'"
+                  fileupload="pdf"
+                  signature-format="getSignatureFormat()"
+                  protocol="getProtocol()"
+                  wrong-type="wrongPDF(ext)"
+                  fileinput="#visuinput"
+                  file-added="updateVisu(files)"
+                  upload-success="updateVisuEnd(data, index)"
+                  action="{{addVisuelUrl}}"
+                  method="POST"
+                  enctype="multipart/form-data">
+                <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+                <div class="fileupload-buttonbar">
+                    <!-- The fileinput-button span is used to style the file input field as button -->
+                    <span class="btn btn-warning fileinput-button force-display">
+                        <i class="fa fa-eye"></i>
+                        <span ng-if="dossier.documents[0].visuelPdf">{{'nouveau.Updating_visual' | translate}}</span>
+                        <span ng-if="!dossier.documents[0].visuelPdf">{{'nouveau.Adding_visual' | translate}}</span>
+                        <input ui-multiple="dossier.documents.length > 0" id="visuinput" type="file" name="file">
+                    </span>
+                    <input type="hidden" name="dossier" value="{{dossier.id}}">
+                    <input type="hidden" name="browser" value="notIe">
+                    <input type="hidden" name="document" value="{{dossier.documents[0].id}}">
+                </div>
+            </form>
+
+            <div class="marginDocument">
+                <legend class="mini">
+                    {{('nouveau.Main_document' | translate)}} <span ng-if="circuit.isMultiDocument" class="text-info"><i
+                        class="fa fa-info-circle"></i> {{('nouveau.MultiDoc_typology_number_maximum' | translate).replace("-number-", mainDocsMax)}}</span>
+                </legend>
+                <ul ui-sortable="getSortableOptions('.annexesDocList')" class="mainDocList"
+                    ng-model="documentsPrincipaux">
+                    <li delete ng-repeat="document in documentsPrincipaux">
+                        <div>
+                            <form ng-if="document.canDelete && documentsPrincipaux.length === 1"
+                                  fileupload="document"
+                                  signature-format="getSignatureFormat()"
+                                  protocol="getProtocol()"
+                                  main-document="true"
+                                  wrong-type="wrongType(ext, isValid, isAuthorized)"
+                                  file-added="beginReplace(files)"
+                                  upload-success="endReplace(data, index)"
+                                  upload-finish="uploadFinished(data, index)"
+                                  upload-error="replaceError(data, index)"
+                                  fileinput="#replaceMain"
+                                  action="{{addDocumentUrl}}"
+                                  method="POST"
+                                  enctype="multipart/form-data">
+                                <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+                                <div class="fileupload-buttonbar">
+                                    <!-- The fileinput-button span is used to style the file input field as button -->
+                                    <i tooltip="Remplacer" class="fa fa-exchange fileinput-button force-display">
+                                        &nbsp;
+                                        <input id="replaceMain" type="file" name="file">
+                                    </i>
+                                    <input type="hidden" name="reloadMainDocument" value="true">
+                                    <input type="hidden" name="isMainDocument" value="true">
+                                    <input type="hidden" name="browser" value="notIe">
+                                    <input type="hidden" name="dossier" value="{{dossier.id}}">
+                                </div>
+                            </form>
+                            <span ng-if="document.isLocked">
+                                <i class="fa fa-info-circle text-info"
+                                   tooltip="{{'nouveau.Transforming___' | translate}}"></i>
+                            </span>
+                            <span><i ng-if="document.canDelete && documentsPrincipaux.length > 1"
+                                     ng-click="document.state = 'delete'; removeDocument(document)"
+                                     class="fa fa-times"></i> {{document.name}}</span>
+                            <br>
+                            <span ng-if="document.visuelPdf"><a target="_blank"
+                                                                href="{{context}}/proxy/alfresco/api/node/content%3bph%3avisuel-pdf/workspace/SpacesStore/{{document.id}}/{{document.name}}-visuel.pdf"><i
+                                    class="fa fa-eye"></i> {{'nouveau.Visual' | translate}}</a></span>
+
+                            <span ng-if="document.isProtected" class="text-warning">
+                                <i class="fa fa-warning"></i>
+                                {{'nouveau.Protected_PDF' | translate}}
+                            </span>
+
+                            <div bn-slide-show="document.state === 'delete'" class="progress progress-striped active">
+                                <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="45"
+                                     aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                    <span>{{'nouveau.Deleting___' | translate}}</span>
+                                </div>
+                            </div>
+
+                            <div bn-slide-show="document.state === 'saving'" class="progress progress-striped active">
+                                <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="45"
+                                     aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                    <span>{{'nouveau.Saving___' | translate}}</span>
+                                </div>
+                            </div>
+
+                            <div bn-slide-show="document.state === 'replace'" class="progress progress-striped active">
+                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="45"
+                                     aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                    <span>{{'nouveau.Replacing___' | translate}}</span>
+                                </div>
+                            </div>
+
+                            <div bn-slide-show="document.state === 'visuel'" class="progress progress-striped active">
+                                <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="45"
+                                     aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                    <span>{{'nouveau.Updating_visual___' | translate}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+                <legend class="mini">
+                    {{'nouveau.Annex_es_' | translate}}
+                </legend>
+                <ul ui-sortable="getSortableOptions('.mainDocList')" class="annexesDocList" ng-model="documentsAnnexes">
+                    <li delete ng-repeat="document in documentsAnnexes">
+                        <div>
+                            <span ng-if="document.isLocked">
+                                <i class="fa fa-info-circle text-info"
+                                   tooltip="{{'nouveau.Transforming___' | translate}}"></i>
+                            </span>
+                            <span><i
+                                    ng-if="document.canDelete && (documentsAnnexes.length > 1 || documentsPrincipaux.length > 0)"
+                                    ng-click="document.state = 'delete'; removeDocument(document)"
+                                    class="fa fa-trash" tooltip="Supprimer le document"></i> {{document.name}}</span><br>
+                            <span class="text text-info"
+                                  ng-if="documentsAnnexes.length == 1 && documentsPrincipaux.length == 0"><i
+                                    class="fa fa-info-circle"></i> En l'absence de pièce principale, cette annexe sera transformée en pièce principale lors de la sauvegarde.</span>
+                            <br>
+
+                            <span ng-if="document.isProtected" class="text-warning">
+                                <i class="fa fa-warning"></i>
+                                {{'nouveau.Protected_PDF' | translate}}
+                            </span>
+
+                            <div bn-slide-show="document.state === 'delete'" class="progress progress-striped active">
+                                <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="45"
+                                     aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                    <span>{{'nouveau.Deleting___' | translate}}</span>
+                                </div>
+                            </div>
+
+                            <div bn-slide-show="document.state === 'saving'" class="progress progress-striped active">
+                                <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="45"
+                                     aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                    <span>{{'nouveau.Saving___' | translate}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+            </div>
+
+            <div class="alert alert-danger" ng-if="existLog">
+                <span><i
+                        class="fa fa-warning"></i> {{'nouveau.Error_on_file_transfert' | translate}} : {{message}}</span>
+            </div>
+            <div class="alert alert-danger" ng-if="result">
+                {{result.data.reponse | i18n}}
+            </div>
+            <div ng-show="typeError" class="alert alert-danger">
+                {{'nouveau.Error_The_file_type_isnt_handled_by_the_iParapheur' | translate}}
+            </div>
+            <div ng-show="formatError" class="alert alert-danger">
+                {{'nouveau.Error_The_file_type_does_not_match_the_selected_type' | translate}}
+            </div>
+            <div ng-show="pdfError" class="alert alert-danger">
+                {{'nouveau.Error_The_visual_has_to_be_a_PDF_file' | translate}}
+            </div>
+            <div ng-show="requestError" class="alert alert-danger">
+                {{requestErrorMessage}}
+            </div>
+
+            <hr>
+
+            <span class="btn btn-warning" ng-click="cancel()">
+                <i class="fa fa-times-circle-o"></i>
+                {{'Back' | translate}}
+            </span>
+            <span ng-click="save()" class="btn btn-primary" ng-disabled="!(nouveau.$valid && loadingDocuments === 0 && !upgrading)">
+                <i class="fa fa-floppy-o"></i>
+                {{'Save' | translate}}
+            </span>
+
+            <span class="btn btn-success"
+                  ng-disabled="!nouveau.$valid || dossier.documents[0].id == null || loadingDocuments > 0 || upgrading"
+                  ng-click="currentBureau.isSecretaire ? saveAndSecretariat() : saveAndEmit()">
+                <i class="fa fa-floppy-o"></i>
+                {{'nouveau.Save_and_send' | translate}}
+            </span>
+
+            <hr>
+            <div bn-slide-show="upgrading" class="progress progress-striped active">
+                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="45" aria-valuemin="0"
+                     aria-valuemax="100" style="width: 100%">
+                    <span>{{'nouveau.Saving_properties' | translate}}</span>
+                </div>
+            </div>
+
+            <div ng-if="circuit.hasSelectionScript ? dossier.circuit.etapes[0].actionDemandee === 'VISA' && dossier.circuit.etapes[0].parapheurName === currentBureau.name : circuit.etapes[0].actionDemandee === 'VISA' && circuit.etapes[0].parapheurName === currentBureau.name && circuit.etapes[0].transition !== 'VARIABLE'"
+                 class="text text-info">
+                <i class="fa fa-info-circle"></i> {{'nouveau.You_are_asked_for_a_visa_in_the_first_step' | translate}}
+            </div>
+
+            <div ng-if="redirect" class="text text-success">
+                <i class="fa fa-check"></i> {{'nouveau.Folder_saved_Redirect_to_preview' | translate}}
+            </div>
+            <div ng-if="errorSavingProperties" class="text text-danger">
+                <i class="fa fa-times"></i> {{'nouveau.An_error_occured_on_folder_save' | translate}}
+            </div>
+        </div>
+    </div>
+</div>

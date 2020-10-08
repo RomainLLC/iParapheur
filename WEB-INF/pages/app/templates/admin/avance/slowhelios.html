@@ -1,0 +1,223 @@
+<div>
+    <div style="top:100px;" class="nextDossierInfo" ng-if="!slowHelios.isInit">
+            <span class="text text-info">
+                {{'Admin.Avance.getting_infos' | translate}}
+            </span>
+        <span style="position: relative; width: 0px; z-index: 2000000000; right: 140px; top: 100px;" us-spinner="{radius:20, width:8, length: 16}" ></span>
+    </div>
+    <div class="col-md-12" ng-if="slowHelios.isInit">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>{{'Admin.Avance.Helios.title' | translate}}</h3>
+            </div>
+        </div>
+        <div class="row">
+            <form submit-button=".launchUploadHelios" one-file="true" fileupload="certificat" file-added="slowHelios.certAdded(files)" wrong-type="slowHelios.wrongType(ext)" fileinput="#fileinput" upload-success="slowHelios.fileEncoded(data, index)" action="{{context + '/base64encode'}}" method="POST" enctype="multipart/form-data" novalidate name="modalForm" class="form-horizontal">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="form-group col-md-4">
+                            <div>
+                                <div class="radio">
+                                    <label for="connecteurActivHelios">
+                                        <input class="unvalidate" id="connecteurActivHelios" ng-model="slowHelios.config.active" type="radio" value="true" name="connecteurStateHelios">{{'Admin.Avance.Helios.enable' | translate}}
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label for="connecteurDesactivHelios">
+                                        <input class="unvalidate" id="connecteurDesactivHelios" ng-model="slowHelios.config.active" type="radio" value="false" name="connecteurStateHelios">{{'Admin.Avance.Helios.disable' | translate}}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#connecteurHelios" bs-tab><i class="fa fa-plug"></i> {{'Admin.Avance.Helios.connect_to_server' | translate}}</a></li>
+                        <li><a href="#signatureHelios" bs-tab><i class="fa fa-gavel"></i> {{'Admin.Avance.Helios.xades_profile' | translate}}</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div class='tab-pane' ng-class="'active'" id='connecteurHelios'>
+                            <div class="col-md-12">
+    
+                                <div class="form-group">
+                                    <label class="control-label col-sm-3" for="serveurHelios">{{'Admin.Avance.Helios.server_name' | translate}}</label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control unvalidate" type="text" id="serveurHelios" name="serveurHelios" ng-change="slowHelios.infoChanged()" placeholder="{{slowHelios.config.server}}" ng-model="slowHelios.config.server" required>
+                                    </div>
+                                </div>
+    
+                                <div class="form-group">
+                                    <label class="control-label col-sm-3" for="portHelios">{{'Admin.Avance.Helios.server_port' | translate}}</label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control unvalidate" type="text" id="portHelios" name="portHelios" ng-change="slowHelios.infoChanged()" placeholder="{{slowHelios.config.port}}" ng-model="slowHelios.config.port" required>
+                                    </div>
+                                </div>
+    
+                                <div class="form-group" style="display:inline-block;">
+                                    <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+                                    <div class="fileupload-buttonbar form-group" style="margin-bottom:0;">
+                                        <!-- The fileinput-button span is used to style the file input field as button -->
+                                        <div class="col-md-6">
+                                            <div class="col-md-12">
+                                                <span style="display:block !important;" class="btn btn-default fileinput-button">
+                                                    <i class="fa fa-folder-open-o"></i>
+                                                    <span>{{'Browse' | translate}}</span>
+                                                    <input id="fileinput" type="file" name="file">
+                                                </span>
+                                                <span ng-if="slowHelios.typeError" class="text-danger"><i class="fa fa-times"></i> {{'Admin.Avance.Helios.certificate_error' | translate}}</span>
+                                            </div>
+                                            <div class="col-md-12" style="float:left;">
+                                                <span>{{'Admin.Avance.Helios.certificate_sel' | translate}} : {{slowHelios.filename}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" style="display:inline-block;">
+                                            <div>
+                                                <p>{{'Admin.Avance.Helios.certificate_actual' | translate}} : {{slowHelios.config.name}}<br>
+                                                    {{'Admin.Avance.Helios.certificate_expiration' | translate}} : {{slowHelios.config.dateLimite}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+    
+                                <div class="form-group">
+                                    <label class="control-label col-sm-3" for="passwordHelios">{{'Admin.Avance.Helios.certificate_passwd' | translate}}</label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control unvalidate" type="text" id="passwordHelios" name="passwordHelios" ng-change="slowHelios.infoChanged()" placeholder="{{slowHelios.config.password}}" ng-model="slowHelios.config.password" required>
+                                    </div>
+                                </div>
+    
+                                <div class="form-group">
+                                    <div class="col-md-6 row">
+                                        <div class="col-md-12">
+                                        <span ng-if="slowHelios.config.isPwdGoodForPkcs !== 'ex'">{{'Admin.Avance.Helios.certificate_passwd' | translate}} :
+                                            <i class="fa fa-check fa-2x" style="color:green;" ng-show="slowHelios.config.isPwdGoodForPkcs === 'ok'"></i>
+                                            <i class="fa fa-times fa-2x" style="color:red;" ng-show="slowHelios.config.isPwdGoodForPkcs !== 'ok'"></i>
+                                        </span>
+                                        <span ng-if="slowHelios.config.isPwdGoodForPkcs === 'ex'">
+                                            <i class="fa fa-warning fa-2x text-warning"></i> {{'Admin.Avance.Helios.certificate_expired' | translate}}
+                                        </span>
+                                        </div>
+                                        <div class="col-md-12">
+                                        <span ng-if="slowHelios.config.listeLogins.length > 1">{{'Admin.Avance.Helios.connection_with_user' | translate}} :
+                                            <i class="fa fa-check fa-2x" style="color:green;" ng-show="slowHelios.config.validLoginAndCertCnx === 'ok'"></i>
+                                            <i class="fa fa-times fa-2x" style="color:red;" ng-show="slowHelios.config.validLoginAndCertCnx !== 'ok'"></i>
+                                        </span>
+                                        </div>
+    
+                                    </div>
+                                    <div class="col-md-6" ng-if="slowHelios.config.listeLogins.length > 1">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label" for="userHelios">{{'Admin.Avance.Helios.user' | translate}}</label>
+                                                    <select ng-change="slowHelios.infoChanged()" id="userHelios" name="userHelios" class="form-control" ng-model="slowHelios.config.userlogin" ng-options="user for user in slowHelios.config.listeLogins">
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label" for="passwordUserHelios">{{'Admin.Avance.Helios.passwd' | translate}}</label>
+                                                    <input ng-change="slowHelios.infoChanged()" id="passwordUserHelios" name="passwordUserHelios" type="text" class="form-control" ng-model="slowHelios.config.userpassword">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <span>{{'Admin.Avance.Helios.certificate_connection' | translate}} :
+                                            <i class="fa fa-check fa-2x" style="color:green;" ng-show="slowHelios.config.validCertCnx === 'ok'"></i>
+                                            <i class="fa fa-times fa-2x" style="color:red;" ng-show="slowHelios.config.validCertCnx !== 'ok'"></i>
+                                        </span>
+                                    </div>
+                                </div>
+    
+                                <span ng-if="(slowHelios.config.validCertCnx !== 'ok' || slowHelios.config.validLoginAndCertCnx !== 'ok' || slowHelios.changed) && slowHelios.config.active === 'true'" class="text-danger">{{'Admin.Avance.Helios.must_save' | translate}}</span>
+                            </div>
+                        </div>
+                        <div class='tab-pane' id='signatureHelios'>
+                            <div class="col-md-12">
+
+                                <div class="form-group">
+                                    <label class="control-label col-sm-3" for="pPolicyIdentifierID">{{'Admin.Avance.Helios.policy_identifier' | translate}}</label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control" type="text" id="pPolicyIdentifierID" name="pPolicyIdentifierID" ng-model="slowHelios.config.pPolicyIdentifierID" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-sm-3" for="pPolicyIdentifierDescription">{{'Admin.Avance.Helios.policy_identifier_description' | translate}}</label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control" type="text" id="pPolicyIdentifierDescription" name="pPolicyIdentifierDescription" ng-model="slowHelios.config.pPolicyIdentifierDescription" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-sm-3" for="pPolicyDigest">{{'Admin.Avance.Helios.policy_digest' | translate}}</label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control" type="text" id="pPolicyDigest" name="pPolicyDigest" ng-model="slowHelios.config.pPolicyDigest" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-sm-3" for="pSPURI">{{'Admin.Avance.Helios.spuri' | translate}}</label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control" type="text" id="pSPURI" name="pSPURI" ng-model="slowHelios.config.pSPURI" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" ng-show="false">
+                                    <label class="control-label col-sm-3" for="pClaimedRole">{{'Admin.Avance.Helios.claimed_role' | translate}}</label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control" type="text" id="pClaimedRole" name="pClaimedRole" ng-model="slowHelios.config.pClaimedRole" required>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-3" for="pPostalCode">{{'Admin.Avance.Helios.postal_code' | translate}}</label>
+                                            <div class="col-sm-9">
+                                                <input class="form-control" type="text" id="pPostalCode" name="pPostalCode" ng-model="slowHelios.config.pPostalCode" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-3" for="pCity">{{'Admin.Avance.Helios.city' | translate}}</label>
+                                            <div class="col-sm-9">
+                                                <input class="form-control" type="text" id="pCity" name="pPostalCode" ng-model="slowHelios.config.pCity" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label class="control-label col-sm-3" for="pCountryName">{{'Admin.Avance.Helios.country' | translate}}</label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control" type="text" id="pCountryName" name="pCountryName" ng-model="slowHelios.config.pCountryName" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <span class="btn btn-default launchUploadHelios force-display" ng-click="slowHelios.enableModeTest()">
+                                <i class="fa fa-check"></i>
+                                {{'Admin.Avance.Helios.test_config' | translate}}
+                            </span>
+                            <span ng-disabled="(slowHelios.config.validCertCnx !== 'ok' || slowHelios.config.validLoginAndCertCnx !== 'ok' || slowHelios.changed) && slowHelios.config.active === 'true'" ng-click="slowHelios.enableModeSave()" class="btn btn-primary launchUploadHelios force-display">
+                                <i class="fa fa-save"></i>
+                                {{'Admin.Avance.Helios.save_config' | translate}}
+                            </span>
+                            <span  ng-if="slowHelios.hasTestConfig">
+                                <div class="text-info"><i class="fa fa-info-circle"></i> {{'Admin.Avance.Helios.test_updated' | translate}}</div>
+                                <div ng-if="slowHelios.config.active === 'false'" class="text-warning"><i class="fa fa-warning"></i> {{'Admin.Avance.Helios.warn_disabled' | translate}}</div>
+                            </span>
+                            <span class="text-success" ng-if="slowHelios.hasSaveConfig"><i class="fa fa-check"></i> {{'Admin.Avance.Helios.saved' | translate}}</span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,17 @@
+{
+  "Admin": {
+    "Avance": {
+      "Script": {
+        "Script_execution": "Exécution d'un script",
+        "Execute_as_admin": "Exécuter en tant qu'utilisateur",
+        "of_tenant": "du tenant",
+        "Read_only": "Lecture seule",
+        "Error_on_script_execution": "Erreur lors de l'exécution du script.",
+        "Execute_script": "Envoyer le script",
+        "Model": "Modèle",
+        "Error_message": "Message d'erreur",
+        "Model": "Modèle"
+      }
+    }
+  }
+}

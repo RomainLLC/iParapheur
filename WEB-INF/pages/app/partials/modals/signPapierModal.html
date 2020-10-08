@@ -1,0 +1,47 @@
+<div class="modal-header">
+    <h3>{{'signPaperModal.signature_paper_confirmation' | translate}}</h3>
+</div>
+<div class="modal-body row">
+    <form novalidate name="modalForm" class="row form-horizontal">
+        <div class="col-md-6">
+            <label class="legendLabel col-xs-12">
+                {{'signPaperModal.public_annotation' | translate}}
+                <hr>
+                <div>
+                    <textarea class="form-control annotation" ng-model="action.annotPub"></textarea>
+                    <i class="fa fa-3x fa-globe textarea-icon"></i>
+                </div>
+            </label>
+            <label class="legendLabel col-xs-12">
+                {{'signPaperModal.private_annotation' | translate}}
+                <hr>
+                <div>
+                    <textarea class="form-control annotationprivee" ng-model="action.annotPriv"></textarea>
+                    <i class="fa fa-3x fa-user-secret textarea-icon"></i>
+                </div>
+            </label>
+        </div>
+        <div class="col-md-6">
+            <div class="col-xs-12">
+                <span class="legend">{{'signPaperModal.folder_list' | translate}}<hr></span>
+                <ul class="listeDossiers">
+                    <li ng-repeat="dossier in dossiers" class="btn btn-default col-md-12 force-display"><span class="label label-info">{{dossier.actionDemandee}}</span>{{dossier.title}}</li>
+                </ul>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="modal-footer">
+    <progressbar class="progress-striped active progress-modal" value="progress" max="max" type="info">
+        <span style="color:black; white-space:nowrap;">{{'signPaperModal.handled_folders' | translate}} : {{progress}} / {{max}}</span>
+    </progressbar>
+    <button class="btn btn-warning" ng-click="cancel()">
+        <i class="fa fa-times-circle-o"></i>
+        {{'Back' | translate}}
+    </button>
+    <button ng-disabled="!modalForm.$valid" class="btn btn-primary" ng-click="ok()">
+        <i class="fa fa-check"></i>
+        {{'signPaperModal.Transmit_after_printing_and_paper_signature' | translate}}
+    </button>
+</div>

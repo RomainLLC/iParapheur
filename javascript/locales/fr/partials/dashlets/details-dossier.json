@@ -1,0 +1,20 @@
+{
+  "details-dossier": {
+    "folderDetails": "Détails du dossier",
+    "type": "Type",
+    "subtype": "Sous-type",
+    "undefined": "Non défini",
+    "visibility": "Visibilité",
+    "readFolder": "Dossier lu par un acteur de l'étape",
+    "unreadFolder": "Dossier non lu par un acteur de l'étape",
+    "tdtStatus": "État du TdT",
+    "required": "Obligatoire",
+    "true": "Oui",
+    "false": "Non",
+    "savedMetadatas": "Métadonnées sauvegardées",
+    "saveMetadatas": "Sauvegarder les métadonnées",
+    "addFile": "Ajouter un fichier",
+    "Error_The_file_type_isnt_handled_by_the_iParapheur": "Erreur : Le type de fichier séléctionné n'est pas géré par le i-Parapheur.",
+    "Error_The_file_type_does_not_match_the_selected_type": "Erreur : Le fichier n'est pas supporté par le type sélectionné."
+  }
+}

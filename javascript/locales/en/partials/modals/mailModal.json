@@ -1,0 +1,12 @@
+{
+  "mailModal": {
+    "sending_mail": "Sending mail",
+    "to": "To",
+    "object": "Object",
+    "message": "Message",
+    "folder_list": "Folder list",
+    "send_signature_slip": "Send signature slip",
+    "annexes_to_add": "Annexes to add",
+    "send_annexes": "Send annexes"
+  }
+}

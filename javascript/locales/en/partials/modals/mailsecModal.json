@@ -1,0 +1,14 @@
+{
+  "mailsecModal": {
+    "send_by_secure_mail": "Send by secure mail",
+    "to": "To",
+    "cc": "CC",
+    "cci": "CCI",
+    "object": "Object",
+    "message": "Message",
+    "password": "Password",
+    "sending_password_uncrypted": "Sending password uncrypted ?",
+    "annexes_to_add": "Annexes to add",
+    "folder_list": "Folder list"
+  }
+}

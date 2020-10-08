@@ -1,0 +1,10 @@
+{
+  "archiveModal": {
+    "archiving": "Archive",
+    "folder_name": "Folder name",
+    "archive_name": "Archive name",
+    "archive_name_default": "(by default : folder name.pdf)",
+    "add_annexes": "Add annexes",
+    "handled_folders": "Handled folder(s)"
+  }
+}

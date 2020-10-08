@@ -1,0 +1,67 @@
+<div class="modal-header">
+    <h3>{{'mailsecInfoModal.folder_state_on_the_secured_mail_platform' | translate}}</h3>
+</div>
+<div class="modal-body row">
+    <div>
+        <b>Statut : </b>
+        <span id="statusInfos">{{dossier.infosMailSec.statut}}</span>
+        <span ng-if="error" class="text text-danger">
+            <i class="fa fa-warning"></i>
+            Erreur lors de la récupération du statut.
+            </br>
+            Veuillez contacter votre administrateur.
+        </span>
+        <div style="float:right;">
+            <span us-spinner spinner-key="spinner"></span>
+            <button ng-click="update()" ng-disabled="updating" class="btn btn-info"><i class="fa fa-undo"></i><span> {{'mailsecInfoModal.refresh' | translate}}</span></button>
+        </div>
+        <br>
+        <span ng-if="dossier.infosMailSec.documentId">
+            <b>{{'mailsecInfoModal.send_date' | translate}} : </b><span id="statusEnvoi">{{dossier.infosMailSec.envoi | date:'dd/MM/yyyy HH:mm'}}</span>
+        </span>
+        <span ng-if="!dossier.infosMailSec.documentId">
+            <b>{{'mailsecInfoModal.send_date' | translate}} : </b><span id="statusEnvoi">{{dossier.infosMailSec.envoi | toUTC | date:'dd/MM/yyyy HH:mm'}}</span>
+        </span>
+
+        <br>
+        <span ng-if="dossier.infosMailSec.documentId" style="color: rgba(0,0,0,0.25); font-size: 0.7em;">
+            <b>Identifiant unique : </b><span>{{dossier.infosMailSec.documentId}}</span>
+        </span>
+
+
+    </div>
+    <br>
+    <div>
+        <table class="table table-striped table-condensed table-bordered" aria-live="polite">
+            <thead>
+        <tr>
+            <th id="column_confirmed" >{{'mailsecInfoModal.state' | translate}}</th>
+            <th id="column_mail">{{'mailsecInfoModal.mail' | translate}}</th>
+            <th id="column_date">{{'mailsecInfoModal.modification_date' | translate}}</th>
+        </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="info in dossier.infosMailSec.details">
+                    <td style="text-align: center;">
+                        <i ng-class="info.confirmed ? 'fa-check text-success' : 'fa-times text-danger'" class="fa" ></i>
+                    </td>
+                    <td>{{info.email}}</td>
+                    <td>{{info.confirmationDate | date:'EEEE dd MMMM yyyy HH:mm:ss'}}</td>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+    <br>
+    <p class="text-info infoNextStep" ng-if="dossier.infosMailSec.statut === 'confirmé'">{{'mailsecInfoModal.go_to_next_step_confirmed' | translate}}</p>
+</div>
+
+<div class="modal-footer">
+    <div style="float:left;">
+        <button ng-disabled="dossier.infosMailSec.statut == 'confirmé'" class="btn btn-danger" ng-click="remorse()" ng-if="dossier.infosMailSec.documentId"><i class="fa fa-times-circle-o"></i> Interrompre la récupération de l'état</button>
+        <button ng-disabled="dossier.infosMailSec.statut == 'confirmé'" class="btn btn-danger" ng-click="remorse()" ng-if="!dossier.infosMailSec.documentId"><i class="fa fa-share"></i> {{'mailsecInfoModal.use_my_remorse_right' | translate}}</button>
+        <button ng-disabled="dossier.infosMailSec.statut == 'confirmé'" class="btn btn-success" ng-click="force()"><i class="fa fa-road"></i> {{'mailsecInfoModal.ignore_unconfirmed_mails' | translate}}</button>
+    </div>
+
+    <button class="btn btn-default" ng-click="cancel()"><i class="fa fa-times"></i> {{'Close' | translate}}</button>
+</div>

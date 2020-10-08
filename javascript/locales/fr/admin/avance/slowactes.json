@@ -1,0 +1,34 @@
+{
+  "Admin": {
+    "Avance": {
+      "Actes": {
+        "title": "Configurer le connecteur S²LOW ACTES",
+        "enable": "Activer le connecteur",
+        "disable": "Désactiver le connecteur",
+        "server_name": "Nom du serveur",
+        "server_port": "Port",
+        "certificate": "Certificat de connexion",
+        "certificate_error": "Le fichier n'est pas du type attendu (.p12).",
+        "certificate_sel": "Certificat sélectionné",
+        "certificate_actual": "Certificat Actuel",
+        "certificate_expiration": "Date d'expiration",
+        "certificate_passwd": "Mot de passe du certificat",
+        "certificate_expired": "Certificat expiré",
+        "connection_with_user": "Connexion avec l'utilisateur",
+        "user": "Compte utilisateur",
+        "passwd": "Mot de passe",
+        "certificate_connection": "Connexion avec le certificat",
+        "archive_base_url": "URL de base pour l'archivage",
+        "must_save": "La connexion doit être validée pour Enregistrer la configuration",
+        "test_config": "Tester la configuration",
+        "save_config": "Enregistrer la configuration",
+        "test_updated": "Tests mis à jour.",
+        "warn_disabled": "Attention, le connecteur est désactivé.",
+        "saved": "Configuration sauvegardée.",
+        "classif_updated": "Classifications mises à jour.",
+        "classif_not_updated": "Classifications non mises à jour.",
+        "classif_update": "Mettre à jour la classification"
+      }
+    }
+  }
+}

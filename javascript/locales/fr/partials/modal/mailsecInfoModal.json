@@ -1,0 +1,13 @@
+{
+  "mailsecInfoModal": {
+    "folder_state_on_the_secured_mail_platform": "Etat du dossier sur la plate-forme de Mail Securisé",
+    "refresh": "Actualiser",
+    "send_date": "Date d'envoi",
+    "state": "État",
+    "mail": "E-mail",
+    "modification_date": "Date de confirmation",
+    "go_to_next_step_confirmed": "Passage à l'étape suivante en cours ...",
+    "use_my_remorse_right": "Exercer mon droit de remords",
+    "ignore_unconfirmed_mails": "Ignorer les envois non confirmés"
+  }
+}

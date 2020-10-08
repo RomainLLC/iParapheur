@@ -1,0 +1,51 @@
+<!-- Affichage d'un bureau -->
+<a ng-if="isThumbnail" class="thumbnail bureau" name='{{b.name}}' id="{{b.nodeRef}}" ng-click="goToDashboard()" href="#/dashboard" >
+    <div class="image-wrap">
+        <span ng-show="b['en-retard'] > 0" ng-click="retard()" i18n="app.bureau.fileLate" placement="top" kind="tooltip" count="{{b['en-retard']}}" class="label label-danger" >{{b['en-retard']}}</span>
+        <span class="label label-info" ng-click="traiter()" i18n="{{(b.isSecretaire ? 'Dossiers en secretariat' : 'Dossiers à traiter') + ' : __count__'}}" placement="top" kind="tooltip" count="{{b['a-traiter'] !== undefined ? b['a-traiter'] : b['secretariat']}}" > {{b.isSecretaire ? b['secretariat'] : b['a-traiter']}}</span>
+        <span ng-show="b['en-preparation'] > 0" ng-click="preparation()" class="label label-warning" placement="top" i18n="app.bureau.fileToTransmit" kind="tooltip" count="{{b['en-preparation']}}" >{{b['en-preparation']}}</span>
+        <span ng-show="b['a-archiver'] > 0" ng-click="archive()" class="label label-success" placement="top" i18n="app.bureau.fileToArchive" kind="tooltip" count="{{b['a-archiver']}}" >{{b['a-archiver']}}</span>
+        <span ng-show="b.retournes > 0 || b['a-imprimer'] > 0" ng-click="retournes()" class="label label-inverse" placement="top" i18n="{{(b.isSecretaire ? 'Dossiers à imprimer' : 'Dossiers rejetés') + ' : __count__'}}" kind="tooltip" count="{{b['retournes'] !== undefined ? b['retournes'] : b['a-imprimer']}}" >{{b.isSecretaire ? b['a-imprimer'] : b['retournes']}}</span>
+        <span ng-show="b['dossiers-delegues'] > 0" style="top:30px; background-color: #6f5499;" ng-click="delegue()"
+              class="label label-info"
+              placement="top" i18n="app.bureau.fileDeleg" kind="tooltip" count="{{b['dossiers-delegues']}}">{{b['dossiers-delegues']}}</span>
+        <img alt="{{b.name}}" ng-cloak ng-show="!hasThemeIcon" ng-src="{{context}}/res/images/bureau_v3.svg">
+        <img alt="{{b.name}}" ng-cloak ng-show="hasThemeIcon" imageonload="iconBureauLoaded()" ng-src="{{context}}/themes/{{tenant ? tenant + '/' : ''}}{{theme}}.png">
+    </div>
+    <div class="nom-bureau">{{b.name}}</div>
+</a>
+<a ng-if="!isThumbnail" ng-click="goToDashboard()" href="#/dashboard" ng-disabled="flags.backdrop" id="currentBureauName">{{b.shortName}}
+    <div style="position:absolute;left:0; right:0;bottom:0;">
+        <div style="display:table; width:100%">
+            <div style="display:table-cell; width:20%;">
+                <span ng-show="b['en-retard'] > 0" ng-click="retard()" i18n="app.bureau.fileLate" placement="bottom"
+                      kind="tooltip" watch-value="b['en-retard']" count="{{b['en-retard']}}" class="label label-danger">{{b['en-retard']}}</span>
+            </div>
+            <div style="display:table-cell; width:20%;">
+                <span ng-show="b['a-archiver'] > 0" ng-click="archive()" class="label label-success" placement="bottom"
+                      i18n="app.bureau.fileToArchive" kind="tooltip" watch-value="b['a-archiver']"
+                      count="{{b['a-archiver']}}">{{b['a-archiver']}}</span>
+            </div>
+            <div style="display:table-cell; width:20%;">
+                <span ng-show="b['retournes'] > 0 || b['a-imprimer'] > 0" ng-click="retournes()"
+                      class="label label-inverse" placement="bottom"
+                      i18n="{{(b.isSecretaire ? 'Dossiers à imprimer' : 'Dossiers rejetés') + ' : __count__'}}"
+                      kind="tooltip" watch-value="b.retournes"
+                      count="{{b['retournes'] !== undefined ? b['retournes'] : b['a-imprimer']}}">{{b.isSecretaire ? b['a-imprimer'] : b['retournes']}}</span>
+            </div>
+            <div style="display:table-cell; width:20%;">
+                <span ng-show="b['en-preparation'] > 0" ng-click="preparation()" class="label label-warning"
+                      placement="bottom" i18n="app.bureau.fileToTransmit" kind="tooltip"
+                      watch-value="b['en-preparation']" count="{{b['en-preparation']}}">{{b['en-preparation']}}</span>
+            </div>
+            <div style="display:table-cell; width:20%;">
+                <span ng-if="!b.isSecretaire" class="label label-info" ng-click="traiter()" i18n="app.bureau.fileToDo"
+                      placement="bottom" kind="tooltip" watch-value="b['a-traiter']" count="{{b['a-traiter']}}">{{b['a-traiter']}}</span>
+                <span ng-if="b.isSecretaire" class="label label-info" ng-click="traiter()"
+                      i18n="Dossiers en secretariat : __count__" placement="bottom" kind="tooltip"
+                      watch-value="b.secretariat" count="{{b.secretariat}}">{{b.secretariat}}</span>
+            </div>
+        </div>
+    </div>
+</a>
+

@@ -1,0 +1,19 @@
+{
+  "apercu": {
+    "Show_with_PDF_reader": "Show with PDF reader",
+    "Save_screen_layout": "Save screen layout",
+    "Show_with_Xemelios_viewer": "Show with Xemelios viewer",
+    "View_folder_in_fullscreen_mode": "View folder in fullscreen mode",
+    "Exit_fullscreen_mode": "Exit fullscreen mode",
+    "Action_pending_Next_folder_selected": "Action pending, selecting next folder",
+    "No_visual_to_display": "No visual to display",
+    "Screen_layout_saved": "Screen layout saved.",
+    "Folder_refreshing_Please_wait": "Refreshing folder, please_wait...",
+    "Next_page": "Next page",
+    "Previous_page": "Previous page",
+    "Loading_Xemelios_viewer___": "Loading the Xemelios_ viewer...",
+    "Cant_load_the_Xemelios_viewer": "Can't load the Xemelios viewer",
+    "Loading_folder_preview___": "Loading folder preview...",
+    "Moved_archived_or_deleted_folder": "Moved, archived, or deleted folder."
+  }
+}

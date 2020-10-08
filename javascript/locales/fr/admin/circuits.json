@@ -1,0 +1,38 @@
+{
+  "EMETTEUR": "Émetteur",
+  "VISA": "Visa",
+  "SIGNATURE": "Signature",
+  "MAILSECPASTELL": "Mail sécurisé Pastell",
+  "CHEF_DE": "Chef de",
+  "VARIABLE": "Bureau variable",
+  "Admin": {
+    "Circuits": {
+      "Wo_Title": "Gestion des circuits",
+      "Wo_Create": "Créer un circuit",
+      "Wo_Copy": "Dupliquer le circuit",
+      "Wo_Used": "Circuit utilisé",
+      "Wo_New": "Nom du nouveau circuit",
+      "Wo_Creation": "Création",
+      "Wo_RemoveStep": "Supprimer l'étape",
+      "Wo_Step": "Étape",
+      "Wo_Action": "Action demandée",
+      "Wo_Desk": "Bureau",
+      "Wo_Mailsec": "Mail sécurisé S²LOW",
+      "Wo_Mailsec_Pastell": "Mail sécurisé Pastell",
+      "Wo_Cachet": "Cachet serveur",
+      "Wo_Tdt": "Télé-transmission",
+      "Wo_Actual": "Actuel",
+      "Wo_Notifs": "Notifications",
+      "Wo_Search_Info": "Recherche sensible aux accents",
+      "Wo_Desks": "Bureaux",
+      "Wo_Notified": "Notifié(s)",
+      "Wo_Notified_None": "Aucun bureau notifié",
+      "Wo_Used_Info": "Ce circuit ne peut pas être renommé / supprimé car il est utilisé par les types suivants",
+      "Wo_Exist": "Un circuit du même nom existe déjà",
+      "Wo_Saved": "Circuit enregistré",
+      "Wo_Delete" : "Supprimer le circuit",
+      "Wo_Confirm" : "Etes-vous sûr de vouloir supprimer le circuit",
+      "Wo_Copied": "Circuit copié"
+    }
+  }
+}

@@ -1,0 +1,210 @@
+<div>
+    <div style="top:100px;" class="nextDossierInfo" ng-if="!fastHelios.isInit">
+                <span class="text text-info">
+                    {{'Admin.Avance.getting_infos' | translate}}
+                </span>
+        <span style="position: relative; width: 0; z-index: 2000000000; right: 140px; top: 100px;" us-spinner="{radius:20, width:8, length: 16}" ></span>
+    </div>
+    <div class="col-md-12" ng-if="fastHelios.isInit">
+    <div class="row">
+        <div class="col-md-12">
+            <h3>{{'Admin.Avance.Fast.title' | translate}}</h3>
+        </div>
+    </div>
+    <div class="row">
+        <form submit-button=".launchUploadFast" one-file="true" fileupload="certificat" file-added="fastHelios.certAdded(files)" wrong-type="fastHelios.wrongType(ext)" fileinput="#fileinput" upload-success="fastHelios.fileEncoded(data, index)" action="{{context + '/base64encode'}}" method="POST" enctype="multipart/form-data" novalidate name="modalForm" class="form-horizontal">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <div>
+                            <div class="radio">
+                                <label for="connecteurActivFast">
+                                    <input class="unvalidate" id="connecteurActivFast" ng-model="fastHelios.config.active" type="radio" value="true" name="connecteurStateFast">{{'Admin.Avance.Fast.enable' | translate}}
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label for="connecteurDesactivFast">
+                                    <input class="unvalidate" id="connecteurDesactivFast" ng-model="fastHelios.config.active" type="radio" value="false" name="connecteurStateFast">{{'Admin.Avance.Fast.disable' | translate}}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#connecteurfast" bs-tab><i class="fa fa-info-circle"></i> {{'Admin.Avance.Fast.connect_to_server' | translate}}</a></li>
+                    <li><a href="#signaturefast" bs-tab><i class="fa fa-road"></i> {{'Admin.Avance.Fast.xades_profile' | translate}}</a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class='tab-pane' ng-class="'active'" id='connecteurfast'>
+                        <div class="col-md-12">
+
+                            <div class="form-group">
+                                <label class="control-label col-sm-3" for="serveurFast">{{'Admin.Avance.Fast.server_name' | translate}}</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control unvalidate" type="text" id="serveurFast" name="serveurFast" ng-change="fastHelios.infoChanged()" placeholder="{{fastHelios.config.server}}" ng-model="fastHelios.config.server" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-sm-3" for="portFast">{{'Admin.Avance.Fast.server_port' | translate}}</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control unvalidate" type="text" id="portFast" name="portFast" ng-change="fastHelios.infoChanged()" placeholder="{{fastHelios.config.port}}" ng-model="fastHelios.config.port" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="display:inline-block;">
+                                <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+                                <div class="fileupload-buttonbar form-group" style="margin-bottom:0;">
+                                    <!-- The fileinput-button span is used to style the file input field as button -->
+                                    <div class="col-md-6">
+                                        <div class="col-md-12">
+                                            <span style="display:block !important;" class="btn btn-info fileinput-button">
+                                                <i class="icon-pencil icon-white"></i>
+                                                <span>{{'Admin.Avance.Fast.certificate' | translate}}</span>
+                                                <input id="fileinput" type="file" name="file">
+                                            </span>
+                                            <span ng-if="fastHelios.typeError" class="text-danger"><i class="fa fa-times"></i> {{'Admin.Avance.Fast.certificate_error' | translate}}</span>
+                                        </div>
+                                        <div class="col-md-12" style="float:left;">
+                                            <span>{{'Admin.Avance.Fast.certificate_sel' | translate}} : {{fastHelios.filename}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6" style="display:inline-block;">
+                                        <div>
+                                            <p>{{'Admin.Avance.Fast.certificate_actual' | translate}} : {{fastHelios.config.name}}<br>
+                                                {{'Admin.Avance.Fast.certificate_expiration' | translate}} : {{fastHelios.config.dateLimite}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-sm-3" for="passwordFast">{{'Admin.Avance.Fast.certificate_passwd' | translate}}</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control unvalidate" type="text" id="passwordFast" name="passwordFast" ng-change="fastHelios.infoChanged()" placeholder="{{fastHelios.config.password}}" ng-model="fastHelios.config.password" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-6 row">
+                                    <div class="col-md-12">
+                                        <span>{{'Admin.Avance.Fast.certificate_passwd' | translate}} :
+                                            <i class="fa fa-check fa-2x" style="color:green;" ng-show="fastHelios.config.isPwdGoodForPkcs === 'ok'"></i>
+                                            <i class="fa fa-times fa-2x" style="color:red;" ng-show="fastHelios.config.isPwdGoodForPkcs !== 'ok'"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-sm-3" for="collectiviteFast">{{'Admin.Avance.Fast.idCol' | translate}}</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="text" id="collectiviteFast" name="collectiviteFast" placeholder="{{fastHelios.config.collectivite}}" ng-model="fastHelios.config.collectivite" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-sm-3" for="cinematiqueFast">{{'Admin.Avance.Fast.kinematic' | translate}}</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="text" id="cinematiqueFast" name="cinematiqueFast" placeholder="{{fastHelios.config.cinematique}}" ng-model="fastHelios.config.cinematique" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-sm-3" for="check_freqFast">{{'Admin.Avance.Fast.verify_folders' | translate}}</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="text" id="check_freqFast" name="check_freqFast" placeholder="{{fastHelios.config.check_freq}}" ng-model="fastHelios.config.check_freq" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-sm-3" for="time_to_consider_file_not_pickableFast">{{'Admin.Avance.Fast.error_folders' | translate}}</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="text" id="time_to_consider_file_not_pickableFast" name="time_to_consider_file_not_pickableFast" placeholder="{{fastHelios.config.time_to_consider_file_not_pickable}}" ng-model="fastHelios.config.time_to_consider_file_not_pickable" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='tab-pane' id='signaturefast'>
+                        <div class="col-md-12">
+
+                            <div class="form-group">
+                                <label class="control-label col-sm-3" for="pPolicyIdentifierIDFast">{{'Admin.Avance.Fast.policy_identifier' | translate}}</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="text" id="pPolicyIdentifierIDFast" name="pPolicyIdentifierIDFast" ng-model="fastHelios.config.pPolicyIdentifierID" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-sm-3" for="pPolicyIdentifierDescriptionFast">{{'Admin.Avance.Fast.policy_identifier_description' | translate}}</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="text" id="pPolicyIdentifierDescriptionFast" name="pPolicyIdentifierDescriptionFast" ng-model="fastHelios.config.pPolicyIdentifierDescription" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-sm-3" for="pPolicyDigestFast">{{'Admin.Avance.Fast.policy_digest' | translate}}</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="text" id="pPolicyDigestFast" name="pPolicyDigestFast" ng-model="fastHelios.config.pPolicyDigest" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-sm-3" for="pSPURIFast">{{'Admin.Avance.Fast.spuri' | translate}}</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="text" id="pSPURIFast" name="pSPURIFast" ng-model="fastHelios.config.pSPURI" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-sm-3" for="pClaimedRoleFast">{{'Admin.Avance.Fast.claimed_role' | translate}}</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="text" id="pClaimedRoleFast" name="pClaimedRoleFast" ng-model="fastHelios.config.pClaimedRole" required>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-3" for="pPostalCodeFast">{{'Admin.Avance.Fast.postal_code' | translate}}</label>
+                                        <div class="col-sm-9">
+                                            <input class="form-control" type="text" id="pPostalCodeFast" name="pPostalCodeFast" ng-model="fastHelios.config.pPostalCode" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-3" for="pCityFast">{{'Admin.Avance.Fast.city' | translate}}</label>
+                                        <div class="col-sm-9">
+                                            <input class="form-control" type="text" id="pCityFast" name="pCityFast" ng-model="fastHelios.config.pCity" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="control-label col-sm-3" for="pCountryNameFast">{{'Admin.Avance.Fast.country' | translate}}</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="text" id="pCountryNameFast" name="pCountryNameFast" ng-model="fastHelios.config.pCountryName" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="button" class="btn btn-default launchUploadFast force-display" ng-click="fastHelios.enableModeTest()" value="{{'Admin.Avance.Fast.test_config' | translate}}">
+                        <input type="button" ng-click="fastHelios.enableModeSave()" class="btn btn-success launchUploadFast force-display" value="{{'Admin.Avance.Fast.save_config' | translate}}">
+                        <span  ng-if="fastHelios.hasTestConfig">
+                            <div class="text-info"><i class="fa fa-info-circle"></i> {{'Admin.Avance.Fast.test_updated' | translate}}</div>
+                            <div ng-if="fastHelios.config.active === 'false'" class="text-warning"><i class="fa fa-warning"></i> {{'Admin.Avance.Fast.warn_disabled' | translate}}</div>
+                        </span>
+                        <span class="text-success" ng-if="fastHelios.hasSaveConfig"><i class="fa fa-check"></i> {{'Admin.Avance.Fast.saved' | translate}}</span>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</div>

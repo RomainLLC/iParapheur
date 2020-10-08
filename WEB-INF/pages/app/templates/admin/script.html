@@ -1,0 +1,63 @@
+<div class="row-fluid">
+    <div class="menuAdmin col-md-3 label label-info headertop" removeonsize="992" classes-list="label label-info" ng-include src="'partials/adminNavbar.html'"></div>
+    <div class="row adminContent">
+        <div class="col-md-6">
+            <h2>{{'Admin.Avance.Script.Script_execution' | translate}}</h2>
+        </div>
+
+        <div class="col-md-offset-1 col-md-6 text-info">
+            <i class="fa fa-info-circle"></i>
+            {{'Admin.Avance.Script.Execute_as_admin' | translate}}
+            <input type="text" ng-model="runas" class="unvalidate form-control inline" style="width:auto;">
+            {{'Admin.Avance.Script.of_tenant' | translate}}
+            <select ng-model="selectedTenant" ng-options="tenant.name for tenant in tenantList | orderBy:'name'"
+                    class="unvalidate form-control inline" style="width:auto;">
+                <option value="">-- ROOT --</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-4">
+                <h3>Script</h3>
+                <div ui-ace="{
+                      useWrapMode : true,
+                      showGutter: true,
+                      theme:'twilight',
+                      mode: 'javascript'
+                }" ng-model="script" style="height:400px;"></div>
+                <span ng-click="sendScript()" class="btn btn-success"> {{'Admin.Avance.Script.Execute_script' | translate}}</span>
+                <span ng-if="scriptError" class="text-danger"><i class="fa fa-warning"></i> {{'Admin.Avance.Script.Error_on_script_execution' | translate}}</span>
+            </div>
+            <div class="col-md-4">
+                <h3>Modèle</h3>
+                <div ui-ace="{
+                      useWrapMode : true,
+                      showGutter: true,
+                      theme:'twilight',
+                      mode: 'ftl'
+                }" ng-model="template" style="height:400px;"></div>
+
+                <label class="checkbox">
+                    <input class="unvalidate" type="checkbox" ng-model="readOnly"/>
+                    {{'Admin.Avance.Script.Read_only' | translate}}
+                </label>
+            </div>
+            <div class="col-md-4">
+                <h3>Résultat</h3>
+                <div ng-if="renderedTemplate">
+                    <h4 ng-if="!scriptError">{{'Admin.Avance.Script.Model' | translate}}</h4>
+                    <h4 ng-if="scriptError">{{'Admin.Avance.Script.Error_message' | translate}}</h4>
+                    {{renderedTemplate}}
+                </div>
+                <div ng-if="printOutput.length > 0">
+                    <h4>Logs</h4>
+                    <ul class="list-unstyled">
+                        <li ng-repeat="log in printOutput">{{log}}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

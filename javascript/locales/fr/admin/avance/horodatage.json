@@ -1,0 +1,18 @@
+{
+  "Admin": {
+    "Avance": {
+      "Horodatage": {
+        "title": "Configuration du service Horodatage",
+        "name": "Nom",
+        "disabled": "Service désactivé",
+        "adullact_service": "Service ADULLACT",
+        "certeurope_service": "Service CERTEUROPE",
+        "server_name": "Nom du serveur",
+        "server_port": "Port du serveur",
+        "algo": "Algorithme",
+        "app_id": "Identifiant d'application",
+        "save_config": "Enregistrer la configuration"
+      }
+    }
+  }
+}

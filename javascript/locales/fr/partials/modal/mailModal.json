@@ -1,0 +1,12 @@
+{
+  "mailModal": {
+    "sending_mail": "Envoyer le(s) dossier(s) par mail",
+    "to": "À",
+    "object": "Objet",
+    "message": "Message",
+    "folder_list": "Liste des dossiers",
+    "send_signature_slip": "Envoyer le bordereau",
+    "annexes_to_add": "Annexes à inclure",
+    "send_annexes": "Envoyer les annexes"
+  }
+}

@@ -1,0 +1,143 @@
+<div class="row-fluid">
+    <div class="menuAdmin col-md-3 label label-info headertop" removeonsize="992" classes-list="label label-info" ng-include src="'partials/adminNavbar.html'"></div>
+    <div>
+        <!-- contenu -->
+        <div class="col-md-3 adminContent">
+            <h2>Gestion des collectivités</h2>
+            <div ng-if="!tenant.isEnabled">
+                <span class="text-info"><i class="fa fa-info-circle"></i> Le mode multi-collectivité est désactivé.</span>
+            </div>
+            <div class="form-horizontal row" ng-if="tenant.isEnabled">
+                <div class="col-md-12" style="margin-bottom:10px;">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-search fa-fw"></i></span>
+                        <input type="text" placeholder="{{'Search' | translate}}" ng-model="tenant.search" class="unvalidate form-control">
+                    </div>
+                    <div class="col-md-12 text-info"><i class="fa fa-info-circle"></i> Recherche sensible aux accents</div>
+                </div>
+                <div class="col-md-12">
+                    <button value="" class="btn btn-success" ng-click="tenant.create()" ng-disabled="tenant.isCreating">
+                        <i class="fa fa-plus-circle"></i>
+                        Ajouter une collectivité
+                    </button>
+                </div>
+
+
+            </div>
+            <ul class="list-unstyled well nav nav-pills nav-stacked adminContent list-data" ng-if="tenant.isEnabled">
+                <li ng-repeat="collectivite in tenant.list | filter:{tenantDomain:tenant.search} | orderBy:'tenantDomain'" ng-class="tenant.selected.tenantDomain == collectivite.tenantDomain ? 'active' : ''">
+                    <a ng-click="tenant.select(collectivite)">
+                        <span class="label label-success" ng-if="collectivite.enabled">Activée</span>
+                        <span class="label label-danger" ng-if="!collectivite.enabled">Désactivée</span>
+                        <span style="display:inline-block; padding-right:50px;">{{collectivite.tenantDomain}}</span>
+                        <span style="right:50px; top:1px; position:absolute;">
+                            <span class="label label-warning pointer fa fa-refresh" tooltip="Recharger les modèles de mail" ng-click="$event.stopPropagation(); tenant.reloadMail(collectivite); " ng-if="collectivite.enabled && !collectivite.modify && !collectivite.reloadMail && !tenant.isCreating"> </span>
+
+                        </span>
+                        <span style="right:15px; top:1px; position:absolute;">
+                            <span class="label label-success pointer fa fa-toggle-off" tooltip="Activer" ng-click="tenant.switchState(collectivite); $event.stopPropagation();" ng-if="!collectivite.enabled && !collectivite.modify && !collectivite.reloadMail && !tenant.isCreating"> </span>
+                            <span class="label label-danger pointer fa fa-toggle-on" tooltip="Désactiver" ng-click="tenant.switchState(collectivite); $event.stopPropagation();" ng-if="collectivite.enabled && !collectivite.modify && !collectivite.reloadMail && !tenant.isCreating"> </span>
+                            <span class="label label-info" ng-if="collectivite.modify">Modification...</span>
+                            <span class="label label-info" ng-if="collectivite.reloadMail">Rechargement...</span>
+                        </span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-md-9 adminContent text-warning" ng-if="tenant.cantSelect">
+            <i class="fa fa-warning"></i> Il faut que la collectivité soit activée pour pouvoir la sélectionner
+        </div>
+        <div ng-if="tenant.selected !== undefined" class="col-md-9 adminContent">
+            <h2 ng-if="!tenant.selected.isNew">Modifier la collectivité {{tenant.selected.tenantDomain}}
+                <i ng-if="tenant.selected.enabled" class="fa fa-toggle-on text-success"  tooltip="Cette collectivité est activée."></i>
+                <i ng-if="!tenant.selected.enabled" class="fa fa-toggle-off text-danger"  tooltip="Cette collectivité est désactivée."></i>
+            </h2>
+            <h2 ng-if="tenant.selected.isNew">Ajout d'une collectivité</h2>
+            <form role="form" name='tenantForm' novalidate>
+                <div class="well">
+                    <div class="row">
+                        <div ng-if="tenant.selected.isNew">
+                            <span class="text-info"><i class="fa fa-info-circle"></i> Ce formulaire va créer un "espace client" (ci-appelé "tenant") vide, activé par défaut.
+Si appelé "domaine", il aura un compte administrateur nommé admin@domaine protégé par le mot de passe saisi dans ce formulaire.
+NB: le nom de tenant ne doit pas comporter de majuscule, de caractère avec accent, ni espace ou caractère exotique ni de ponctuation.
+Bonne pratique: Privilégier des noms simples de type domaine internet (exemple: collectivite.org)</span>
+                        </div>
+                        <div class="col-md-4">
+                            <div ng-if="tenant.selected.isNew" class="form-group mandatory-group">
+                                <label for="domainTenant">Tenant (syntaxe de type FQDN, en minuscules)</label>
+                                <span class="label label-danger"><i class="fa fa-warning"></i> Obligatoire</span>
+                                <input id="domainTenant" ng-pattern="/^(?=^.{4,253}$)(^((?!-)[a-z0-9-]{0,62}[a-z0-9]\.)?[a-z0-9-]{2,63}$)/i" type="text" class="form-control" ng-model="tenant.edited.tenantDomain" name="domainTenant" required>
+                            </div>
+                            <div ng-if="tenant.selected.isNew" class="form-group mandatory-group">
+                                <label for="passwordTenant">Mot de passe administrateur (compte admin@...)</label>
+                                <span class="label label-danger"><i class="fa fa-warning"></i> Obligatoire</span>
+                                <input id="passwordTenant" type="password" class="form-control" ng-model="password.newOne" name="passwordTenant" required>
+                            </div>
+                            <div ng-if="tenant.selected.isNew" class="form-group mandatory-group">
+                                <label for="confirmTenant">Mot de passe (seconde saisie de confirmation)</label>
+                                <span class="label label-danger"><i class="fa fa-warning"></i> Obligatoire</span>
+                                <input id="confirmTenant" type="password" class="form-control" ng-model="password.confirm" confirm-with="password" name="confirmTenant" required>
+                            </div>
+                            <div class="form-group mandatory-group">
+                                <label for="titleTenant">Titre de l'organisation</label>
+                                <span class="label label-danger"><i class="fa fa-warning"></i> Obligatoire</span>
+                                <input id="titleTenant" type="text" class="form-control" ng-model="tenant.edited.title" name="titleTenant" required>
+                            </div>
+                            <div class="form-group mandatory-group">
+                                <label for="descTenant">Description</label>
+                                <span class="label label-danger"><i class="fa fa-warning"></i> Obligatoire</span>
+                                <input id="descTenant" type="text" class="form-control" ng-model="tenant.edited.description" name="descTenant" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="sirenTenant">SIREN</label>
+                                <input id="sirenTenant" type="text" class="form-control unvalidate" ng-model="tenant.edited.siren" name="sirenTenant">
+                            </div>
+                            <div class="form-group">
+                                <label for="villeTenant">Ville</label>
+                                <input id="villeTenant" type="text" class="form-control unvalidate" ng-model="tenant.edited.city" name="villeTenant">
+                            </div>
+                            <div class="form-group">
+                                <label for="postTenant">Code Postal</label>
+                                <input id="postTenant" type="text" class="form-control unvalidate" ng-model="tenant.edited.postalCode" name="postTenant">
+                            </div>
+                            <div class="form-group">
+                                <label for="paysTenant">Pays</label>
+                                <input id="paysTenant" type="text" class="form-control unvalidate" ng-model="tenant.edited.country" name="paysTenant">
+                            </div>
+                        </div>
+                        <div ng-if="!tenant.selected.isNew && tenant.selected.enabled" class="col-md-4">
+                            <button ng-if="tenant.selected.enabled && !tenant.selected.hasDetails && !tenant.isGettingInfos" value="" class="btn btn-success force-display" ng-click="tenant.infos()"><i class="fa fa-bar-chart-o"></i> Récupérer les statistiques de la collectivité</button>
+                            <span ng-if="tenant.isGettingInfos" class="text text-info">Récupération des informations de la collectivité <b>{{tenant.isGettingInfos}}</b> en cours, merci de patienter...</span>
+                            <div ng-if="tenant.selected.hasDetails">
+                                <h3>Détails de la collectivité</h3>
+                                <ul>
+                                    <li>Nombre d'utilisateurs : {{tenant.selected.people.length}}</li>
+                                    <li>Nombre de bureaux : {{tenant.selected.bureaux.length}}</li>
+                                    <li>Nombre de dossier : {{tenant.selected.dossiers.length}}</li>
+                                    <li>Nombre de dossier à archiver : {{tenant.selected.dossiersAArchiver.length}} ({{tenant.selected.dossiersAArchiverDiskUsage}} octets)</li>
+                                    <li>Utilisation disque : {{tenant.selected.diskUsage}} octets</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <span ng-if="tenant.selected.modify && tenant.selected.isNew"  style="position: relative; width: 0px; z-index: 2000000000; left: 25px; top: 13px;" us-spinner="{radius:10, width:4, length: 8}" ></span>
+                            <button ng-click="tenant.save()" ng-if="!(tenant.selected.modify && tenant.selected.isNew)" ng-disabled="tenant.selected.modify || !tenantForm.$valid" class="force-display btn btn-primary"><i class="fa-floppy-o fa"></i> Enregistrer</button>
+                            <span ng-if="tenant.selected.modify && tenant.selected.isNew" style="margin-left: 60px;" class="text text-info"><i class="fa fa-info-circle"></i> Ajout de la collectivité en cours... ( ~1 minute )</span>
+                            <button ng-if="!tenant.selected.isNew" ng-click="tenant.changeAdminPassword()" class="force-display btn btn-info">
+                                <i class="fa fa-lock"></i>
+                                Modifier le mot de passe administrateur</button>
+                            <button ng-if="!tenant.selected.isNew" ng-click="tenant.changePESProperties()" class="force-display btn btn-warning">
+                                <i class="fa fa-pencil"></i>
+                                Modifier les propriétés PES</button>
+                            <span ng-if="tenant.selected.modify && !tenant.selected.isNew" class="text text-info"><i class="fa fa-info-circle"></i> Modification de la collectivité en cours...</span>
+                            <span ng-if="tenant.selected.exist" class="text text-danger"><i class="fa fa-warning"></i> Ce tenant existe déjà !</span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

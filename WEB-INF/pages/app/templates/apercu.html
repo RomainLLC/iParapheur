@@ -1,0 +1,87 @@
+<div>
+
+    <ul is-visible-dash ng-show="!apercu.annotations.fullscreen" listen-on="dashletsPosition.left" is-visible="apercu.annotations.hasDashlets.left" ui-sortable="{connectWith:'.list-dash-right'}" ng-model="dashletsPosition.left" class="list-dash-left">
+        <li ng-repeat="element in dashletsPosition.left" ng-include="'partials/dashlets/'+element.name+'.html'">
+        </li>
+    </ul>
+
+    <div ng-cloak ng-show="loaded" class="annotatableContainer" ng-style="apercu.annotations.fullscreen ? {width:'100%', paddingLeft:'20px', paddingRight:'20px', left:'0'} : (apercu.annotations.hasDashlets.left ? apercu.annotations.hasDashlets.right ? {width:'60%', height:'60%', left:'20%'} : {width:'80%', height:'80%', right:'0', paddingRight:'20px'} : {width:'80%', height:'80%', left:'0', paddingLeft:'20px'})">
+        <div class="helper-inline-block" ng-if="dossier.isXemEnabled && !apercu.flags.noVisuel" style="position:absolute; padding-left:50px;padding-top:15px;">
+            <i class="fa fa-file-pdf-o fa-2x block" ng-if="apercu.iframe.visuType === 'xemelios'" ng-class="apercu.iframe.current < 0 ? 'text-danger' : 'pointer'" ng-click="apercu.iframe.switchVisu()" tooltip="{{'apercu.Show_with_PDF_reader' | translate}}" tooltip-placement="right"></i>
+            <i class="fa fa-file-excel-o fa-2x block pointer" ng-if="apercu.iframe.visuType === 'visuelpdf'" ng-click="apercu.iframe.switchVisu()" tooltip="{{'apercu.Show_with_Xemelios_viewer' | translate}}" tooltip-placement="right"></i>
+        </div>
+
+        <div class="helper-inline-block" style="position:absolute;">
+            <i class="fa fa-save fa-2x block pointer" ng-click="saveDashletsPosition()" tooltip-placement="right" tooltip="{{'apercu.Save_screen_layout' | translate}}"></i>
+            <i ng-if="!apercu.flags.noVisuel || dossier.isXemEnabled" class="fa fa-expand fa-2x block pointer" ng-class="apercu.annotations.fullscreen ? 'fa-compress' : 'fa-expand'" ng-click="apercu.annotations.switchFullscreen()" tooltip-placement="right" tooltip="{{apercu.annotations.fullscreen ? ('apercu.Exit_fullscreen_mode' | translate) : ('apercu.View_folder_in_fullscreen_mode' | translate)}}"></i>
+            <div class="signaturePosition" ng-if="apercu.annotations.canPositionSignature()">
+                <i class="fa fa-hand-o-up fa-2x pointer" ng-class="apercu.annotations.signatureMode ? 'text-danger' : ''" ng-click="apercu.annotations.signatureMode = !apercu.annotations.signatureMode" tooltip-placement="right" tooltip="{{forCachet ? 'apercu.position_cachet': 'apercu.position_signature' | translate}}"></i>
+                <div ng-if="apercu.annotations.signatureMode" class="text-info"><i class="fa fa-info-circle"></i> {{forCachet ? 'apercu.position_cachet_mode_active' : 'apercu.position_mode_active' | translate}}</div>
+            </div>
+        </div>
+
+
+        <div ng-hide="apercu.flags.noVisuel || (dossier.isXemEnabled && apercu.iframe.visuType === 'xemelios')" pagination timestamp="timestamp" ng-change="apercu.annotations.pageChanged()" previous-text="Précédent" next-text="Suivant" first-text="Première Page" last-text="Dernière Page" total-items="apercu.annotations.pageCount" items-per-page="1" ng-model="apercu.annotations.viewPage" max-size="apercu.annotations.maxSize" class="pagination-sm" boundary-links="true" rotate="false"></div>
+
+        <span class="text-info nextDossierInfo" ng-if="nextDossierSelected"><i class="fa fa-info-circle"></i> {{'apercu.Action_pending_Next_folder_selected' | translate}}</span>
+
+        <span class="text-info nextDossierInfo" ng-if="dashletsSaved"><i class="fa fa-info-circle"></i> {{'apercu.Screen_layout_saved' | translate}}</span>
+
+        <span class="text-info nextDossierInfo" ng-if="refreshDossier"><i class="fa fa-info-circle"></i> {{'apercu.Folder_refreshing_Please_wait' | translate}}</span>
+
+        <span class="text-danger nextDossierInfo" ng-if="hasNoVisualToDisplay()"><i class="fa fa-times"></i> {{'apercu.No_visual_to_display' | translate}}</span>
+
+        <span class="text-info nextDossierInfo" ng-if="isGenerating()"><i class="fa fa-info-circle"></i> {{'apercu.Visual_generating' | translate}}</span>
+
+        <div ng-if="(!(apercu.flags.noVisuel || (dossier.isXemEnabled && apercu.iframe.visuType === 'xemelios'))) || apercu.flags.annotShownOnce"
+             ng-init="apercu.flags.annotShownOnce = true;"
+             ng-show="!(apercu.flags.noVisuel || (dossier.isXemEnabled && apercu.iframe.visuType === 'xemelios'))"
+             annotorious
+             load-on="apercu.annotations.canLoad"
+             document-page-listen="apercu.annotations.documentPage"
+             src-base="apercu.annotations.src"
+             on-created="apercu.annotations.create(annotation)"
+             set-position="apercu.annotations.setPosition(anno, annotation)"
+             on-updated="apercu.annotations.update(annotation)"
+             on-removed="apercu.annotations.remove(annotation)"
+             on-load="apercu.annotations.load(anno, width, height)"
+             signature-mode="apercu.annotations.signatureMode"
+             for-cachet="forCachet"
+             version-number="getCurrentDocumentVersionNumber()">
+        </div>
+
+        <div ng-show="(dossier.isXemEnabled && apercu.iframe.visuType === 'xemelios')" class="pagination">
+            <span class="btn btn-default" ng-click="apercu.iframe.previousPage()" ng-disabled="apercu.iframe.current <= 0">{{'apercu.Previous_page' | translate}}</span>
+            <span class="btn btn-default" ng-click="apercu.iframe.nextPage()" ng-disabled="!(apercu.iframe.current < apercu.iframe.max)">{{'apercu.Next_page' | translate}}</span>
+            <div ng-if="apercu.iframe.current < 0" class="text-info" style="position:absolute; right:0; bottom:0;">{{'apercu.Loading_Xemelios_viewer___' | translate}}</div>
+        </div>
+
+        <iframe ng-cloak class="fixbottom" id="visionneuse" style="width: 100%; margin-bottom:20px;" onLoad="onIframeLoad()" ng-if="dossier.isXemEnabled && apercu.iframe.visuType === 'xemelios'" ng-src="{{context + '/proxy/alfresco/parapheur/dossiers/' + dossier.id + '/' + dossier.documents[0].id + '/xemelios'}}" localize>
+            {{'apercu.Cant_load_the_Xemelios_viewer' | translate}}
+        </iframe>
+
+        <span us-spinner style="position:absolute; top:100px; right:50%;" spinner-key="spinnerLoading"></span>
+
+        <div style="position:absolute; top:5px; right:20px;" ng-if="apercu.annotations.fullscreen" ng-include="'partials/dashlets/actions.html'">
+        </div>
+
+    </div>
+
+    <div style="top:100px;" class="nextDossierInfo" ng-show="!loaded && !bestBureauError">
+        <span class="text text-info" localize>
+            {{'apercu.Loading_folder_preview___' | translate}}
+        </span>
+        <span style="position: relative; width: 0px; z-index: 2000000000; right: 120px; top: 100px;" us-spinner="{radius:20, width:8, length: 16}" ></span>
+    </div>
+    <div style="top:100px;" class="nextDossierInfo" ng-show="bestBureauError">
+        <span class="text text-warning">
+            <i class="fa fa-warning"></i>
+            {{'apercu.Moved_archived_or_deleted_folder' | translate}}
+        </span>
+    </div>
+
+    <ul is-visible-dash ng-show="!apercu.annotations.fullscreen" listen-on="dashletsPosition.right" is-visible="apercu.annotations.hasDashlets.right" ui-sortable="{connectWith:'.list-dash-left'}" ng-model="dashletsPosition.right" class="list-dash-right">
+        <li ng-repeat="element in dashletsPosition.right" ng-include="'partials/dashlets/'+element.name+'.html'">
+        </li>
+    </ul>
+</div>

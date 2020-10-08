@@ -1,0 +1,18 @@
+{
+  "Admin": {
+    "Avance": {
+      "Archiland": {
+        "title": "Configuration du connecteur Archiland",
+        "enable": "Activer le connecteur",
+        "disable": "Désactiver le connecteur",
+        "id": "Identifiant de connexion",
+        "passwd": "Mot de passe",
+        "msg_server": "Serveur de Messagerie",
+        "server_port": "Port du serveur",
+        "siren": "SIREN de la collectivité",
+        "services": "Services",
+        "save": "Enregistrer la configuration"
+      }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "tdtModal": {
+    "sending_helios_folders": "Sending folder(s) - HELIOS",
+    "public_annotation": "Public annotation",
+    "private_annotation": "Private annotation",
+    "acte_subject": "Acte subject",
+    "type_selection": "Type selection",
+    "acte_number": "Acte number",
+    "decision_date": "Decision date",
+    "required_input_help": "Requis",
+    "folder_list": "Folder list",
+    "handled_folders": "Handled folder(s)"
+  }
+}

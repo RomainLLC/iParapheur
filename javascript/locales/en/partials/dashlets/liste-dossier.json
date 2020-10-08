@@ -1,0 +1,23 @@
+{
+  "liste-dossier": {
+    "toTransmit": "To transmit",
+    "toTreat": "To treat",
+    "endOfCircuit": "End of circuit",
+    "returned": "Returned",
+    "pending": "Pending",
+    "upcoming": "Upcoming",
+    "retrievables": "Retrievables",
+    "late": "Late",
+    "treated": "Treated",
+    "delegatedFolders": "Delegated folders",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "noFolderFound": "No folder found",
+    "availableFilters": "Available filters :",
+    "customList": "Custom list",
+    "custom": "Custom",
+    "noFilter": "No filter",
+    "traySelection": "Tray selection",
+    "filterSelection": "Filter selection"
+  }
+}

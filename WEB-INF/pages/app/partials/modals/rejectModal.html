@@ -1,0 +1,43 @@
+<div class="modal-header">
+    <h3>{{'rejectModal.reject' | translate}}</h3>
+</div>
+<div class="modal-body row">
+    <form novalidate name="modalForm" class="row form-horizontal">
+        <div class="col-md-6">
+            <label class="legendLabel col-xs-12">
+                <span class="label label-danger">{{'Mandatory' | translate}}</span> {{'rejectModal.public_annotation' | translate}}
+                <hr>
+                <textarea class="form-control annotation" ng-model="action.annotPub" required></textarea>
+                <i class="fa fa-3x fa-globe textarea-icon"></i>
+            </label>
+            <label class="legendLabel col-xs-12">
+                {{'rejectModal.private_annotation' | translate}}
+                <hr>
+                <textarea class="form-control annotationprivee" ng-model="action.annotPriv"></textarea>
+                <i class="fa fa-3x fa-user-secret textarea-icon"></i>
+            </label>
+        </div>
+        <div class="col-md-6">
+            <div class="col-xs-12">
+                <span class="legend">{{'rejectModal.folder_list' | translate}}<hr></span>
+                <ul class="listeDossiers">
+                    <li ng-repeat="dossier in dossiers" class="btn btn-default col-md-12 force-display"><span class="label label-info">{{dossier.actionDemandee}}</span>{{dossier.title}}</li>
+                </ul>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="modal-footer">
+    <progressbar class="progress-striped active progress-modal" value="progress" max="max" type="info">
+        <span style="color:black; white-space:nowrap;">{{'rejectModal.handled_folders' | translate}} : {{progress}} / {{max}}</span>
+    </progressbar>
+    <button class="btn btn-warning" ng-click="cancel()">
+        <i class="fa fa-times-circle-o"></i>
+        {{'Back' | translate}}
+    </button>
+    <button ng-disabled="!modalForm.$valid" class="btn btn-primary" ng-click="ok()">
+        <i class="fa fa-times"></i>
+        {{'rejectModal.reject' | translate}}
+    </button>
+</div>

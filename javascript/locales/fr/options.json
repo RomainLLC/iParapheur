@@ -1,0 +1,82 @@
+{
+  "Options": {
+    "Prefs": "Préférences",
+
+    "_comment": "------ GENERAL ------",
+    "PasswordTitle": "Modifier le mot de passe",
+    "Password": "Mot de passe",
+    "Theme": "Thème",
+    "Dashboard": "Tableau de bord",
+    "Archives": "Dossiers à extraire",
+    "Notifs": "Mails de notifications",
+    "Signature": "Image de signature",
+    "Language": "Langue",
+    "BureauOrder": "Ordre des bureaux",
+    "Required": "Requis",
+
+
+    "_comment": "------ MOT DE PASSE ------",
+    "Pass_Title": "Modifier mon mot de passe",
+    "Pass_Current": "Mot de passe actuel",
+    "Pass_Current_Alert": "Merci de renseigner votre mot de passe actuel.",
+    "Pass_New": "Nouveau mot de passe",
+    "Pass_Confirm": "Confirmez le nouveau mot de passe",
+    "Pass_Confirm_Alert": "La confirmation ne correspond pas au nouveau mot de passe.",
+    "Pass_Save": "Enregistrer les modifications",
+    "Pass_Saving": "Mot de passe en cours de modification...",
+    "Pass_Invalid": "Mot de passe actuel invalide",
+    "Pass_Error": "Erreur inconnue lors de la modification de mot de passe",
+    "Pass_Success": "Mot de passe sauvegardé avec succès",
+
+
+    "_comment": "------ THEMES ------",
+    "Theme_Title": "Choisir un thème",
+    "Theme_Actual": "Votre thème est actuellement",
+    "Theme_Choice": "Choisir un thème",
+    "Theme_Save": "Enregistrer les modifications",
+
+
+    "_comment": "------ DASHBOARD ------",
+    "Dash_Title": "Personnaliser le tableau de bord",
+    "Dash_Deleg": "Afficher les délégations",
+    "Dash_Page": "Nombre de résultats par page",
+    "Dash_Page_Helper": "Le nombre de résultats doit être compris entre 5 et",
+    "Dash_Sort": "Tri par défaut",
+    "Dash_Asc": "Ascendant",
+    "Dash_Default_Filter": "Filtre par défaut",
+    "Dash_Filter_None": "Aucun",
+    "Dash_Col_Order": "Réorganiser les colonnes (glisser/déposer)",
+    "Dash_Col_Show": "Colonnes affichées",
+    "Dash_Col_Hide": "Colonnes cachées",
+    "Dash_Save": "Enregistrer les modifications",
+    "Dash_Success": "Les préférences ont bien été modifiées",
+
+
+    "_comment": "------ ARCHIVE ------",
+    "Arch_Title": "Personnaliser le navigateur des dossiers à extraire",
+
+
+    "_comment": "------ NOTIFICATIONS ------",
+    "Notif_Title": "Personnaliser les notifications",
+
+
+    "_comment": "------ SIGNATURE ------",
+    "Sig_Title": "Modifier mon image de signature",
+    "Sig_NoScan": "Pas de scan de signature pour cet utilisateur",
+    "Sig_Change": "Parcourir",
+    "Sig_Err1": "Erreur : Le fichier séléctionné n'est pas une image.",
+    "Sig_Err2": "Votre fichier doit être de type JPG, PNG ou GIF.",
+
+
+    "_comment": "------ ORDER ------",
+    "Ord_Title": "Configurer l'ordre d'affichage des bureaux",
+
+
+    "_comment": "------ LANG ------",
+    "Lang_Title": "Langue de l'application",
+    "Lang_Choice": "Sélection de la langue",
+    "Lang_Change": "Changer la langue",
+    "Lang_FR": "Français",
+    "Lang_EN": "Anglais"
+  }
+}

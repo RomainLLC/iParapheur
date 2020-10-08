@@ -1,0 +1,105 @@
+<div class="row-fluid">
+    <div class="menuAdmin col-md-3 label label-info headertop" removeonsize="992" classes-list="label label-info" ng-include src="'partials/adminNavbar.html'"></div>
+
+    <div class="col-md-12 adminContent">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-9">
+                        <h2 style="display:inline-block;">{{'Admin.Users.User_Title' | translate}}</h2>
+                        <span style="margin-bottom:20px; margin-left:50px;" class="btn btn-success" ng-click="createUser()"><i class="fa fa-plus-circle"></i> {{'Admin.Users.User_Create' | translate}}</span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <form name="find">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-search fa-fw"></i></span>
+                                <input type="text" class="unvalidate form-control" ng-change="changeSearch()" placeholder="{{'Admin.Users.User_Search' | translate}}" ng-model="search">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div style="top:100px;" class="nextDossierInfo" ng-if="flags.isSearching">
+                    <span class="text text-info">
+                        {{'Admin.Users.User_Searching' | translate}}
+                    </span>
+                    <span style="position: relative; width: 0px; z-index: 2000000000; right: 90px; top: 100px;" us-spinner="{radius:20, width:8, length: 16}" ></span>
+                </div>
+                <form name="userCreation">
+                    <table ng-show="(flags.hasSearch && users.length > 0 && !flags.isSearching) || !empty(newUser)" ng-table="tableParams" class="table table-striped">
+
+                        <tr ng-if="!empty(newUser)">
+                            <td data-title="'Admin.Users.User_Lastname' | translate" sortable="'lastName'">
+                                <input name="lastName" placeholder="{{'Admin.Users.User_Lastname' | translate}}" type="text" class="form-control" ng-model="newUser.lastName" required="required">
+                            </td>
+                            <td data-title="'Admin.Users.User_Firstname' | translate" sortable="'firstName'">
+                                <input name="firstName" placeholder="{{'Admin.Users.User_Firstname' | translate}}" type="text" class="form-control" ng-model="newUser.firstName" required="required">
+                            </td>
+                            <td data-title="'Admin.Users.User_Name' | translate" sortable="'username'">
+                                <input name="username" placeholder="{{'Admin.Users.User_Name' | translate}}" ng-pattern='/^[^&:"£*/<>?%|+;]*$/' type="text" class="form-control" ng-model="newUser.username" required="required">
+                                <span class="text-danger" ng-show="exist"><i class="fa fa-warning"></i> {{'Admin.Users.User_Exist' | translate}}</span>
+                                <span class="text-danger" ng-show="multiTenantEnableError"><i class="fa fa-warning"></i> {{'Admin.Users.User_MultiT' | translate}}</span>
+                                <span class="text-danger" ng-show="userCreation.username.$error.pattern"><i class="fa fa-warning"></i> {{'Admin.Users.User_SpecialChar' | translate}}</span>
+                            </td>
+                            <td data-title="'Admin.Users.User_Mail' | translate" sortable="'email'">
+                                <input name="email" placeholder="Courriel" type="email" class="form-control unvalidate" ng-model="newUser.email">
+                                <span class="text-danger" ng-show="userCreation.email.$error.email"><i class="fa fa-warning"></i> {{'Admin.Users.User_Mail_Error' | translate}}</span>
+                            </td>
+                            <td data-title="'Admin.Users.User_Info' | translate"></td>
+                            <td style="text-align: center;" data-title="'Admin.Users.User_Actions' | translate">
+                                <span tooltip="Annuler" ng-click="cancelCreate()" class="btn btn-warning force-display">
+                                    <i class="fa fa-times-circle"></i>
+                                </span>
+                                <button tooltip="Enregistrer" type="submit" ng-click="askForPassword()" class="btn btn-primary force-display" ng-disabled="!userCreation.$valid">
+                                    <i class="fa fa-floppy-o"></i>
+                                </button>
+                            </td>
+                        </tr>
+
+                        <tr ng-repeat="user in $data">
+                            <td data-title="'Admin.Users.User_Lastname' | translate" sortable="'lastName'">
+                                {{user.lastName}}
+                            </td>
+                            <td data-title="'Admin.Users.User_Firstname' | translate" sortable="'firstName'">
+                                {{user.firstName}}
+                            </td>
+                            <td data-title="'Admin.Users.User_Name' | translate" sortable="'username'">
+                                {{user.username}}
+                            </td>
+                            <td data-title="'Admin.Users.User_Mail' | translate" sortable="'email'">
+                                {{user.email}}
+                            </td>
+                            <td data-title="'Admin.Users.User_Info' | translate">
+                                <i class="fa fa-certificate fa-2x text-success" ng-if="user.hasCertificate" tooltip="{{'Admin.Users.User_HasCert' | translate}}"></i>
+                                <i class="fa fa-user fa-2x text-success" ng-if="user.isAdmin" tooltip="{{'Admin.Users.User_IsAdmin' | translate}}"></i>
+                                <i class="fa fa-desktop fa-2x text-success" style="vertical-align: inherit;" ng-if="user.isAdminFonctionnel" tooltip="{{'Admin.Users.User_IsFonc' | translate}}"></i>
+                                <i class="fa fa-share-alt-square fa-2x text-success" ng-if="user.isFromLdap" tooltip="{{'Admin.Users.User_LDAP' | translate}}"></i>
+                            </td>
+                            <td style="text-align: center;" data-title="'Admin.Users.User_Actions' | translate">
+                            <span ng-click="editUser(user)" tooltip="Modifier l'utilisateur" class="btn btn-info force-display">
+                                <i class="fa fa-pencil"></i>
+                            </span>
+                            <span tooltip="Supprimer l'utilisateur" ng-if="user.username !== 'admin' && !(user.username.split('@')[0] === 'admin' && !tenantName)"
+                                  tooltip="" ng-click="deleteUser(user)" class="btn btn-danger force-display">
+                                <i class="fa fa-trash-o"></i>
+                            </span>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+                <div class="col-md-12" ng-if="!flags.isSearching">
+                    <p>
+                        <span ng-show="(!users || users.length === 0) && flags.hasSearch" class="text-info">{{'Admin.Users.User_None' | translate}}</span>
+                        <span ng-show="!flags.hasSearch" class="text-info">{{'Admin.Users.User_HasToSearch' | translate}}</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

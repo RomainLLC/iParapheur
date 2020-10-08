@@ -1,0 +1,7 @@
+{
+  "signPapeConfirmationModal": {
+    "paper_signature_confirmation": "Changer le mode de signature en mode papier",
+    "do_you_really_want_change_signature_to_paper_signature": "Voulez vous réellement changer le mode de signature de ce dossier vers le mode signature papier ?",
+    "link_to_the_document_to_print": "Lien vers votre document à imprimer "
+  }
+}

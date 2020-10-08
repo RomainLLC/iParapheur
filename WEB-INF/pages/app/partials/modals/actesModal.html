@@ -1,0 +1,72 @@
+<div class="modal-header">
+    <h3>{{'actesModal.sending_tdt_actes' | translate}}</h3>
+</div>
+<div class="modal-body row">
+    <form novalidate name="modalForm">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="form-group mandatory-group">
+                    <label class="control-label" for="nature">{{'actesModal.nature' | translate}}</label>
+                    <span class="label label-danger"><i class="fa fa-warning"></i> {{'Mandatory' | translate}}</span>
+                    <select class="form-control unvalidate" id="nature" ng-model="action.nature" ng-options="key as (key + ' ' + value) for (key, value) in actesInfo.nature" required="required">
+                    </select>
+                </div>
+                <div class="form-group mandatory-group">
+                    <label class="control-label" for="classification">{{'actesModal.classification' | translate}}</label>
+                    <span class="label label-danger"><i class="fa fa-warning"></i> {{'Mandatory' | translate}}</span>
+                    <select class="form-control unvalidate" id="classification" ng-model="action.classification" ng-options="classif.key as (classif.key + ' ' + classif.value) group by classif.group for classif in orderedClassification" required="required">
+                    </select>
+                </div>
+                <div class="form-group mandatory-group">
+                    <label class="control-label" for="numero">{{'actesModal.acte_number' | translate}} <i class="pointer fa fa-info-circle" tooltip="{{'actesModal.acte_number_tooltip' | translate}}"></i></label>
+                    <span class="label label-danger"><i class="fa fa-warning"></i> {{'Mandatory' | translate}}</span>
+                    <input class="form-control unvalidate" id="numero" ng-model="action.numero" required="required">
+                </div>
+                <div class="form-group mandatory-group">
+                    <label class="control-label" for="date">{{'actesModal.decision_date' | translate}}</label>
+                    <span class="label label-danger"><i class="fa fa-warning"></i> {{'Mandatory' | translate}}</span>
+                    <input ip-datepicker return-format="timestamp" readonly="true" class="form-control unvalidate" id="date" name="confirm" ng-model="action.dateActe" required="required">
+                </div>
+            </div>
+            <div class="col-md-7">
+                <label class="legendLabel col-xs-12">
+                    {{'actesModal.public_annotation' | translate}}
+                    <hr>
+                    <div>
+                        <textarea class="form-control annotation" ng-model="action.annotPub"></textarea>
+                        <i class="fa fa-3x fa-globe textarea-icon"></i>
+                    </div>
+                </label>
+                <label class="legendLabel col-xs-12">
+                    {{'actesModal.private_annotation' | translate}}
+                    <hr>
+                    <div>
+                        <textarea class="form-control annotationprivee" ng-model="action.annotPriv"></textarea>
+                        <i class="fa fa-3x fa-user-secret textarea-icon"></i>
+                    </div>
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <label class="legendLabel col-xs-12 mandatory-group">
+                    {{'actesModal.object' | translate}}
+                    <span class="label label-danger"><i class="fa fa-warning"></i> {{'Mandatory' | translate}}</span>
+                    <hr>
+                    <textarea style="width:100%;" class="form-control unvalidate" ng-model="action.objet" required="required"></textarea>
+                </label>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="modal-footer">
+    <button ng-disabled="spin" class="btn btn-warning" ng-click="cancel()">
+        <i class="fa fa-times-circle-o"></i>
+        {{'Cancel' | translate}}
+    </button>
+    <button ng-disabled="spin || !modalForm.$valid" class="btn btn-primary" ng-click="ok()">
+        <i class="fa fa-cloud-upload"></i>
+        {{'actions.sendToActesTdt' | translate}}
+    </button>
+</div>

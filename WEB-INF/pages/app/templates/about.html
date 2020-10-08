@@ -1,0 +1,93 @@
+<div class="container about">
+    <div class="page-header">
+        <h1>{{'About.About' | translate}}</h1>
+        <a class="btn btn-default float-right manual-download" target="_blank"
+           href="{{properties['parapheur.ihm.aide.utilisateur.url']}}">
+            <i class="fa fa-download fa-lg"></i> {{properties['parapheur.ihm.aide.utilisateur.text']}}
+        </a>
+    </div>
+    <div class="col-md-12">
+        <div class="col-md-6">
+            <div class="col-md-12">
+                <h4 class="page-header">Informations du poste</h4>
+                <p>
+                    <strong>Navigateur: </strong>
+                    <span ng-repeat="v in navigator">{{v}} </span>
+                </p>
+
+                <p>
+                    <strong>Signature électronique : </strong>
+
+                    <span class="text-success" ng-if="client.signature.isCompatible"><i
+                            class="fa fa-check"></i> <strong>Compatible</strong><br/></span>
+                    <span class="text-danger" ng-if="!client.signature.isCompatible"><i
+                            class="fa fa-warning"></i> <strong>Non compatible</strong><br/></span>
+
+                </p>
+                <p>
+                    <span ng-if="client.signature.extension">
+                        <strong>Extension : </strong>
+                        <span ng-if="client.signature.version" class="text-success fa fa-check"><br/></span>
+                        <span ng-if="client.signature.version"
+                              class="text-info">Version {{client.signature.version}}</span>
+                        <span ng-if="client.signature.error === 'no_implementation'" class="text-warning">
+                            <i class="fa fa-warning"></i> <strong>Application LiberSign non installée</strong><br/>
+                        </span>
+                    </span>
+                    <span ng-if="client.signature.canExtension && !client.signature.extension">
+                        <strong>Extension : </strong>
+                        <span class="text-warning"><i class="fa fa-warning"></i> <strong>Non installée</strong><br/></span>
+                    </span>
+                    <div ng-if="client.signature.canExtension">
+                <p class="text-info"><i class="fa fa-info-circle"></i> Afin de rendre votre navigateur compatible avec
+                    la signature électronique, merci de suivre l'aide d'installation.</p>
+                        <span class="btn btn-info"
+                              ng-click="launchHelpModal()">
+                            <i class="fa fa-question"></i>
+                            Aide d'installation
+                        </span>
+            </div>
+
+
+            <span ng-if="client.signature.error && client.signature.error !== 'no_implementation'" class="text-danger"><br/><i class="fa fa-warning"></i> Problème de communication avec LiberSign : {{client.signature.error}}</span>
+                </p>
+                <p ng-if="client.signature.canJava && !client.signature.extension">
+                    <strong>Java :</strong>
+                    <span ng-if="client.java.enabled" class="text-success fa fa-check"><br/></span>
+                    <span ng-if="!client.java.enabled" class="text-danger"><i class="fa fa-times"></i> Non installé<br/></span>
+                    <span ng-if="client.java.enabled" class="text-info">Version : {{client.java.version}}</span>
+                </p>
+            </div>
+            <div class="col-md-12">
+                <h4 class="page-header">{{'About.LicenceTitle' | translate}}</h4>
+                <div class="col-md-12">
+                    <div>{{'About.Agplpart1.1' | translate}} <a target="_blank"
+                                                                href="//www.gnu.org/licenses/agpl-3.0.html">{{'About.Agplpart1.link'
+                        | translate}}</a> {{'About.Agplpart1.2' | translate}}
+                    </div>
+                    <br/>
+                    <div>{{'About.Agplpart2.1' | translate}} <a target="_blank"
+                                                                href="//www.gnu.org/licenses/agpl-3.0.html">{{'About.Agplpart2.link'
+                        | translate}}</a> {{'About.Agplpart2.2' | translate}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h4 class="page-header">I-Parapheur Web - Version {{'About.Version' | translate}} - <a target="_blank"
+                                                                                                   href="//adullact.net/projects/iparapheur-web/">Forge</a>
+            </h4>
+
+            <p ng-bind-html="'About.Copyright' | translate"></p>
+            <div class="col-md-12">
+                <p ng-bind-html="'About.ReleaseNote4600' | translate"></p>
+                <p ng-bind-html="'About.ReleaseNote4500' | translate"></p>
+                <p ng-bind-html="'About.ReleaseNote4400' | translate"></p>
+                <p ng-bind-html="'About.ReleaseNote4300' | translate"></p>
+                <p ng-bind-html="'About.ReleaseNote4200' | translate"></p>
+                <p ng-bind-html="'About.ReleaseNote4101' | translate"></p>
+                <p ng-bind-html="'About.ReleaseNote41' | translate"></p>
+                <p ng-bind-html="'About.ReleaseNote40' | translate"></p>
+            </div>
+        </div>
+    </div>

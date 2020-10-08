@@ -1,0 +1,7 @@
+{
+  "annotations": {
+    "publicAnnotations": "Public annotations",
+    "-person-the-date-": "-person-, the -date-",
+    "dateFormat": "MM/dd/yyyy, at H:mm"
+  }
+}

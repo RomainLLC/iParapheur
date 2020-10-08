@@ -1,0 +1,47 @@
+{
+  "Admin": {
+    "Dossiers":{
+      "Title": "Gestion des dossiers",
+      "Filter_Type": "Rechercher par Type",
+      "Filter_Sub": "Rechercher par Sous-Type",
+      "Filter_Desk": "Rechercher par bureau",
+      "Filter_Title": "Rechercher par titre",
+      "Find_Desk": "Recherche par titre, nom ou utilisateur",
+      "Find_Desk_Info": "Tapez votre recherche puis choisissez un bureau afin de le sélectionner.",
+      "Find_Desk_None": "Pas de bureau selectionné",
+      "Find_Desk_Sel": "Bureau sélectionné",
+      "Warning": "Afficher tous les dossiers prendra un certain temps.",
+      "Show_All": "Afficher tous les dossiers",
+      "Current_Desk": "Bureau Courant",
+      "Emit_Date": "Date de création",
+      "Modif_Date": "Dernière modification",
+      "Type": "Type",
+      "Sub": "Sous-Type",
+      "State": "État",
+      "Actions": "Actions",
+      "Transfert": "Transférer",
+      "Events": "Journal des événements",
+      "Advanced": "Informations avancées",
+      "Unlock": "Débloquer",
+      "No_Folders": "Aucun dossier trouvé.",
+      "Currently": "Dossier en cours de traitement.",
+      "Locked": "Ce dossier a été bloqué pour traitement il y a plus de __var__ secondes.",
+
+      "State_App" : "Approuvé",
+      "State_Sec": "En cours - Secretariat",
+      "State_Cur": "En cours",
+      "State_Prep": "En préparation",
+      "State_Rej": "Rejeté",
+
+      "Mod_Del": "Supprimer le dossier",
+      "Mod_Del_Mess": "Etes-vous sûr de vouloir supprimer le dossier",
+
+      "Mod_Unlock": "Déblocage du dossier",
+      "Mod_Unlock_Mess": "Etes-vous sûr de vouloir débloquer le dossier",
+      "Emit_date": "Émis avant le",
+      "Emit_date_help": "Dossiers émis avant la date indiquée",
+      "Static_since": "Immobile depuis le",
+      "Static_since_help": "Dossiers sur le même bureau depuis la date indiquée"
+    }
+  }
+}

@@ -1,0 +1,584 @@
+<!-- Modal de suppression de filtre -->
+<div bs-modal when="filterToDelete"
+     title="{{'dashboard.Deleting_filter' | translate}} : {{filterToDelete}}"
+     primary-label="{{'Delete' | translate}}"
+     primary-action="deleteFilter()">
+    <p>{{'dashboard.Are_you_sure_you_want_to_delete_the_filter' | translate}} : <strong>{{filterToDelete}}</strong> ?</p>
+</div>
+
+<!-- Modal d'ajout de filtre -->
+<div bs-modal when="filterToSave"
+     title="{{'dashboard.Saving_current_filter' | translate}}"
+     primary-label="{{'Save' | translate}}"
+     primary-action="saveFilter()">
+    <label>
+        {{'dashboard.Choose_a_filter_name' | translate}} :
+        <input type="text" ng-model="newFilterName">
+    </label>
+</div>
+
+<script type="text/ng-template" id="popover_list_documents">
+    {{'dashboard.Main_documents' | translate}} :
+    <ul class="list-unstyled">
+        <li ng-repeat="doc in dossier.documentsPrincipaux">
+            <a target="_blank" class="wrap" href="{{context}}/proxy/alfresco/api/node/workspace/SpacesStore/{{doc.id}}/content/{{doc.name}}">
+                <i class="fa" ng-class="getFileExtIcon(doc.name)"></i>
+                {{doc.name}}
+            </a>
+        </li>
+    </ul>
+</script>
+
+<div class="dashboard-page">
+    <div id="dashboard-filters" class="well">
+        <form action="#" method="post">
+
+            <tabset>
+                <tab heading="{{'dashboard.Base' | translate}}">
+                    <div class="row col-md-12" style="margin-top:10px;">
+                        <!-- TYPE -->
+                        <fieldset class="col-md-4">
+                            <label class="checkbox">
+                                <input class="unvalidate" ng-disabled="dashboard.searchContent == 'true'" ng-checked="dashboard.showed.types.length" ng-change="dashboard.showed.types = []; dashboard.showed.subtypes = []" type="checkbox" ng-model="selectType"/>
+                                {{'dashboard.Type' | translate}}
+                            </label>
+                            <select multiple class="form-control unvalidate" ng-disabled="dashboard.searchContent == 'true'" ng-change="selectType = true" ng-selected="selectType" ng-model="dashboard.showed.types" ng-options="type.id as type.id for type in typo"></select>
+                        </fieldset>
+                        <!-- SOUS-TYPE -->
+                        <fieldset class="col-md-4">
+                            <label class="checkbox">
+                                <input class="unvalidate" ng-disabled="dashboard.searchContent == 'true'" ng-checked="dashboard.showed.subtypes.length" ng-change="dashboard.showed.subtypes = []" type="checkbox" ng-model="selectSubtype"/>
+                                {{'dashboard.SubType' | translate}}
+                            </label>
+                            <select multiple ng-disabled="dashboard.searchContent == 'true'" class="form-control unvalidate" ng-change="selectSubtype = true" ng-model="dashboard.showed.subtypes" ng-options="ssType as ssType for ssType in (typo | sameId:dashboard.showed.types | mergeArrays:'sousTypes')"></select>
+                        </fieldset>
+
+                        <!-- DATE -->
+                        <fieldset class="col-md-2">
+                            <div class="control-group">
+                                <label class="checkbox">
+                                    <input ng-disabled="dashboard.searchContent == 'true'" class="unvalidate" ng-checked="dashboard.showed.dateFrom || dashboard.showed.dateTo" ng-change="dashboard.showed.dateFrom='';dashboard.showed.dateTo=''" ng-model="selectDate" type="checkbox"/>
+                                    {{'dashboard.Creation_date' | translate}}
+                                </label>
+
+                                <div class="input-group">
+                                    <input ng-disabled="dashboard.searchContent == 'true'" ng-change="selectDate = true" type="text" id="from" from="true" linked="#to" ng-model="dashboard.showed.dateFrom" class="form-control unvalidate" readonly="true" ip-datepicker i18n="app.dashboard.filters.from" kind="attr" attr="placeholder"/>
+                                    <span ng-if="!!dashboard.showed.dateFrom" ng-click="dashboard.showed.dateFrom = undefined"
+                                          class="pointer input-group-addon">
+                                        <i class="fa fa-times"></i>
+                                    </span>
+                                    <label style="display: table-cell;" ng-if="!dashboard.showed.dateFrom" class="input-group-addon btn" for="from">
+                                        <i class="fa fa-calendar"></i>
+                                    </label>
+
+                                </div>
+
+                                <div class="input-group">
+                                    <input ng-disabled="dashboard.searchContent == 'true'" ng-change="selectDate = true" type="text" id="to" linked="#from" ng-model="dashboard.showed.dateTo" class="form-control unvalidate" readonly="true" ip-datepicker i18n="app.dashboard.filters.to" kind="attr" attr="placeholder"/>
+                                    <span ng-if="!!dashboard.showed.dateTo" ng-click="dashboard.showed.dateTo = undefined"
+                                          class="pointer input-group-addon">
+                                        <i class="fa fa-times"></i>
+                                    </span>
+                                    <label style="display: table-cell;" ng-if="!dashboard.showed.dateTo" class="input-group-addon btn" for="to">
+                                        <i class="fa fa-calendar"></i>
+                                    </label>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <div class="col-md-2">
+                            <!-- CORBEILLE -->
+                            <fieldset class="control-group">
+                                <label i18n="app.dashboard.filters.files.title"></label>
+                                <select ng-disabled="dashboard.searchContent == 'true'" ng-options="corbeille.key as corbeille.value for corbeille in corbeillesListFilter" ng-model="dashboard.showed.dossier" class="form-control unvalidate">
+                                </select>
+                            </fieldset>
+
+                            <!-- CONTENT -->
+                            <div>
+                                <label for="searchValue">
+                                    {{'dashboard.Search' | translate}} :
+                                </label>
+
+                                <label class="radio-inline">
+                                    <input class="unvalidate" type="radio" name="radio-content" ng-checked="dashboard.showed.dossier === 'content'" ng-model="dashboard.searchContent" id="content-filter" value="true">
+                                    {{'dashboard.Full_text' | translate}}
+                                </label>
+                                <label class="radio-inline">
+                                    <input class="unvalidate" type="radio" name="radio-content" ng-change="dashboard.showed.dossier='a-traiter'" ng-checked="dashboard.showed.dossier !== 'content'" ng-model="dashboard.searchContent" id="title-radio" value="false">
+                                    {{'Title' | translate}}
+                                </label>
+
+                                <input type="text" ng-model="dashboard.showed.title" id="searchValue" name="searchValue" class="form-control unvalidate"/>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </tab>
+                <tab heading="{{'dashboard.Advanced' | translate}} {{metaFilter.length > 0 ? ('- ' + ('Currently' | translate) + ' : ') + (metaFilter | object2string:', ':'name') : ''}}">
+                    <div style="margin-top:10px; display: flex;">
+                        <div style="flex: 0 0 33%;">
+                            <label style="width: 95%;">
+                                {{'dashboard.Available_filters' | translate}}
+                                <select size="5" class="form-control unvalidate" ng-change="createAdvancedFilter(selectedMetadonneeIndex.index)" ng-model="selectedMetadonneeIndex.index">
+                                    <option value="">-- {{'dashboard.Select_to_create_a_filter' | translate}} --</option>
+                                    <optgroup label="{{'dashboard.Metadata' | translate}}">
+                                        <option ng-repeat="item in metadonnees" ng-value="$index">{{item.name}}</option>
+                                    </optgroup>
+                                </select>
+                            </label>
+                        </div>
+                        <div style="flex: 0 0 33%;">
+                            <div ng-hide="empty(metaTmpFilter) || metaTmpFilter.name === undefined">
+                                <label>
+                                    {{metaTmpFilter.name + ' - Condition'}}
+                                    <select class="form-control unvalidate" ng-show="metaTmpFilter.values !== undefined"
+                                            ng-model="metaTmpFilter.text"
+                                            ng-options="val for val in metaTmpFilter.values">
+                                    </select>
+                                    <input ng-cloak type="text" class="form-control unvalidate"
+                                           ng-model="metaTmpFilter.text"
+                                           ng-show="metaTmpFilter.values === undefined && (metaTmpFilter.type === 'STRING' || metaTmpFilter.type === 'URL')">
+                                    <input ng-cloak integer type="text" class="form-control unvalidate"
+                                           ng-model="metaTmpFilter.text"
+                                           ng-show="metaTmpFilter.values === undefined && metaTmpFilter.type === 'INTEGER'">
+                                    <input ng-cloak decimal type="text" class="form-control unvalidate"
+                                           ng-model="metaTmpFilter.text"
+                                           ng-show="metaTmpFilter.values === undefined && metaTmpFilter.type === 'DOUBLE'">
+                                    <input ng-cloak type="checkbox" class="unvalidate" ng-model="metaTmpFilter.text"
+                                           ng-true-value="true" ng-false-value="false"
+                                           ng-show="metaTmpFilter.values === undefined && metaTmpFilter.type === 'BOOLEAN'">
+                                    <input ng-cloak
+                                           ng-show="metaTmpFilter.values === undefined && metaTmpFilter.type === 'DATE'"
+                                           type="text" id="fromMeta" from="true" linked="#toMeta"
+                                           ng-model="metaTmpFilter.dateFrom" class="form-control unvalidate"
+                                           readonly="true" ip-datepicker i18n="app.dashboard.filters.from" kind="attr"
+                                           attr="placeholder"/>
+                                </label>
+                                <label>
+                                    <input ng-show="metaTmpFilter.type === 'DATE'" type="text" id="toMeta"
+                                           linked="#fromMeta" ng-model="metaTmpFilter.dateTo"
+                                           class="form-control unvalidate" readonly="true" ip-datepicker
+                                           i18n="app.dashboard.filters.to" kind="attr" attr="placeholder"/>
+                                </label>
+
+                                <div>
+                                    <span class="btn btn-info" ng-click="saveAdvancedFilter()">OK</span>
+                                    <span ng-show="selectedMetadonneeIndex.bis !== ''" class="btn btn-warning" ng-click="deleteAdvancedFilter()">{{'Delete' | translate}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="flex: 0 0 33%;">
+                            <label style="width:95%;">
+                                {{'dashboard.Current_advanced_filters' | translate}}
+                                <select size="5" ng-keydown="keyDownAdvancedActiveFilter($event)" class="form-control unvalidate" ng-change="selectAdvancedFilter(selectedMetadonneeIndex.bis)" ng-model="selectedMetadonneeIndex.bis">
+                                    <option value="">-- Édition de filtre --</option>
+                                    <option ng-repeat="item in metaFilter" ng-value="$index">{{item.name}} =
+                                        {{item.text === '\'true\'' ? 'Oui' : (item.text === '\'false\'' || item.text ===
+                                        'false') ? 'Non' : item.text}}{{item.dateFrom ? item.dateFrom :
+                                        ''}}{{item.dateTo ? ' -> ' + item.dateTo : ''}}
+                                    </option>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+                </tab>
+            </tabset>
+
+            <hr>
+
+            <!-- DO FILTER -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-md-offset-4 col-md-3">
+                        <span ng-if="dashboard.navigation.selected === unsavedFilterName"
+                              class="btn btn-default"
+                              ng-click="dashboard.save() && (dashboard.navigation.selected !== '')">
+                            <i class="fa fa-save"></i> {{'dashboard.Save_current_filter' | translate}}
+                        </span>
+                        <span ng-if="(!!dashboard.navigation.selected) && (dashboard.navigation.selected !== unsavedFilterName) && (dashboard.navigation.selected !== defaultFilterName)"
+                              class="btn btn-danger"
+                              ng-click="dashboard.remove()">
+                            <i class="fa fa-trash-o"></i> {{'dashboard.Delete_selected_filter' | translate}}
+                        </span>
+                    </div>
+                    <div class="col-md-offset-2 col-md-3">
+                        <fieldset>
+                            <button ng-click="dashboard.resetFilter()" class="btn btn-default" type="reset">
+                                <i class="fa fa-undo"></i>
+                                {{'Reset' | translate}}
+                            </button>
+                            <button ng-click="dashboard.doFilter()" class="btn btn-success" type="button">
+                                <i class="fa fa-filter"></i>
+                                {{"Filter" | translate}}
+                            </button>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="alert alert-info row" style="margin-bottom:5px;">
+
+        <div class="filtreActif col-xs-10">
+            <span>
+                <i class="fa fa-filter"></i>
+                <strong id="titleInfoFiltre">{{'dashboard.Active_filter' | translate}} :</strong>
+            </span>
+            <span id="filtreDossiers">
+                <strong ng-show="currentFilter.dossier && currentFilter.dossier !== 'content'"
+                        i18n="{{corbeilleList[currentFilter.dossier]}}" watch-value="currentFilter"></strong>
+            </span>
+            <span ng-show="currentFilter.types.length > 0" id="filtreType">
+                <p> {{'dashboard.of_type' | translate}} </p>
+                <strong>
+                    <p ng-repeat="type in currentFilter.types">&nbsp;{{type}},</p>
+                </strong>
+            </span>
+            <span ng-show="currentFilter.subtypes.length > 0" id="filtreSousType">
+                <p>{{'dashboard.of_subtype' | translate}}</p>
+                <strong>
+                    <p ng-repeat="subtype in currentFilter.subtypes">&nbsp;{{subtype}},</p>
+                </strong>
+            </span>
+            <span id="filtreDate">
+                <span ng-show="currentFilter.dateFrom" id="filtreFrom">
+                    <p> {{'dashboard.from' | translate}} </p>
+                    <strong>{{currentFilter.dateFrom | texttodate | date:'fullDate'}}</strong>
+                </span>
+                <span ng-show="currentFilter.dateTo" id="filtreTo">
+                    <p> {{'dashboard.until' | translate}} </p>
+                    <strong>{{currentFilter.dateTo | texttodate | date:'fullDate'}}</strong>
+                </span>
+            </span>
+            <span ng-show="currentFilter.title" id="filtreRecherche">
+                <span class="icon-angle-right"></span>
+                 {{'dashboard.Search' | translate}}
+                <strong>"{{currentFilter.title}}"</strong>
+                 {{'dashboard.in' | translate}}
+                <strong ng-show="currentFilter.dossier == 'content'">{{'dashboard.Content' | translate}}</strong>
+                <strong ng-hide="currentFilter.dossier == 'content'">{{'Title' | translate}}</strong>
+            </span>
+            <span ng-show="currentFilter.metadonnees.length > 0" id="filtreMetadonnees">
+                {{'dashboard.with' | translate}}
+                <span ng-repeat="meta in currentFilter.metadonnees">
+                    <strong ng-show="{{meta.type === 'STRING'}}">{{meta.name}} = "{{meta.text}}",</strong>
+                    <strong ng-show="{{meta.type === 'BOOLEAN'}}" >{{meta.name}} = {{(meta.text === "'true'" ? 'dashboard.true' : 'dashboard.false') | translate}},</strong>
+                    <span ng-show="{{meta.type ==='DATE'}}">
+                        <strong>{{meta.name}}</strong>
+                        <span ng-show="meta.dateFrom">
+                            <p> {{'dashboard.from' | translate}} </p>
+                            <strong>{{meta.dateFrom | texttodate | date:'fullDate'}}</strong>
+                        </span>
+                        <span ng-show="meta.dateTo">
+                            <p> {{'dashboard.until' | translate}} </p>
+                            <strong>{{meta.dateTo | texttodate | date:'fullDate'}}</strong>
+                        </span>
+                        ,
+                    </span>
+                </span>
+            </span>
+        </div>
+
+        <!-- FILTERS HANDLER -->
+        <div class="col-xs-2">
+            <select ng-model="dashboard.navigation.selected"
+                    ng-options="name as translateFilter(name) for (name, filter) in dashboard.list"
+                    ng-change="dashboard.change()"
+                    class="form-control unvalidate">
+                <option value="">{{defaultFilterName | translate}}</option>
+            </select>
+        </div>
+    </div>
+
+
+    <div style="display:flex; height: 47px; flex-wrap: wrap; align-items: center;">
+        <div style="flex: 0 0 33%;">
+            <div id="actions" class="left-buttons action-buttons">
+                <a class="fa fa-2x text-muted" ng-class="isOnlySignature() ? 'ls-signature' : isOnlyCachet() ? 'ls-stamp' : isOnlyVisa() ? 'fa-check-square-o': 'fa-check'" ng-show="(!isDossierLockedInSelection()) && ((dossiersToDo | intersectionOnProperty:'actions').indexOf('VALIDATION') !== -1)" ng-click="checkReadAndLaunchModal('VALIDATION')" tooltip="{{isOnlySignature() ? 'Signer' : isOnlyCachet() ? 'Cacheter' :  isOnlyVisa() ? 'Viser' : 'Valider'}}" tooltip-placement="bottom">
+                </a>
+                <a class="fa fa-2x fa-check text-muted" ng-show="(!isDossierLockedInSelection()) && ((dossiersToDo | intersectionOnProperty:'actions').indexOf('TDT_HELIOS') !== -1)" ng-click="launchModal('TDT_HELIOS')" i18n="app.general.actions.tdt" kind="tooltip">
+                </a>
+                <a class="fa fa-2x fa-reply text-muted" ng-show="(!isDossierLockedInSelection()) && ((dossiersToDo | intersectionOnProperty:'actions').indexOf('REMORD') !== -1)" ng-click="launchModal('REMORD')" tooltip="Exercer mon droit de remords" tooltip-placement="right">
+                </a>
+                <a class="fa fa-2x fa-times text-muted" ng-show="(!isDossierLockedInSelection()) && ((dossiersToDo | intersectionOnProperty:'actions').indexOf('REJET') !== -1)" ng-click="launchModal('REJET')" tooltip="Rejeter">
+                </a>
+                <a class="fa fa-2x fa-inbox text-muted" ng-show="(!isDossierLockedInSelection()) && ((dossiersToDo | intersectionOnProperty:'actions').indexOf('ARCHIVAGE') !== -1)" ng-click="launchModal('ARCHIVAGE')" tooltip="{{'actions.archive' | translate}}" tooltip-placement="right">
+                </a>
+                <a class="fa fa-2x fa-share text-muted" ng-show="(!isDossierLockedInSelection()) && ((dossiersToDo | intersectionOnProperty:'actions').indexOf('TRANSFERT_ACTION') !== -1)" ng-click="launchModal('TRANSFERT')" i18n="Transférer les dossiers" kind="tooltip">
+                </a>
+                <a class="fa fa-2x fa-paper-plane-o text-muted" ng-show="(dossiersToDo | intersectionOnProperty:'actions').indexOf('EMAIL') !== -1" ng-click="launchModal('EMAIL')" i18n="app.general.actions.email" kind="tooltip">
+                </a>
+                <a class="fa fa-2x fa-trash-o text-muted" ng-show="(!isDossierLockedInSelection()) && ((dossiersToDo | intersectionOnProperty:'actions').indexOf('SUPPRESSION') !== -1)" ng-click="launchModal('SUPPRESSION')" i18n="app.general.actions.delete" kind="tooltip">
+                </a>
+                <a class="fa fa-2x fa-user text-muted" ng-show="(!isDossierLockedInSelection()) && ((dossiersToDo | intersectionOnProperty:'actions').indexOf('SECRETARIAT') !== -1)" ng-click="launchModal('SECRETARIAT')" i18n="{{currentBureau.isSecretaire ? 'Renvoyer le dossier' : 'app.general.actions.sendToSecretariat'}}" kind="tooltip">
+                </a>
+            </div>
+
+
+            <div class="text-info" style="padding-left:30px;">
+                <span ng-if="dossiersToDo.length > 0"><i class="fa fa-info-circle"></i> {{('dashboard._number_folder_s_selected' | translate).replace("-number-", dossiersToDo.length)}}</span>
+            </div>
+        </div>
+
+        <div ng-if="delegation.hasToShow && delegation.showed && (delegation.titulaires.length > 0 || delegation.current['date-debut-delegation'] < delegation.timestamp || delegation.current['date-fin-delegation'] > delegation.timestamp)"
+             class="alert alert-info" style="flex: 0 0 33%;">
+            <script type="text/ng-template" id="popover_titulaires">
+                <ul class="list-unstyled text-info">
+                    <li ng-repeat="titulaire in delegation.titulaires">{{titulaire}}</li>
+                </ul>
+            </script>
+            <span>
+                <strong ng-if="delegation.titulaires.length === 0">
+                    Délégations :
+                </strong>
+                <span ng-if="delegation.titulaires.length > 0">
+                    <strong class="pointer" ng-click="delegation.showDossiers()">
+                        <i class="fa fa-share"></i> ({{delegation.dossiers}}) {{'dashboard.delegated_folders' | translate}}
+                    </strong>
+                    <span>
+                        <span tooltip="Titulaire" ng-if="delegation.titulaires.length === 1">{{delegation.titulaires[0]}} <i class="fa fa-arrow-right"></i></span>
+                        <span ng-if="delegation.titulaires.length > 1">
+                            <span class="btn btn-default" data-placement="bottom" bs-popover="'popover_titulaires'" data-trigger="hover">Titulaires</span>&nbsp;<i class="fa fa-arrow-right"></i>
+
+                        </span>
+                    </span>
+                </span>
+
+                <span tooltip="Mon Bureau">{{currentBureau.name}}</span>
+                <span tooltip="Suppléant"
+                      ng-if="delegation.current['date-debut-delegation'] < delegation.timestamp || delegation.current['date-fin-delegation'] > delegation.timestamp">
+                    <i class="fa fa-arrow-right"></i>
+                    {{delegation.current.titreCible}}
+                </span>
+            </span>
+        </div>
+
+
+        <div class="paginate" style="margin-left: auto;">
+            <p style="display:inline-block;">{{'dashboard.Current_page' | translate}} : {{nav.currentPage+1}}</p>
+
+            <div ng-if="nav.hasPrev || nav.hasNext" title="Précédent" ng-click="changePage(false)" ng-class="{true:'', false:'disabled'}[nav.hasPrev]" class="btn btn-default">
+                <i class="fa-chevron-left fa"></i></div>
+            <div ng-if="nav.hasPrev || nav.hasNext" title="Suivant" ng-click="changePage(true)" ng-class="{true:'', false:'disabled'}[nav.hasNext]" class="btn btn-default">
+                <i class="fa-chevron-right fa"></i></div>
+        </div>
+    </div>
+
+
+    <div ng-if="!loaded">
+        <div style="position:relative;" class="nextDossierInfo">
+            <span class="text text-info">
+                <i class="fa fa-info-circle"></i> {{'dashboard.Retrieving_folders___' | translate}}
+            </span>
+            <span style="position: relative; width: 0; z-index: 2000000000; right: 120px; top: 100px;" us-spinner="{radius:20, width:8, length: 16}"></span>
+        </div>
+    </div>
+    <div ng-if="loaded && dossiers.length > 0">
+        <div class="fixbottom" id="table-container" style=" overflow-y: auto; margin-bottom:10px;">
+            <table class="table table-condensed table-bordered" id="data-table">
+                <thead>
+                <tr>
+                    <th>
+                        <label>
+                            <input class="unvalidate" ng-click="setAllCheck(!masterCheckbox); updateActions()" ng-model="masterCheckbox" type="checkbox">
+                        </label>
+                    </th>
+                    <th ng-repeat="data in dashboard.columns.enabled" ng-class="data.key ? 'pointer' : ''" ng-click="sortTable(data)">
+                        <div>
+                            <i ng-if="nav.currentChamp === data.key" class="fa" ng-class="nav.ascBase ? 'fa-sort-alpha-asc' : 'fa-sort-alpha-desc'"></i>
+                            {{data.i18n | translate}}
+                        </div>
+                    </th>
+                </tr>
+
+                </thead>
+                <tbody>
+                <tr ng-repeat="dossier in dossiers" ng-class="checkboxDossier[$index] ? 'selected-row' : ''">
+                    <td>
+                        <label>
+                            <input class="unvalidate" ng-model="checkboxDossier[$index]" type="checkbox">
+                        </label>
+                    </td>
+                    <td ng-repeat="data in dashboard.columns.enabled" ng-switch on="data.value">
+                        <a href="#/apercu" ng-click="selectDossier(dossier)" ng-switch-when="title">
+                            {{dossier[data.value]}}
+                            <a class="navbar-link" ng-switch-when="title"
+                               ng-show="(dossier.banetteName === 'Dossiers à transmettre' || 'Dossiers à relire - annoter') && dossier.actions.indexOf('EDITION') !== -1"
+                               ng-click="selectDossier(dossier)" href="#/nouveau">
+                                <i class="fa fa-pencil" tooltip="Modifier"></i>
+                            </a>
+                            <span class="label label-danger float-right" ng-switch-when="title"
+                                  ng-if="dossier.dateLimite && dossier.dateLimite < delegation.timestamp">{{'dashboard.Late' | translate}}</span>
+                        </a>
+
+                        <p ng-switch-when="type">
+                            {{dossier['type']}} / {{dossier['sousType']}}
+                        </p>
+
+                        <p ng-switch-when="actionDemandee" class="center block" style="min-width:60px;">
+                            <span>
+                                <i class="fa" tooltip="{{getReadMandatoryTooltip(dossier)}}"
+                                   ng-class="dossier.hasRead ? 'fa-eye text-success' : dossier.readingMandatory && dossier.actionDemandee === 'SIGNATURE' ? 'fa-warning text-danger' : 'fa-eye-slash text-yellow'"></i>
+                            </span>
+                            <i ng-if="!dossier.locked" class="fa fa-lg" ng-class="getIconClass(dossier, data)" tooltip="{{getActionTooltip(dossier, data)}}"></i>
+
+                            <i ng-if="dossier.locked" i18n="Traitement en cours" kind="tooltip" placement="top"
+                               class="fa fa-spinner center fa-spin"></i>
+                        </p>
+
+                        <p ng-switch-when="dateEmission">
+                            {{dossier[data.value] | texttodate | date:'dd/MM/yyyy'}}
+                        </p>
+
+                        <p ng-switch-when="dateLimite">
+                            {{dossier[data.value] | texttodate | date:'dd/MM/yyyy'}}
+                        </p>
+
+                        <div ng-switch-when="visual">
+                            <a target="_blank" class="xemelios" ng-click="readDossier(dossier)"
+                               ng-if="(dossier.documentsPrincipaux[0].name | fileext) === 'xml' && dossier.isXemEnabled && dossier.protocol === 'HELIOS'"
+                               href="{{context}}/proxy/alfresco/parapheur/dossiers/{{dossier.id}}/{{dossier.documentsPrincipaux[0].id}}/xemelios">
+                                <img ng-src="{{context}}/res/images/xemelios.png">
+                            </a>
+                            <a ng-show="(dossier.documentsPrincipaux[0].name | fileext) !== 'xml' || !dossier.isXemEnabled || dossier.protocol !== 'HELIOS'"
+                               target="_blank" class="wrap"
+                               ng-click="readDossier(dossier)"
+                               href="{{context}}/proxy/alfresco/api/node/workspace/SpacesStore/{{dossier.documentsPrincipaux[0].id}}/content/{{dossier.documentsPrincipaux[0].name}}">
+                                <i class="fa" ng-class="getFileExtIcon(dossier.documentsPrincipaux[0].name)"></i>
+                                {{dossier.documentsPrincipaux[0].name}}
+                            </a>
+                            <div ng-if="dossier.documentsPrincipaux.length > 1" class="dropdown multiDoc">
+                                <button class="btn btn-default fa fa-list-ul dropdown-toggle" id="dropdownMenuDocs"
+                                        type="button" data-toggle="dropdown" aria-expanded="true">
+                                </button>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuDocs">
+                                    <li role="presentation" class="dropdown-header">{{'dashboard.Main_documents' |
+                                        translate}}
+                                    </li>
+                                    <li ng-repeat="doc in dossier.documentsPrincipaux">
+                                        <a target="_blank" class="wrap"
+                                           href="{{context}}/proxy/alfresco/api/node/workspace/SpacesStore/{{doc.id}}/content/{{doc.name}}">
+                                            <i class="fa" ng-class="getFileExtIcon(doc.name)"></i>
+                                            {{doc.name}}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <span ng-if="!dossier.documentsPrincipaux" class="text-info"><i
+                                    class="fa fa-info-circle"></i> {{'dashboard.No_document' | translate}}</span>
+                        </div>
+
+                        <p ng-switch-default>
+                            <span ng-if="data.type === 'DOUBLE'">{{dossier[data.value] | number:2}}</span>
+                            <span ng-if="data.type !== 'DOUBLE'">{{dossier[data.value]}}</span>
+                        </p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <table copy-size="table-container" style="position: fixed; pointer-events:none; top:146px; "
+                   class="table table-condensed table-bordered">
+                <thead style="visibility: hidden; pointer-events: auto; background-color: white; color: #333333;">
+                <tr>
+                    <th>
+                        <label>
+                            <input class="unvalidate" ng-click="setAllCheck(!masterCheckbox); updateActions()" ng-model="masterCheckbox" type="checkbox">
+                        </label>
+                    </th>
+                    <th ng-repeat="data in dashboard.columns.enabled" ng-class="data.key ? 'pointer' : ''"
+                        ng-click="sortTable(data)">
+                        <div>
+                            <i ng-if="nav.currentChamp === data.key || nav.currentChamp === data.value" class="fa" ng-class="nav.ascBase ? 'fa-sort-alpha-asc' : 'fa-sort-alpha-desc'"></i>
+                            {{data.i18n | translate}}
+                        </div>
+                    </th>
+                </tr>
+
+                </thead>
+                <tbody class="no-border" style="visibility: hidden;">
+                <tr ng-repeat="dossier in dossiers" ng-class="checkboxDossier[$index] ? 'selected-row' : ''">
+                    <td>
+                        <label>
+                            <input class="unvalidate" ng-model="checkboxDossier[$index]" type="checkbox">
+                        </label>
+                    </td>
+                    <td ng-repeat="data in dashboard.columns.enabled" ng-switch on="data.value">
+                        <a href="#/apercu" ng-click="selectDossier(dossier)" ng-switch-when="title">
+                            {{dossier[data.value]}}
+                            <a class="navbar-link" ng-switch-when="title" ng-show="(dossier.banetteName === 'Dossiers à transmettre' || 'Dossiers à relire - annoter') && dossier.actions.indexOf('EDITION') !== -1" ng-click="selectDossier(dossier)" href="#/nouveau">
+                                <i class="fa fa-pencil"></i>
+                            </a>
+                            <span class="label label-danger float-right" ng-switch-when="title" ng-if="dossier.dateLimite && dossier.dateLimite < delegation.timestamp">{{'dashboard.Late' | translate}}</span>
+                        </a>
+
+                        <p ng-switch-when="type">
+                            {{dossier['type']}} / {{dossier['sousType']}}
+                        </p>
+
+                        <p ng-switch-when="actionDemandee" class="center block" style="min-width:60px;">
+                            <span>
+                                <i class="fa" tooltip="{{getReadMandatoryTooltip(dossier)}}"
+                                   ng-class="dossier.hasRead ? 'fa-eye text-success' : dossier.readingMandatory && dossier.actionDemandee === 'SIGNATURE' ? 'fa-warning text-danger' : 'fa-eye-slash text-yellow'"></i>
+                            </span>
+                            <i ng-if="!dossier.locked" class="fa fa-lg" ng-class="getIconClass(dossier, data)" tooltip="{{getActionTooltip(dossier, data)}}"></i>
+                            <i ng-if="dossier.locked" i18n="Traitement en cours" kind="tooltip" placement="top" class="fa fa-spinner center fa-spin"></i>
+                        </p>
+
+                        <p ng-switch-when="dateEmission">
+                            {{dossier[data.value] | texttodate | date:'dd/MM/yyyy'}}
+                        </p>
+
+                        <p ng-switch-when="dateLimite">
+                            {{dossier[data.value] | texttodate | date:'dd/MM/yyyy'}}
+                        </p>
+
+                        <div ng-switch-when="visual">
+                            <a target="_blank" class="xemelios" ng-click="readDossier(dossier)" ng-if="(dossier.documentsPrincipaux[0].name | fileext) === 'xml' && dossier.isXemEnabled && dossier.protocol === 'HELIOS'" href="{{context}}/proxy/alfresco/parapheur/dossiers/{{dossier.id}}/{{dossier.documentsPrincipaux[0].id}}/xemelios">
+                                <img ng-src="{{context}}/res/images/xemelios.png">
+                            </a>
+                            <a ng-if="(dossier.documentsPrincipaux[0].name | fileext) !== 'xml' || !dossier.isXemEnabled || dossier.protocol !== 'HELIOS'" target="_blank" class="wrap" ng-click="readDossier(dossier)" href="{{context}}/proxy/alfresco/api/node/workspace/SpacesStore/{{dossier.documentsPrincipaux[0].id}}/content/{{dossier.documentsPrincipaux[0].name}}">
+                                <i class="fa" ng-class="getFileExtIcon(dossier.documentsPrincipaux[0].name)" ></i>
+                                {{dossier.documentsPrincipaux[0].name}}
+                            </a>
+                            <div ng-if="dossier.documentsPrincipaux.length > 1" class="dropdown multiDoc">
+                                <button class="btn btn-default fa fa-list-ul dropdown-toggle" id="dropdownMenuDocs" type="button" data-toggle="dropdown" aria-expanded="true">
+                                </button>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuDocs">
+                                    <li role="presentation" class="dropdown-header">{{'dashboard.Main_documents' | translate}}</li>
+                                    <li ng-repeat="doc in dossier.documentsPrincipaux">
+                                        <a target="_blank" class="wrap" href="{{context}}/proxy/alfresco/api/node/workspace/SpacesStore/{{doc.id}}/content/{{doc.name}}">
+                                            <i class="fa" ng-class="getFileExtIcon(doc.name)"></i>
+                                            {{doc.name}}</a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <span ng-if="!dossier.documentsPrincipaux" class="text-info"><i class="fa fa-info-circle"></i> {{'dashboard.No_document' | translate}}</span>
+                        </div>
+
+                        <p ng-switch-default>
+                            <span ng-if="data.type === 'DOUBLE'">{{dossier[data.value] | number:2}}</span>
+                            <span ng-if="data.type !== 'DOUBLE'">{{dossier[data.value]}}</span>
+                        </p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <span class="text text-info center block" ng-if="dossiers.length === 0 && loaded && !error">
+        <i class="fa fa-info-circle"></i> {{'dashboard.No_folder_found' | translate}}
+    </span>
+    <span class="text text-danger center block" ng-if="error">
+        <i class="fa fa-warning"></i> {{errorMessage}}
+    </span>
+</div>
+
+
+

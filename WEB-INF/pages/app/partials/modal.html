@@ -1,0 +1,19 @@
+<!-- angular dialog template -->
+<script type="text/ng-template" id="dialog-template">
+    <div class="modal fade" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" data-dismiss="modal"></button>
+                    <h3>{{title}}</h3>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal" ng-click="secondaryAction()">{{secondaryLabel}}</button>
+                    <button id="modalConfirm" class="btn btn-primary" data-dismiss="modal" ng-disabled="!modalForm.$valid" ng-click="primaryAction()">{{primaryLabel}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

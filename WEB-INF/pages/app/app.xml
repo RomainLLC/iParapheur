@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page>
+   <id>app</id>
+   <title>i-Parapheur</title>
+    <template-instance>base</template-instance>
+   <authentication>user</authentication>
+   <order-id>0</order-id>
+    <components>
+        <component>
+            <region-id>main</region-id>
+            <url>/app/app</url>
+        </component>
+    </components>
+</page>

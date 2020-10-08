@@ -1,0 +1,10 @@
+{
+  "archiveModal": {
+    "archiving": "Déplacer dans les dossiers à extraire",
+    "folder_name": "Nom du dossier",
+    "archive_name": "Nom du dossier à extraire",
+    "archive_name_default": "(par défaut : nom du dossier.pdf)",
+    "add_annexes": "Joindre les annexes",
+    "handled_folders": "Dossiers traité(s)"
+  }
+}

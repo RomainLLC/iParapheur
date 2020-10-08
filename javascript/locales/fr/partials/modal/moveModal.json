@@ -1,0 +1,7 @@
+{
+  "moveModal": {
+    "move_folder": "Transférer le dossier",
+    "available_desks": "Bureaux disponibles",
+    "moving_a_folder_imply_circuit_modification": "Attention : Le transfert implique la modification du circuit de validation du dossier"
+  }
+}

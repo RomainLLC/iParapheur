@@ -1,0 +1,49 @@
+<script type="text/ng-template"  id="popover_signature">
+    <a href="{{context}}/proxy/alfresco/parapheur/api/getProp?dossier=workspace://SpacesStore/{{etape.id}}&property=ph:signature-etape&filename={{dossier.documents[0].name + '-signature-iparapheur'}}">{{'circuit.download' | translate}}</a>
+    <p>
+        <strong ng-if="etape.signatureInfo.signature_date">{{'circuit.signatureDate' | translate}} :</strong>
+        {{etape.signatureInfo.signature_date}}<br>
+        <strong>{{'circuit.withCertificateOf' | translate}} :</strong> {{etape.signatureInfo.subject_name}}<br>
+        <strong>{{'circuit.issuedBy' | translate}} :</strong> {{etape.signatureInfo.issuer_name}}<br>
+        <strong>{{'circuit.certificateValidity' | translate}} :</strong> {{('circuit.from-start-to-end-' | translate).replace("-start-", etape.signatureInfo.certificate_valid_from).replace("-end-", etape.signatureInfo.certificate_valid_to)}}
+    </p>
+</script>
+
+<div id="circuit" class="well dashlet">
+    <h3 ng-click="element.show = !element.show" class="pointer text-info">{{'circuit.validationCircuit' | translate}}</h3>
+    <div class="dashlet-content" bn-slide-show="element.show">
+        <span ng-if="flags.noCircuit" class="text-danger">
+            <i class="fa fa-warning"></i>{{'circuit.noCircuitDefinedForThisFolder' | translate}}
+        </span>
+        <ol>
+            <li ng-repeat="etape in dossier.circuit.etapes">
+                <i class="fa fa-lg fa-fw" ng-class="getIconClass(etape, dossier.circuit.etapes[$index+1])" tooltip="{{getActionTooltip(etape)}}"></i>
+                <span style="position:absolute; left: 0; margin-left: 50px;" ng-if="etape.isCurrent && !dossier.circuit.etapes[$index-1].rejected">
+                    <i tooltip="Étape en cours" class="fa fa-lg fa-fw text-success fa-arrow-right" ></i>
+                </span>
+
+                <span class="label label-danger" style="position:absolute; left: -5px; margin-left: 50px; margin-top: 18px;" ng-if="etape.rejected && dossier.circuit.etapes[$index+1].isCurrent">
+                    Rejeté
+                </span>
+
+                <span ng-class="etape.approved ? (etape.rejected && dossier.circuit.etapes[$index+1].isCurrent ? 'text-danger' : 'text-success') : (etape.isCurrent && !dossier.circuit.etapes[$index-1].rejected) ? 'bold' : ''">
+                    {{etape.parapheurName}}
+                    <span ng-if="etape.delegueName">
+                        <i class="fa fa-arrow-right"></i>
+                        <span tooltip="Par délégation">{{etape.delegueName}}</span>
+                    </span>
+
+                </span>
+                <i ng-if="etape.signatureEtape && (dossier.circuit.sigFormat.indexOf('PKCS#7') !== -1 || dossier.circuit.sigFormat.indexOf('PKCS#1') !== -1 || dossier.circuit.sigFormat === 'XAdES/detached')"
+                     class="pointer fa fa-lg fa-fw ls-signature-o"  data-placement="left"
+                   bs-popover="'popover_signature'" data-trigger="click" title="{{'circuit.signature_information' | translate}}"></i>
+                <span tooltip="Télécharger le PES_Acquit" ng-if="etape.approved && !etape.rejected && etape.actionDemandee === 'TDT' && dossier.protocole === 'HELIOS'">
+                    <a target="_blank" href="{{context}}/proxy/alfresco/api/node/content%3bph%3anackHeliosXml/workspace/SpacesStore/{{dossier.id}}/PES_Acquit.xml"><i class="fa fa-arrow-circle-o-down fa-lg"></i></a>
+                </span>
+                <blockquote class="quote-circuit" ng-if="etape.approved">
+                    <small>{{('circuit.the-date-from-person-' | translate).replace("-date-", (etape.dateValidation | date:('circuit.dateFormat' | translate))).replace("-person-", etape.signataire)}}</small>
+                </blockquote>
+            </li>
+        </ol>
+    </div>
+</div>

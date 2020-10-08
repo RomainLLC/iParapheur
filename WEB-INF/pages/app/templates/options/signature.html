@@ -1,0 +1,21 @@
+
+<div>
+    <h2 class="underscore">{{'Options.Sig_Title' | translate}}</h2>
+    <span ng-show="isEmptyOrNull(signNode)" class="text-info"><i class="fa fa-info-circle"></i> {{'Options.Sig_NoScan' | translate}}</span>
+
+    <img ng-if="signNode" class="signatureImg" ng-cloak ng-src="{{context}}/proxy/alfresco/api/node/workspace/SpacesStore/{{signNode}}/content?timestamp={{timeimg || 0}}">
+
+    <form fileupload="image" wrong-type="wrongType(ext)" fileinput="#fileinput" upload-success="signatureSaved(data, index)" action="{{changeSignatureUrl}}" method="POST" enctype="multipart/form-data">
+        <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+        <div class="fileupload-buttonbar">
+            <!-- The fileinput-button span is used to style the file input field as button -->
+        <span class="btn btn-default fileinput-button">
+            <i class="fa fa-folder-open-o"></i>
+            <span>{{'Browse' | translate}}</span>
+            <input id="fileinput" type="file" name="file">
+        </span>
+            <input type="hidden" name="username" value="{{config.username}}">
+        </div>
+        <div ng-show="typeError" class="alert alert-error">{{'Options.Sig_Err1' | translate}}<br>{{'Options.Sig_Err2' | translate}}</div>
+    </form>
+</div>

@@ -1,0 +1,30 @@
+<div id="annotationsIndex" class="well dashlet" ng-show="apercu.annotations.hasAnnotation">
+    <h3 ng-click="element.show = !element.show" class="pointer text-info">{{'annotindex.graphicalAnnotations' | translate}}</h3>
+
+    <div class="dashlet-content" bn-slide-show="element.show">
+        <ul class="list-unstyled">
+            <li ng-repeat="(documentIndex, pages) in apercu.annotations.orderedList"
+                ng-show="apercu.annotations.docHasAnnot[documentIndex]">
+                <strong ng-show="isMultiDocument()" class="text-info wrap"
+                        ng-init="apercu.annotations.docHasAnnot[documentIndex] = false">{{getDocumentName(documentIndex)}}</strong>
+                <ul class="list-unstyled">
+                    <li ng-repeat="(page, value) in apercu.annotations.orderedList[documentIndex]"
+                        ng-if="value.length > 0">
+                        <span class="text-info">{{('annotindex.page-pagenumber-' | translate).replace("-pagenumber-", (page *1 + 1))}}</span>
+                        <hr style="margin:0;">
+                        <ul class="list-unstyled">
+                            <li ng-repeat="annot in value" class="pointer" ng-click="apercu.annotations.select(documentIndex, page, annot)">
+                                <span ng-if="!annot.text" class="text-warning">{{'annotindex.noComment' | translate}}</span>
+                                <span ng-if="!!annot.text" class="text-overflow">{{annot.text}}</span>
+                                <blockquote style="padding:0;"
+                                            ng-init="apercu.annotations.docHasAnnot[documentIndex] = true">
+                                    <small>{{('annotindex.by-person-the-date-' | translate).replace("-date-", (annot.date | date:('annotindex.dateFormat' | translate))).replace("-person-", annot.author)}}</small>
+                                </blockquote>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>

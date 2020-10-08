@@ -1,0 +1,8 @@
+{
+  "printModal": {
+    "printing": "Imprimer le dossier",
+    "concerned_folder": "Dossier concerné",
+    "print_with_signature_slip": "Imprimer le bordereau de signature",
+    "annexes": "Annexes"
+  }
+}

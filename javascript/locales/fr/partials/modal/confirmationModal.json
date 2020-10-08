@@ -1,0 +1,11 @@
+{
+  "confirmationModal": {
+    "confirmation": "Confirmer",
+    "reject_confirmation": "Vous êtes sur le point de renvoyer le(s) dossier(s) sélectionné(s) à votre responsable :",
+    "get_back_confirmation": "Vous êtes sur le point de récupérer le(s) dossier(s) suivant :",
+    "delete_confirmation": "Vous êtes sur le point de supprimer le(s) dossier(s) suivant :",
+    "secretariat_confirmation": "Vous êtes sur le point d'envoyer le(s) dossier(s) suivant au secrétariat :",
+    "recovery_confirmation": "Reprise du dossier",
+    "handled_folders": "Dossiers traité(s)"
+  }
+}

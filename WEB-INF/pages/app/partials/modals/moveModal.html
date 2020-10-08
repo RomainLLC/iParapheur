@@ -1,0 +1,46 @@
+<div class="modal-header">
+    <h3>{{'moveModal.move_folder' | translate}}</h3>
+</div>
+<div class="modal-body row">
+    <form novalidate name="modalForm" class="row form-horizontal">
+        <div class="col-md-6">
+            <span class="text-danger"><i class="fa fa-warning"></i> {{'moveModal.moving_a_folder_imply_circuit_modification' | translate}}</span>
+        </div>
+        <div class="col-md-8">
+            <label class="legendLabel col-xs-12">
+                {{'moveModal.available_desks' | translate}}
+                <hr>
+                <div class="input-group" ng-show="bureau.associes.length !== 0">
+                    <div class="right-inner-addon">
+                        <i class="fa fa-question-circle" tooltip-trigger="click" tooltip-placement="bottom"
+                           tooltip="{{'validationModal.type_your_search_tooltip' | translate}}"></i>
+                        <input id="bureau" type="text" class="form-control unvalidate" ng-model="action.bureau"
+                               placeholder="{{'validationModal.search_by_title_name_or_user' | translate}}"
+                               typeahead="bureau as bureau.title for bureau in bureaux | filter:$viewValue | limitTo:8"
+                               name="bureau" required="required">
+                    </div>
+
+                    <span class="input-group-addon" style="opacity: 0.7;"
+                          ng-class="!!action.bureau.id ? 'label-success' : 'label-warning'">
+                        {{!!action.bureau.id ? ('validationModal.selected_folder' | translate) : ('validationModal.no_folder_selected' | translate)}}
+                    </span>
+                </div>
+            </label>
+        </div>
+
+    </form>
+</div>
+
+<div class="modal-footer">
+    <div class="col-md-1" style="margin-top:12px;">
+        <span us-spinner ng-if="showSpinner"></span>
+    </div>
+    <button ng-disabled="showSpinner" class="btn btn-warning" ng-click="cancel()">
+        <i class="fa fa-times-circle-o"></i>
+        {{'Back' | translate}}
+    </button>
+    <button ng-disabled="!modalForm.$valid || showSpinner" class="btn btn-primary" ng-click="ok()" >
+        <i class="fa fa-check"></i>
+        {{'Confirm' | translate}}
+    </button>
+</div>

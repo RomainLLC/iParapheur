@@ -1,0 +1,33 @@
+<div class="modal-header">
+    <h3>{{'confirmationModal.confirmation' | translate}}</h3>
+</div>
+<div class="modal-body row">
+    {{textModal}}
+    <ul class="listeDossiers">
+        <li ng-repeat="dossier in dossiers" class="btn btn-default col-md-12 force-display"><span class="label label-info">{{dossier.actionDemandee}}</span>{{dossier.title}}</li>
+    </ul>
+
+    <label class="legendLabel col-xs-12" ng-if="showAnnot">
+        Annotation
+        <hr>
+        <div>
+            <textarea class="form-control annotationprivee" ng-model="action.annotPub"></textarea>
+            <i class="fa fa-3x fa-user-secret textarea-icon"></i>
+        </div>
+
+    </label>
+</div>
+
+<div class="modal-footer">
+    <progressbar class="progress-striped active progress-modal" value="progress" max="max" type="info">
+        <span style="color:black; white-space:nowrap;">{{'confirmationModal.handled_folders' | translate}} : {{progress}} / {{max}}</span>
+    </progressbar>
+    <button class="btn btn-warning" ng-click="cancel()">
+        <i class="fa fa-times-circle-o"></i>
+        {{'Back' | translate}}
+    </button>
+    <button class="btn btn-primary" ng-click="ok()">
+        <i class="fa fa-check"></i>
+        {{'Confirm' | translate}}
+    </button>
+</div>

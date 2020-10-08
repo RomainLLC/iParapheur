@@ -1,0 +1,12 @@
+{
+  "Admin": {
+    "Avance": {
+      "PastellMailsec": {
+        "title": "Configurer les connecteurs Pastell",
+        "create": "Ajouter un connecteur",
+        "mod_del_title": "Suppression du connecteur",
+        "mod_del_confirm" : "Etes-vous sûr de vouloir supprimer ce connecteur ?"
+      }
+    }
+  }
+}

@@ -1,0 +1,113 @@
+<div class="row-fluid">
+    <div class="menuAdmin col-md-3 label label-info headertop" removeonsize="992" classes-list="label label-info" ng-include src="'partials/adminNavbar.html'"></div>
+    <div class="col-md-6 adminContent">
+        <h2 style="display:inline-block;">{{'Admin.Groupes.Gr_Title' | translate}}</h2>
+        <span  style="margin-bottom:20px; margin-left:50px;"  class="btn btn-success" ng-click="createGroup()">
+            <i class="fa fa-plus"></i>
+            {{'Admin.Groupes.Gr_New' | translate}}
+        </span>
+        <div>
+            <div class="col-md-6">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-search fa-fw"></i></span>
+                    <input type="text" class="unvalidate form-control" placeholder="{{'Admin.Groupes.Gr_Filter' | translate}}" ng-model="search">
+                </div>
+            </div>
+            <div class="col-md-12 text-info"><i class="fa fa-info-circle"></i> {{'Admin.Groupes.Gr_Filter_Info' | translate}}</div>
+        </div>
+        <div class="well adminContent col-md-12">
+            <abn-tree-groups tree-data="groupes"
+                             on-select="selectGroup(branch);"
+                             on-delete="deleteGroup(branch)"
+                             search="queryGroups"></abn-tree-groups>
+        </div>
+    </div>
+    <div class="col-md-6 adminContent">
+        <div ng-if="!empty(selectedGroup)" class="adminContent col-md-12 well">
+            <div class="col-md-12">
+
+                <form name="editGroup" novalidate>
+                    <legend ng-if="!selectedGroup.isNew">
+                        {{selectedGroup.shortName}}
+                    </legend>
+                    <legend ng-if="selectedGroup.isNew">
+                        {{'Admin.Groupes.Gr_Create' | translate}}
+                    </legend>
+
+                    <label ng-if="selectedGroup.isNew" class="col-md-12">
+                        {{'Admin.Groupes.Gr_Name' | translate}} :
+                        <input class="form-control" name="nomGroup" ng-minlength="1" type="text" ng-model="selectedGroup.shortName" ng-pattern='/^[^&:"£*/<>?%|+;]*$/' required diff-array="unorderedGroupes" placeholder="{{'Admin.Groupes.Gr_New_Name' | translate}}" attr="shortName">
+                        <span class="text-danger" ng-show="editGroup.nomGroup.$error.pattern"><i class="fa fa-warning"></i> {{'Admin.Groupes.Gr_SpeChar' | translate}}</span>
+                    </label>
+                    <div ng-if="selectedGroup.isNew">
+                        <label class="col-md-12">
+                            {{'Admin.Groupes.Gr_Parent' | translate}} :
+                            <select class="form-control unvalidate" ng-model="selectedGroup.parent">
+                                <option value="">-- {{'None' | translate}} --</option>
+                                <option ng-value="group.shortName" ng-repeat="group in unorderedGroupes">
+                                    {{group.shortName}}
+                                </option>
+                            </select>
+                        </label>
+                    </div>
+                </form>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>{{'Admin.Groupes.Gr_Add_Member' | translate}} :</label>
+                        <div>
+                            <div>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-search fa-fw"></i></span>
+                                    <input placeholder="{{'Search' | translate}}" ng-model="searchUser" ng-change="listUsersHandler.search(searchUser)" class="form-control unvalidate" type="text">
+                                </div>
+
+                                <div style="height:30px;" ng-if="listUsersHandler.maxSize < listUsersHandler.total">
+                                <span class="text-warning float-right">
+                                    {{listUsersHandler.page*listUsersHandler.maxSize +1}}-{{(listUsersHandler.page+1)*listUsersHandler.maxSize < listUsersHandler.total ? (listUsersHandler.page+1)*listUsersHandler.maxSize : listUsersHandler.total}} {{'On' | translate}} {{listUsersHandler.total}}
+                                    <span class="btn btn-default fa fa-chevron-left force-display" ng-disabled="listUsersHandler.page === 0" ng-click="listUsersHandler.pagine(-1)"></span>
+                                    <span class="btn btn-default fa fa-chevron-right force-display" ng-disabled="listUsersHandler.page+1 >= (listUsersHandler.total/listUsersHandler.maxSize)" ng-click="listUsersHandler.pagine(1)"></span>
+                                </span>
+                                </div>
+                            </div>
+
+                            <span class="text-info" ng-if="listUsersHandler.total == 0 || (listUsersHandler.subList.length === 0 && $scope.selectedGroup.users.length === 0)"><i class="fa fa-info-circle"></i> {{'Admin.Groupes.Gr_None_Result' | translate}}</span>
+                            <ul class="list-unstyled nav nav-pills nav-stacked adminContent list-data" style="margin-top:5px;margin-bottom: 20px;">
+                                <li ng-repeat="user in listUsersHandler.subList" ng-switch on="userAlreadyInGroup(user)">
+                                    <a ng-click="addUserToGroup(user)" ng-switch-when="true">
+                                        <i class="fa fa-plus-circle text-success"></i> {{user.firstName}} {{user.lastName}} ({{user.username}})
+                                    </a>
+                                    <a class="disabled" ng-switch-default>
+                                        {{user.firstName}} {{user.lastName}} ({{user.username}})
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label>{{'Admin.Groupes.Gr_Members' | translate}} :</label>
+                        <ul class="list-unstyled">
+                            <li ng-class="(selectedGroup.shortName === 'ALFRESCO_ADMINISTRATORS' && user.shortName.split('@')[0] ==='admin') ? '' : 'hover-li pointer'" ng-repeat="user in selectedGroup.users" ng-click="removeUserFromGroup($index)"><i ng-hide="selectedGroup.shortName === 'ALFRESCO_ADMINISTRATORS' && user.shortName.split('@')[0] ==='admin'" class="fa fa-times-circle text-danger"></i> {{user.fullName}} ({{user.shortName}})</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <span ng-if="!selectedGroup.isNew" class="btn btn-primary" ng-click="saveGroup()" ng-disabled="saving">
+                        <i class="fa fa-floppy-o"></i>
+                        <span>{{'Save' | translate}}</span>
+                    </span>
+                    <span ng-if="selectedGroup.isNew" ng-disabled="!editGroup.$valid" class="btn btn-primary" ng-click="saveGroup()" ng-disabled="saving">
+                        <i class="fa fa-floppy-o"></i>
+                        <span>{{'Save' | translate}}</span>
+                    </span>
+                    <span us-spinner spinner-key="spinnerGroups"></span>
+                    <span ng-show="saved" class="alert alert-success">{{'Admin.Groupes.Gr_Saved' | translate}}</span>
+                    <span ng-if="selectedGroup.isNew && selectedGroup.shortName !== '' && editGroup.nomGroup.$error.isdiff" class="block alert alert-danger">{{'Admin.Groupes.Gr_Exist' | translate}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

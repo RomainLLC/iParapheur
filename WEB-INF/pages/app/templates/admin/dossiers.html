@@ -1,0 +1,219 @@
+<div class="row-fluid">
+    <div class="menuAdmin col-md-3 label label-info headertop" removeonsize="992" classes-list="label label-info" ng-include src="'partials/adminNavbar.html'"></div>
+    <div class="col-md-12 adminContent">
+        <!-- contenu -->
+        <div class="row">
+            <div class="col-md-2">
+                <h2>{{'Admin.Dossiers.Title' | translate}}</h2>
+            </div>
+            <div class="col-md-10">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label for="type">{{'Admin.Dossiers.Filter_Type' | translate}}</label>
+                                <div class="form-group">
+                                    <select ng-options="type.id as type.id for type in types" id="type"  class="form-control unvalidate" ng-model="opt.type" ng-change="opt.sousType = ''" name="type">
+                                        <option value="">-- {{'None' | translate}} --</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="subtype">{{'Admin.Dossiers.Filter_Sub' | translate}}</label>
+                                <div class="form-group">
+                                    <select ng-options="subtype.id as subtype.id for subtype in (types | findWithId:opt.type).sousTypes " id="subtype" class="form-control unvalidate" ng-model="opt.sousType" name="subtype">
+                                        <option value="">-- {{'None' | translate}} --</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label" style="width:100%;" for="beforeEmit">
+                                        {{'Admin.Dossiers.Emit_date' | translate}}
+                                        <i class="fa fa-question-circle"
+                                           tooltip="{{'Admin.Dossiers.Emit_date_help' | translate}}"></i>
+
+                                    </label>
+                                    <div class="input-group validation-control" style="width: auto !important;">
+                                        <input type="text" id="beforeEmit" max-date="today" name="beforeEmit"
+                                               return-format="timestamp" ng-model="opt.beforeEmit"
+                                               class="form-control unvalidate" ip-datepicker readonly='true'/>
+                                        <span ng-if="!!opt.beforeEmit" ng-click="opt.beforeEmit = undefined"
+                                              class="pointer input-group-addon">
+                                                    <i class="fa fa-times"></i>
+                                                </span>
+                                        <label for="beforeEmit" ng-if="!opt.beforeEmit" class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="checkbox">
+                                    <label class="ng-binding" for="endedDossiers">Afficher seulement les dossiers en
+                                        cours
+                                        <input class="unvalidate" id="endedDossiers" ng-model="opt.showOnlyCurrent"
+                                               name="endedDossiers" type="checkbox">
+                                    </label>
+                                </div>
+                                <div class="checkbox">
+                                    <label class="ng-binding" for="lateDossiers">Afficher seulement les dossiers en
+                                        retard
+                                        <input class="unvalidate" id="lateDossiers" ng-model="opt.showOnlyLate"
+                                               name="lateDossiers" type="checkbox">
+                                    </label>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div ng-if="!config.isAdminFonctionnel()" class="col-md-3">
+                                <label for="bureau">
+                                    {{'Admin.Dossiers.Filter_Desk' | translate}}
+                                </label>
+                                <div class="input-group">
+                                    <div class="right-inner-addon">
+                                        <input id="bureau" type="text" class="form-control unvalidate" ng-model="opt.bureau" placeholder="{{'Admin.Dossiers.Find_Desk' | translate}}"
+                                               typeahead="bureau as bureau.title for bureau in bureaux | filter:$viewValue | limitTo:8"
+                                               name="bureau">
+                                    </div>
+
+                                    <span style="white-space: normal;cursor: pointer;" class="input-group-addon"
+                                          tooltip-trigger="click" tooltip-placement="bottom"
+                                          tooltip="{{'Admin.Dossiers.Find_Desk_Info' | translate}}">
+                                        <i ng-class="!!opt.bureau.id ? 'text-success fa-check' : 'text-warning fa-question-circle'"
+                                           class="fa fa-question-circle"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div ng-if="config.isAdminFonctionnel()" class="col-md-3">
+                                <label for="bureauFonctionnel">{{'Admin.Dossiers.Filter_Desk' | translate}}</label>
+                                <div class="input-group">
+                                    <div class="right-inner-addon">
+                                        <input id="bureauFonctionnel" type="text" class="form-control unvalidate" ng-model="opt.bureau" placeholder="{{'Admin.Dossiers.Find_Desk' | translate}}"
+                                               typeahead="bureau as bureau.name for bureau in bureaux | sameId:config.adminFonctionnel() | filter:$viewValue | limitTo:8"
+                                               name="bureauFonctionnel">
+                                    </div>
+                                     <span style="white-space: normal;cursor: pointer;" class="input-group-addon"
+                                           tooltip-trigger="click" tooltip-placement="bottom"
+                                           tooltip="{{'Admin.Dossiers.Find_Desk_Info' | translate}}">
+                                        <i ng-class="!!opt.bureau.id ? 'text-success fa-check' : 'text-warning fa-question-circle'"
+                                           class="fa fa-question-circle"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="recherche">{{'Admin.Dossiers.Filter_Title' | translate}}</label>
+                                <div class="form-group">
+                                    <input id="recherche" type="text" class="form-control unvalidate" ng-model="opt.title" placeholder="{{'Search' | translate}}" name="recherche">
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label" style="width:100%;" for="staticSince">
+                                        {{'Admin.Dossiers.Static_since' | translate}}
+                                        <i class="fa fa-question-circle"
+                                           tooltip="{{'Admin.Dossiers.Static_since_help' | translate}}"></i>
+
+
+                                    </label>
+                                    <div class="input-group validation-control" style="width: auto !important;">
+                                        <input type="text" id="staticSince" max-date="today" name="staticSince"
+                                               return-format="timestamp" ng-model="opt.staticSince"
+                                               class="form-control unvalidate" ip-datepicker readonly='true'
+                                               max-date="today"/>
+                                        <span ng-if="!!opt.staticSince" ng-click="opt.staticSince = undefined"
+                                              class="pointer input-group-addon">
+                                                    <i class="fa fa-times"></i>
+                                                </span>
+                                        <label for="staticSince" ng-if="!opt.staticSince" class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </label>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <span ng-click="getDossiers(opt)" class="btn btn-success col-xs-12" ng-disabled="buttonsDisabled">
+                                            <i class="fa fa-search"></i>
+                                            {{'Find' | translate}}
+                                        </span>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <span ng-click="opt = copy(noneOpt); hasSearch = false;" class="btn btn-info col-xs-12"
+                                              ng-disabled="buttonsDisabled">
+                                            <i class="fa fa-undo"></i>
+                                            {{'Reset' | translate}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="row" ng-show="hasSearch">
+            <div class="col-md-12">
+                <table ng-table="tableParams" class="table table-striped" ng-show="!buttonsDisabled && hasFoundFolder">
+                    <tr ng-repeat="dossier in $data" ng-init="completelyLocked = isUnlockable(dossier)" ng-class="completelyLocked ? 'text-danger' : ''">
+                        <td data-title="'Title' | translate" sortable="'title'">
+                            <i ng-if="dossier.locked && !completelyLocked" class="text-info fa fa-clock-o fa-2x" tooltip-placement="right" tooltip="{{'Admin.Dossiers.Currently' | translate}}"></i>
+                            <i ng-if="completelyLocked" class="text-danger fa fa-warning fa-2x" tooltip-placement="right" tooltip="{{('Admin.Dossiers.Locked' | translate).replace('__var__', properties['parapheur.ihm.admin.dossier.locked.notify'] || 600)}}"></i>
+                            {{dossier.title}}
+                        </td>
+                        <td data-title="'Admin.Dossiers.Current_Desk' | translate" sortable="'parent'">
+                            {{(bureaux | findWithId:dossier.parent).title}}
+                        </td>
+                        <td data-title="'Admin.Dossiers.Emit_Date' | translate" sortable="'dateEmission'">
+                            {{dossier.dateEmission | texttodate | date:'dd/MM/yyyy à HH:mm'}}
+                        </td>
+                        <td data-title="'Admin.Dossiers.Modif_Date' | translate" sortable="'modified'">
+                            {{dossier.modified | texttodate | date:'dd/MM/yyyy à HH:mm'}}
+                        </td>
+                        <td data-title="'Admin.Dossiers.Type' | translate" sortable="'type'">
+                            {{dossier.type}}
+                        </td>
+                        <td data-title="'Admin.Dossiers.Sub' | translate" sortable="'sousType'">
+                            {{dossier.sousType}}
+                        </td>
+                        <td data-title="'Admin.Dossiers.State' | translate" sortable="'banetteName'">
+                            {{getStateName(dossier.banetteName)}}
+                        </td>
+                        <td style="text-align: center;" data-title="'Admin.Dossiers.Actions' | translate">
+                            <span ng-click="unlock(dossier)" ng-if="completelyLocked" class="btn btn-warning" title="{{'Admin.Dossiers.Unlock' | translate}}">
+                                <i class="fa fa-unlock"></i>
+                            </span>
+                            <span ng-click="confirmTransfert(dossier)" ng-if="isEnCours(dossier.banetteName) && !dossier.locked" class="btn btn-info" title="{{'Admin.Dossiers.Transfert' | translate}}">
+                                <i class="fa fa-share"></i>
+                            </span>
+                            <span ng-click="confirmDelete(dossier)" ng-if="!dossier.locked" class="btn btn-danger" title="{{'Delete' | translate}}">
+                                <i class="fa fa-trash-o"></i>
+                            </span>
+                            <span ng-click="viewJournal(dossier)" class="btn btn-default" title="{{'Admin.Dossiers.Events' | translate}}">
+                                <i class="fa fa-list-alt"></i>
+                            </span>
+                            <span ng-if="properties['parapheur.ihm.admin.mode.advanced'] === 'true' && config.isAdmin" ng-click="viewProperties(dossier)" class="btn btn-success" title="{{'Admin.Dossiers.Advanced' | translate}}">
+                                <i class="fa fa-info"></i>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="col-md-offset-5" ng-if="!hasFoundFolder">
+                    <span class="text text-info"><i class="fa fa-info-circle"></i> {{'Admin.Dossiers.No_Folders' | translate}}</span>
+                </div>
+
+                <div class="row">
+                    <div style="margin-top:30px;" class="col-md-12">
+                        <span us-spinner spinner-key="spinnerDossiers"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

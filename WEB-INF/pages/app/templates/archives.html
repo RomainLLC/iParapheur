@@ -1,0 +1,310 @@
+<!-- Modal de suppression de filtre -->
+<div bs-modal when="filterToDelete"
+     title="{{'archive.deleting_filter_' | translate}} {{filterToDelete}}"
+     primary-label="{{'Delete' | translate}}"
+     primary-action="deleteFilter()">
+    <p>{{'archives.are_you_sure_you_want_to_delete_the_filter_' | translate}} <strong>{{filterToDelete}}</strong> ?</p>
+</div>
+
+<!-- Modal d'ajout de filtre -->
+<div bs-modal when="filterToSave"
+     title="{{'archive.saving_filter' | translate}}"
+     primary-label="{{'Save' | translate}}"
+     primary-action="saveFilter()">
+    <label>
+        {{'archives.choose_a_name_for_your_filter' | translate}} :
+        <input type="text" ng-model="newFilterName">
+    </label>
+</div>
+
+<div class="dashboard-page">
+<div id="dashboard-filters" class="well">
+    <form action="#" method="post">
+        <tabset>
+            <tab heading="{{'Basic' | translate}}">
+                <div class="row col-md-12" style="margin-top:10px;">
+                    <!-- TYPE -->
+                    <fieldset class="col-md-4">
+                        <label class="checkbox">
+                            <input class="unvalidate" ng-checked="dashboard.showed.types.length" ng-change="dashboard.showed.types = []; dashboard.showed.subtypes = []" type="checkbox" ng-model="selectType"/>
+                            Type
+                        </label>
+                        <select multiple class="form-control unvalidate" ng-change="selectType = true" ng-selected="selectType" ng-model="dashboard.showed.types" ng-options="type.id as type.id for type in typo"></select>
+                    </fieldset>
+                    <!-- SOUS-TYPE -->
+                    <fieldset class="col-md-4">
+                        <label class="checkbox">
+                            <input class="unvalidate"  ng-checked="dashboard.showed.subtypes.length" ng-change="dashboard.showed.subtypes = []" type="checkbox" ng-model="selectSubtype"/>
+                            {{'SubType' | translate}}
+                        </label>
+                        <select multiple  class="form-control unvalidate" ng-change="selectSubtype = true" ng-model="dashboard.showed.subtypes" ng-options="ssType as ssType for ssType in (typo | sameId:dashboard.showed.types | mergeArrays:'sousTypes')"></select>
+                    </fieldset>
+
+                    <!-- DATE -->
+                    <fieldset class="col-md-2">
+                        <div class="control-group">
+                            <label class="checkbox">
+                                <input  class="unvalidate" ng-checked="dashboard.showed.dateFrom || dashboard.showed.dateTo" ng-change="dashboard.showed.dateFrom='';dashboard.showed.dateTo=''" ng-model="selectDate" type="checkbox"/>
+                                {{'archives.creation_date' | translate}}
+                            </label>
+
+                            <div class="input-group">
+                                <input  ng-change="selectDate = true" type="text" id="from" from="true" linked="#to" ng-model="dashboard.showed.dateFrom" class="form-control unvalidate" readonly="true" ip-datepicker i18n="app.dashboard.filters.from" kind="attr" attr="placeholder"/>
+                                <span ng-if="!!dashboard.showed.dateFrom" ng-click="dashboard.showed.dateFrom = undefined"
+                                      class="pointer input-group-addon">
+                                        <i class="fa fa-times"></i>
+                                    </span>
+                                <label style="display: table-cell;" ng-if="!dashboard.showed.dateFrom" class="input-group-addon btn" for="from">
+                                    <i class="fa fa-calendar"></i>
+                                </label>
+
+                            </div>
+
+                            <div class="input-group">
+                                <input  ng-change="selectDate = true" type="text" id="to" linked="#from" ng-model="dashboard.showed.dateTo" class="form-control unvalidate" readonly="true" ip-datepicker i18n="app.dashboard.filters.to" kind="attr" attr="placeholder"/>
+                                <span ng-if="!!dashboard.showed.dateTo" ng-click="dashboard.showed.dateTo = undefined"
+                                      class="pointer input-group-addon">
+                                        <i class="fa fa-times"></i>
+                                    </span>
+                                <label style="display: table-cell;" ng-if="!dashboard.showed.dateTo" class="input-group-addon btn" for="to">
+                                    <i class="fa fa-calendar"></i>
+                                </label>
+                            </div>
+
+                        </div>
+                    </fieldset>
+
+                    <div class="col-md-2">
+
+                        <!-- CONTENT -->
+                        <div>
+                            <label for="searchValue">
+                                {{'Title' | translate}}
+                            </label>
+                            <input type="text" ng-model="dashboard.showed.title" id="searchValue" name="searchValue" class="form-control unvalidate"/>
+                        </div>
+                    </div>
+
+
+                </div>
+            </tab>
+            <tab heading="{{'Advanced' | translate}} {{metaFilter.length > 0 ? '- Actuellement : ' + (metaFilter | object2string:', ':'name') : ''}}">
+                <div class="row col-md-12 ng-scope" style="margin-top:10px;">
+                    <div class="col-md-4">
+                        <label>
+                            {{'archives.available_filters' | translate}}
+                            <select size="5"
+                                    ng-options="el.value as el.key group by el.group for el in optionsFiltersAvailable"
+                                    class="form-control unvalidate"
+                                    ng-change="createAdvancedFilter(selectedMetadonneeIndex.index)"
+                                    ng-model="selectedMetadonneeIndex.index">
+                            </select>
+                        </label>
+                    </div>
+                    <div class="col-md-4">
+                        <div ng-show="!empty(metaTmpFilter)">
+                            <label>
+                                {{!empty(metaTmpFilter) ? metaTmpFilter.name + ' - Condition' : ''}}
+                                <select class="form-control unvalidate" ng-change="editAdvancedFilter()" ng-show="metaTmpFilter.values !== undefined" ng-model="metaTmpFilter.text" ng-options="val for val in metaTmpFilter.values">
+                                </select>
+                                <input ng-cloak ng-keydown="keyDownAdvancedFilter($event)" ng-change="editAdvancedFilter()" type="text" class="form-control unvalidate" ng-model="metaTmpFilter.text" ng-show="metaTmpFilter.values === undefined && metaTmpFilter.type === 'STRING'">
+                                <input ng-cloak ng-keydown="keyDownAdvancedFilter($event)" ng-change="editAdvancedFilter()" integer type="text" class="form-control unvalidate" ng-model="metaTmpFilter.text" ng-show="metaTmpFilter.values === undefined && metaTmpFilter.type === 'INTEGER'">
+                                <input ng-cloak ng-keydown="keyDownAdvancedFilter($event)" ng-change="editAdvancedFilter()" decimal type="text" class="form-control unvalidate" ng-model="metaTmpFilter.text" ng-show="metaTmpFilter.values === undefined && metaTmpFilter.type === 'DOUBLE'">
+                                <input ng-cloak ng-keydown="keyDownAdvancedFilter($event)" ng-change="editAdvancedFilter()" type="checkbox" class="unvalidate" ng-model="metaTmpFilter.text" ng-true-value="'true'" ng-false-value="'false'" ng-show="metaTmpFilter.values === undefined && metaTmpFilter.type === 'BOOLEAN'">
+                                <input ng-cloak ng-keydown="keyDownAdvancedFilter($event)" ng-change="editAdvancedFilter()" ng-show="metaTmpFilter.values === undefined && metaTmpFilter.type === 'DATE'" type="text" id="fromMeta" from="true" linked="#toMeta" ng-model="metaTmpFilter.dateFrom" class="form-control unvalidate" readonly="true" ip-datepicker i18n="app.dashboard.filters.from" kind="attr" attr="placeholder"/>
+                            </label>
+                            <label>
+                                <input ng-keydown="keyDownAdvancedFilter($event)" ng-change="editAdvancedFilter()" ng-show="metaTmpFilter.type === 'DATE'" type="text" id="toMeta" linked="#fromMeta" ng-model="metaTmpFilter.dateTo" class="form-control unvalidate" readonly="true" ip-datepicker i18n="app.dashboard.filters.to" kind="attr" attr="placeholder"/>
+                            </label>
+                            <div>
+                                <span class="btn btn-info" ng-click="saveAdvancedFilter()">OK</span>
+                                <span ng-show="selectedMetadonneeIndex.bis !== ''" class="btn btn-warning" ng-click="deleteAdvancedFilter()">Supprimer</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label>
+                            {{'archives.current_advanced_filder' | translate}}
+                            <select size="5" ng-keydown="keyDownAdvancedActiveFilter($event)" class="form-control unvalidate" ng-change="selectAdvancedFilter(selectedMetadonneeIndex.bis)" ng-model="selectedMetadonneeIndex.bis">
+                                <option value="">-- {{'archives.select_a_filter_to_edit' | translate}} --</option>
+                                <option ng-repeat="item in metaFilter" ng-value="$index"><i class="fa fa-trash"></i>{{item.name}} = {{item.text}}{{item.dateFrom ? item.dateFrom : ''}}{{item.dateTo ? ' -> ' + item.dateTo : ''}}</option>
+                            </select>
+                        </label>
+                    </div>
+                </div>
+            </tab>
+        </tabset>
+
+        <hr>
+
+        <!-- DO FILTER -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-offset-4 col-md-3">
+                    <span ng-if="!dashboard.navigation.selected == unsavedFilterName"
+                          class="btn btn-default"
+                          ng-click="dashboard.save()">
+                        <i class="fa fa-save"></i> {{'archives.save_current_filter' | translate}}
+                    </span>
+                    <span ng-if="(!!dashboard.navigation.selected) && (dashboard.navigation.selected !== unsavedFilterName) && (dashboard.navigation.selected !== noFilterName)"
+                          class="btn btn-danger"
+                          ng-click="dashboard.remove()">
+                        <i class="fa fa-trash-o"></i> {{'archives.delete_selected_filter' | translate}}
+                    </span>
+                </div>
+                <div class="col-md-offset-2 col-md-3">
+                    <fieldset>
+                        <span ng-click="dashboard.resetFilter()" class="btn btn-default">
+                            <i class="fa fa-undo"></i>
+                            Réinitialiser
+                        </span>
+                        <span ng-click="dashboard.doFilter()" class="btn btn-success">
+                            <i class="fa fa-filter"></i>
+                            {{'archives.apply_filter' | translate}}
+                        </span>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+</div>
+
+<div class="alert alert-info row">
+
+    <div class="filtreActif col-xs-10">
+            <span>
+                <i class="icon-filter"></i>
+                <strong id="titleInfoFiltre">{{'archives.active_filter' | translate}} :</strong>
+            </span>
+            <span ng-hide="currentFilter.types || currentFilter.subtypes || currentFilter.dateFrom || currentFilter.dateTo || currentFilter.title || currentFilter.metadonnees.length > 0">
+                <strong>{{'archives.None' | translate}}</strong>
+            </span>
+            <span ng-show="currentFilter.types" id="filtreType">
+                <p>{{'archives.type' | translate}} </p>
+                <strong>
+                    <p ng-repeat="type in currentFilter.types">&nbsp;{{type}},</p>
+                </strong>
+            </span>
+            <span ng-show="currentFilter.subtypes" id="filtreSousType">
+                <p>{{'archives.subtype' | translate}}</p>
+                <strong>
+                    <p ng-repeat="subtype in currentFilter.subtypes">&nbsp;{{subtype}},</p>
+                </strong>
+            </span>
+            <span id="filtreDate">
+                <span ng-show="currentFilter.dateFrom" id="filtreFrom">
+                    <p> {{'archives.from' | translate}} </p>
+                    <strong>{{currentFilter.dateFrom | texttodate | date:'fullDate'}}</strong>
+                </span>
+                <span ng-show="currentFilter.dateTo" id="filtreTo">
+                    <p> {{'archives.until' | translate}} </p>
+                    <strong>{{currentFilter.dateTo | texttodate | date:'fullDate'}}</strong>
+                </span>
+            </span>
+            <span ng-show="currentFilter.title" id="filtreRecherche">
+                <span class="icon-angle-right"></span>
+                 {{'archives.searching' | translate}}
+                <strong>"{{currentFilter.title}}"</strong>
+                 {{'archives.in' | translate}}
+                <strong>{{'Title' | translate}}</strong>
+            </span>
+            <span ng-show="currentFilter.metadonnees.length > 0" id="filtreMetadonnees">
+                {{'archives.with' | translate}}
+                <span ng-repeat="meta in currentFilter.metadonnees">
+                    <strong ng-show="{{meta.type === 'STRING'}}" >{{meta.name}} = "{{meta.text}}",</strong>
+                    <strong ng-show="{{meta.type === 'BOOLEAN'}}" >{{meta.name}} = {{(meta.text === "'true'" ? 'archives.true' : 'archives.false') | translate}},</strong>
+                    <span ng-show="{{meta.type ==='DATE'}}">
+                        <strong>{{meta.name}}</strong>
+                        <span ng-show="meta.dateFrom">
+                            <p> {{'archives.from' | translate}} </p>
+                            <strong>{{meta.dateFrom | texttodate | date:'fullDate'}}</strong>
+                        </span>
+                        <span ng-show="meta.dateTo">
+                            <p> {{'archives.until' | translate}} </p>
+                            <strong>{{meta.dateTo | texttodate | date:'fullDate'}}</strong>
+                        </span>
+                        ,
+                    </span>
+                </span>
+            </span>
+    </div>
+
+    <!-- FILTERS HANDLER -->
+    <div class="col-xs-2">
+        <select ng-model="dashboard.navigation.selected"
+                ng-options="name as translateFilter(name) for (name, filter) in dashboard.list"
+                ng-change="dashboard.change()"
+                class="form-control unvalidate">
+            <option value="">{{noFilterName | translate}}</option>
+        </select>
+    </div>
+</div>
+<table class="table table-condensed table-bordered dashboard-table">
+    <thead>
+    <tr>
+        <th ng-repeat="data in dashboard.columns.enabled" ng-class="data.key ? 'sort-th pointer' : ''" ng-click="sortTable(data.key)">
+            <i ng-if="nav.currentChamp === data.key" class="fa" ng-class="nav.ascBase ? data.value === 'created' ? 'fa-sort-numeric-asc' : 'fa-sort-alpha-asc' : data.value === 'created' ? 'fa-sort-numeric-desc' : 'fa-sort-alpha-desc'"></i> {{data.i18n | translate}}
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="dossier in dossiers" ng-style="{{checkColoration(dossier)}}">
+        <td ng-repeat="data in dashboard.columns.enabled" ng-switch on="data.value">
+            <p ng-switch-when="type">
+                {{dossier['type']}} / {{dossier['sousType']}}
+            </p>
+
+            <p ng-switch-when="created">
+                {{dossier[data.value] | texttodate | date:'dd/MM/yyyy'}}
+            </p>
+            <p ng-switch-when="telechargements" class="downloadCol" style="display:block;text-align: center;font-size:18px;">
+                <a ng-if="dossier.sig === 'true'"
+                   href="{{context}}/proxy/alfresco/api/node/content%3bph%3asig/workspace/SpacesStore/{{dossier.id}}/{{removeSlash(dossier.title)}}_sig.zip">
+                    <i tooltip="Signatures" class="fa ls-signature"></i>
+                </a>
+                <a ng-if="dossier.original === 'true'" target="_blank" href="{{context}}/proxy/alfresco/api/node/content%3bph%3aoriginal/workspace/SpacesStore/{{dossier.id}}/{{removeSlash(dossier.originalName)}}">
+                    <i tooltip="Document Original" class="fa fa-download"></i>
+                </a>
+                <a ng-if="dossier.attest" target="_blank" ng-init="attestName = 'attest-' + dossier.originalName" href="{{context}}/proxy/alfresco/api/node/content%3bph%3aattest-content/workspace/SpacesStore/{{dossier.id}}/{{attestName}}">
+                    <i tooltip="Attestation de signature" class="fa fa-check-circle-o"></i>
+                </a>
+            </p>
+            <p ng-switch-when="title">
+
+                <a target="_blank" href="{{context}}/proxy/alfresco/api/node/workspace/SpacesStore/{{dossier.id}}/content/{{getFullTitle(dossier.title)}}">
+                    {{dossier[data.value]}}
+                </a>
+                <a target="_blank" class="xemelios" ng-if="dossier.isXemEnabled && dossier.original === 'true'" href="{{context}}/proxy/alfresco/parapheur/archives/{{dossier.id}}/xemelios">
+                    <img ng-src="{{context}}/res/images/xemelios.png">
+                </a>
+            </p>
+            <a ng-switch-when="title" tooltip="Supprimer" ng-if="config.isAdmin" class="btn btn-danger float-right" ng-click="deleteArchive(dossier)">
+                <i class="fa fa-trash-o"></i>
+            </a>
+            <a ng-switch-when="title" tooltip="Renommer" ng-if="config.isAdmin" class="btn btn-info float-right" ng-click="renameArchive(dossier)">
+                <i class="fa fa-ellipsis-h"></i>
+            </a>
+
+            <p ng-switch-default>
+                {{dossier[data.value]}}
+            </p>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+<div class="paginate">
+    <div ng-click="changePage(false)" ng-class="{true:'enable', false:'disable'}[nav.hasPrev]" class="page {{hasPrev}}"><p class="inline" i18n="app.general.page.previous"></p><i class="icon-circle-arrow-left"></i></div>
+    <p style="display:inline-block;">{{'archives.current_page' | translate}} : {{nav.currentPage+1}}</p>
+    <div ng-click="changePage(true)" ng-class="{true:'enable', false:'disable'}[nav.hasNext]" class="page"><i class="icon-circle-arrow-right"></i><p class="inline" i18n="app.general.page.next"></p></div>
+</div>
+
+<!-- Panneau d'alertes, d'informations et d'erreurs -->
+<div notify text="alert" class="notifications bottom-right">
+</div>
+
+
+

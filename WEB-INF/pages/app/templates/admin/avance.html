@@ -1,0 +1,109 @@
+<div class="row-fluid">
+    <div class="menuAdmin col-md-3 label label-info headertop" removeonsize="992" classes-list="label label-info" ng-include src="'partials/adminNavbar.html'"></div>
+    <div class="col-md-3 adminContent">
+        <div class="col-md-11 col-md-offset-1">
+            <h1 class="underscore">{{'Admin.Avance.title' | translate}}</h1>
+            <div class="bs-sidebar " role="complementary">
+                <ul class="nav bs-sidenav">
+                    <li>
+                        <span class="titleList">{{'Admin.Avance.config_tdt' | translate}}</span>
+                        <a bs-tab ng-if="properties['parapheur.admin.s2low.actes.show'] == 'true'" href="#slowactes" ng-click="slowActes.init()" data-toggle="tab">{{'Admin.Avance.actes' | translate}}</a>
+                    </li>
+                    <li>
+                        <a bs-tab ng-if="properties['parapheur.admin.s2low.helios.show'] == 'true'" href="#slowhelios" ng-click="slowHelios.init()" data-toggle="tab">{{'Admin.Avance.helios' | translate}}</a>
+                    </li>
+                    <li>
+                        <a bs-tab ng-if="properties['parapheur.admin.s2low.mailsec.show'] == 'true'" href="#slowmailsec" ng-click="slowMailsec.init()" data-toggle="tab">{{'Admin.Avance.mailsec' | translate}}</a>
+                    </li>
+                    <li>
+                        <a bs-tab ng-if="properties['parapheur.admin.pastell.mailsec.show'] == 'true'" href="#pastellmailsec" ng-click="pastellMailsec.init()" data-toggle="tab">{{'Admin.Avance.mailsec_pastell' | translate}}</a>
+                    </li>
+                    <li>
+                        <a bs-tab ng-if="properties['parapheur.admin.fast.show'] == 'true'" href="#fasthelios" ng-click="fastHelios.init()" data-toggle="tab">{{'Admin.Avance.fast' | translate}}</a>
+                    </li>
+                    <li>
+                        <a bs-tab ng-if="properties['parapheur.admin.srci.show'] == 'true'" href="#srcihelios" ng-click="srciHelios.init()" data-toggle="tab">{{'Admin.Avance.srci' | translate}}</a>
+                    </li>
+                    <li>
+                        <span class="titleList">{{'Admin.Avance.advanced_config' | translate}}</span>
+                        <a bs-tab href="#model" ng-click="modeles.init()" data-toggle="tab">{{'Admin.Avance.models' | translate}}</a>
+                    </li>
+                    <li>
+                        <a bs-tab href="#metadonne" ng-click="meta.init()" data-toggle="tab">{{'Admin.Avance.metadata' | translate}}</a>
+                    </li>
+                    <li>
+                        <a bs-tab href="#calque" ng-click="calques.init()" data-toggle="tab">{{'Admin.Avance.calque' | translate}}</a>
+                    </li>
+                    <li>
+                        <a bs-tab href="#cachet" ng-click="cachet.init()" data-toggle="tab">{{'Admin.Avance.cachet' | translate}}</a>
+                    </li>
+                    <li>
+                        <span
+                                ng-if="
+                                properties['parapheur.ihm.attest.show'] == 'true' ||
+                                properties['parapheur.admin.horodate.show'] == 'true' ||
+                                properties['parapheur.admin.mailservice.show'] == 'true' ||
+                                properties['parapheur.admin.archiland.show'] == 'true'"
+                                class="titleList">{{'Admin.Avance.other_config' | translate}}</span>
+                        <a ng-if="properties['parapheur.ihm.attest.show'] == 'true'" bs-tab href="#attestation" ng-click="attestation.init()" data-toggle="tab">{{'Admin.Avance.attestation' | translate}}</a>
+                    </li>
+                    <li>
+                        <a bs-tab ng-if="properties['parapheur.admin.horodate.show'] == 'true'" href="#horodatage" ng-click="horodate.init()" data-toggle="tab">{{'Admin.Avance.horodate' | translate}}</a>
+                    </li>
+                    <li>
+                        <a bs-tab ng-if="properties['parapheur.admin.mailservice.show'] == 'true'" href="#mail" ng-click="mail.init()" data-toggle="tab">{{'Admin.Avance.mail_service' | translate}}</a>
+                    </li>
+                    <li>
+                        <a bs-tab ng-if="properties['parapheur.admin.archiland.show'] == 'true'" href="#archiland" ng-click="archiland.init()" data-toggle="tab">{{'Admin.Avance.archiland' | translate}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="tab-content">
+        <div class="tab-pane" id="slowactes">
+            <div class="include-animate" ng-include="'templates/admin/avance/slowactes.html'"></div>
+        </div>
+        <div class="tab-pane" id="slowhelios">
+            <div class="include-animate" ng-include="'templates/admin/avance/slowhelios.html'"></div>
+        </div>
+        <div class="tab-pane" id="slowmailsec">
+            <div class="include-animate" ng-include="'templates/admin/avance/slowmailsec.html'"></div>
+        </div>
+        <div class="tab-pane" id="fasthelios">
+            <div class="include-animate" ng-include="'templates/admin/avance/fasthelios.html'"></div>
+        </div>
+        <div class="tab-pane" id="srcihelios">
+            <div class="include-animate" ng-include="'templates/admin/avance/srcihelios.html'"></div>
+        </div>
+
+        <div class="tab-pane" id="model">
+            <div class="include-animate editor" ng-include="'templates/admin/avance/model.html'"></div>
+        </div>
+        <div class="tab-pane" id="attestation">
+            <div class="include-animate" ng-include="'templates/admin/avance/attestation.html'"></div>
+        </div>
+        <div class="tab-pane" id="horodatage">
+            <div class="include-animate" ng-include="'templates/admin/avance/horodatage.html'"></div>
+        </div>
+        <div class="tab-pane" id="mail">
+            <div class="include-animate" ng-include="'templates/admin/avance/mail.html'"></div>
+        </div>
+        <div class="tab-pane" id="archiland">
+            <div class="include-animate" ng-include="'templates/admin/avance/archiland.html'"></div>
+        </div>
+        <div class="tab-pane" id="metadonne">
+            <div class="include-animate" ng-include="'templates/admin/avance/metadonne.html'"></div>
+        </div>
+        <div class="tab-pane" id="calque">
+            <div class="include-animate" ng-include="'templates/admin/avance/calque.html'"></div>
+        </div>
+        <div class="tab-pane" id="cachet">
+            <div class="include-animate" ng-include="'templates/admin/avance/cachet.html'"></div>
+        </div>
+        <div class="tab-pane" id="pastellmailsec">
+            <div class="include-animate" ng-include="'templates/admin/avance/pastellmailsec.html'"></div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,62 @@
+<div class="optionsPage">
+    <div class="col-md-3">
+        <h1 class="underscore">{{"Options.Prefs" | translate}}</h1>
+        <div class="bs-sidebar affix" role="complementary">
+            <ul class="nav bs-sidenav">
+                <li ng-class="properties['parapheur.ihm.options.password.show'] === 'true' ? 'active' : ''" ng-show="properties['parapheur.ihm.options.password.show'] === 'true'">
+                    <a bs-tab href="#infos" data-toggle="tab"><i class="fa fa-lock"></i> {{"Options.PasswordTitle" | translate}}</a>
+                </li>
+                <li ng-class="properties['parapheur.ihm.options.password.show'] !== 'true' && properties['parapheur.ihm.options.theme.show'] === 'true' ? 'active' : ''"
+                    ng-show="properties['parapheur.ihm.options.theme.show'] === 'true'">
+                    <a bs-tab href="#theme" data-toggle="tab"><i class="fa fa-text-width"></i> {{"Options.Theme" | translate}}</a>
+                </li>
+                <li ng-class="properties['parapheur.ihm.options.password.show'] !== 'true' && properties['parapheur.ihm.options.theme.show'] !== 'true' ? 'active' : ''">
+                    <a bs-tab href="#personaliser" data-toggle="tab"><i class="fa fa-tachometer"></i> {{"Options.Dashboard" | translate}}</a>
+                </li>
+                <li>
+                    <a bs-tab href="#archives" data-toggle="tab"><i class="fa fa-inbox"></i> {{"Options.Archives" | translate}}</a>
+                </li>
+                <li>
+                    <a bs-tab href="#notifications" data-toggle="tab"><i class="fa fa-envelope-o"></i> {{"Options.Notifs" | translate}}</a>
+                </li>
+                <li ng-show="properties['parapheur.ihm.options.signature.show'] === 'true'">
+                    <a bs-tab href="#signature" data-toggle="tab"><i class="fa fa-picture-o"></i> {{"Options.Signature" | translate}}</a>
+                </li>
+                <li ng-show="properties['parapheur.ihm.options.langue.show'] === 'true'">
+                    <a bs-tab href="#lang" data-toggle="tab"><i class="fa fa-globe"></i> {{"Options.Language" | translate}}</a>
+                </li>
+                <li ng-show="bureaux.length > 1">
+                    <a bs-tab href="#order" data-toggle="tab"><i class="fa fa-list-ul"></i> {{"Options.BureauOrder" | translate}}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="tab-content col-md-9">
+        <div ng-class="properties['parapheur.ihm.options.password.show'] === 'true' ? 'active' : ''" class="tab-pane" id="infos">
+            <div class="include-animate" ng-include="'templates/options/informations.html'"></div>
+        </div>
+        <div ng-class="properties['parapheur.ihm.options.password.show'] !== 'true' && properties['parapheur.ihm.options.theme.show'] === 'true' ? 'active' : ''"
+             class="tab-pane" id="theme">
+            <div class="include-animate" ng-include="'templates/options/theme.html'"></div>
+        </div>
+        <div ng-class="properties['parapheur.ihm.options.password.show'] !== 'true' && properties['parapheur.ihm.options.theme.show'] !== 'true' ? 'active' : ''" class="tab-pane" id="personaliser">
+            <div class="include-animate" ng-include="'templates/options/dashboard.html'"></div>
+        </div>
+        <div class="tab-pane" id="archives">
+            <div class="include-animate" ng-include="'templates/options/archives.html'"></div>
+        </div>
+        <div class="tab-pane" id="notifications">
+            <div class="include-animate" ng-include="'templates/options/notifications.html'"></div>
+        </div>
+        <div class="tab-pane" id="signature">
+            <div class="include-animate" ng-include="'templates/options/signature.html'"></div>
+        </div>
+        <div class="tab-pane" id="lang">
+            <div class="include-animate" ng-include="'templates/options/langue.html'"></div>
+        </div>
+        <div class="tab-pane" id="order">
+            <div class="include-animate" ng-include="'templates/options/orderBureaux.html'"></div>
+        </div>
+    </div>
+</div>

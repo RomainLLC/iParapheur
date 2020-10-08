@@ -1,0 +1,13 @@
+{
+  "actesModal": {
+    "sending_tdt_actes": "Sending folder to S²LOW platform (Actes)",
+    "nature": "Nature",
+    "classification": "Classification",
+    "acte_number": "Acte number",
+    "acte_number_tooltip": "Max 15 characters : Numbers, uppercase letters, or _",
+    "decision_date": "Decision date",
+    "public_annotation": "Public annotation",
+    "private_annotation": "Private annotation",
+    "object": "Object"
+  }
+}

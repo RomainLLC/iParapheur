@@ -1,0 +1,10 @@
+{
+  "notificationModal": {
+    "notify_and_add_consultation_credentials": "Notifier et ajouter un droit de consultation",
+    "available_desks": "Bureaux disponibles",
+    "desks_to_notify": "Bureaux à notifier",
+    "notify": "Notifier",
+    "remove": "Enlever",
+    "no_desk": "Aucun bureau"
+  }
+}

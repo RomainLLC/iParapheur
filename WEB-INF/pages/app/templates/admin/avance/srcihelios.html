@@ -1,0 +1,97 @@
+<div>
+    <div style="top:100px;" class="nextDossierInfo" ng-if="!srciHelios.isInit">
+            <span class="text text-info">
+                {{'Admin.Avance.getting_infos' | translate}}
+            </span>
+        <span style="position: relative; width: 0px; z-index: 2000000000; right: 140px; top: 100px;" us-spinner="{radius:20, width:8, length: 16}" ></span>
+    </div>
+    <div class="col-md-12" ng-if="srciHelios.isInit">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>{{'Admin.Avance.SRCI.title' | translate}}</h3>
+            </div>
+        </div>
+        <div class="row">
+            <form class="form-horizontal">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="proxyAccount">{{'Admin.Avance.SRCI.account' | translate}}</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" id="proxyAccount" name="proxyAccount" ng-model="srciHelios.config.proxy_account" required>
+                        </div>
+                        <span class="text-info">{{'Admin.Avance.SRCI.account_info' | translate}}</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="pPolicyIdentifierIDSrci">{{'Admin.Avance.SRCI.policy_identifier' | translate}}</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" id="pPolicyIdentifierIDSrci" name="pPolicyIdentifierIDSrci" ng-model="srciHelios.config.pPolicyIdentifierID" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="pPolicyIdentifierDescriptionSrci">{{'Admin.Avance.SRCI.policy_identifier_description' | translate}}</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" id="pPolicyIdentifierDescriptionSrci" name="pPolicyIdentifierDescriptionSrci" ng-model="srciHelios.config.pPolicyIdentifierDescription" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="pPolicyDigestSrci">{{'Admin.Avance.SRCI.policy_digest' | translate}}</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" id="pPolicyDigestSrci" name="pPolicyDigestSrci" ng-model="srciHelios.config.pPolicyDigest" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="pSPURISrci">{{'Admin.Avance.SRCI.spuri' | translate}}</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" id="pSPURISrci" name="pSPURISrci" ng-model="srciHelios.config.pSPURI" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="pClaimedRoleSrci">{{'Admin.Avance.SRCI.claimed_role' | translate}}</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" id="pClaimedRoleSrci" name="pClaimedRoleSrci" ng-model="srciHelios.config.pClaimedRole" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-sm-3" for="pPostalCodeSrci">{{'Admin.Avance.SRCI.postal_code' | translate}}</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="text" id="pPostalCodeSrci" name="pPostalCodeSrci" ng-model="srciHelios.config.pPostalCode" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-sm-3" for="pCitySrci">{{'Admin.Avance.SRCI.city' | translate}}</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control" type="text" id="pCitySrci" name="pCitySrci" ng-model="srciHelios.config.pCity" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="pCountryNameSrci">{{'Admin.Avance.SRCI.country' | translate}}</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" id="pCountryNameSrci" name="pCountryNameSrci" ng-model="srciHelios.config.pCountryName" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <span class="text-info">{{srciHelios.config.proxy_account_message}}</span>
+                </div>
+                <div class="col-md-12">
+                    <input type="button" ng-click="srciHelios.enableModeSave()" class="btn btn-success force-display" value="{{'Admin.Avance.SRCI.save_config' | translate}}">
+                    <span class="text-success" ng-if="srciHelios.hasSaveConfig"><i class="fa fa-check"></i> {{'Admin.Avance.SRCI.saved' | translate}}</span>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

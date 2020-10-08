@@ -1,0 +1,8 @@
+{
+  "confirmForceModal": {
+    "confirmation": "Confirmation",
+    "confirmations_from": "Confirmations from :",
+    "hasnt_been_received": "hasn't been received.",
+    "public_annotations_to_add": "Public annotations to add"
+  }
+}

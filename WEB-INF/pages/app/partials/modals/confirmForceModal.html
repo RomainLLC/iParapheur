@@ -1,0 +1,33 @@
+<div class="modal-header">
+    <h3>{{'confirmForceModal.confirmation' | translate}}</h3>
+</div>
+<div class="modal-body row">
+    <div class="row">
+        <div class="text-danger col-xs-12">
+            <i class="fa fa-warning"></i> {{'Warning' | translate}} : <br/> {{'confirmForceModal.confirmations_from' | translate}}
+            <ul>
+                <li ng-if="!info.confirmed" ng-repeat="info in infos">{{info.email}}</li>
+            </ul>
+            {{'confirmForceModal.hasnt_been_received' | translate}}
+        </div>
+        <label class="legendLabel col-xs-12">
+            {{'confirmForceModal.public_annotations_to_add' | translate}}
+            <hr>
+            <textarea class="form-control annotation" ng-model="action.annotation"></textarea>
+        </label>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <div class="spinner">
+        <span us-spinner spinner-key="spinner"></span>
+    </div>
+    <button class="btn btn-warning" ng-click="cancel()">
+        <i class="fa fa-times-circle-o"></i>
+        {{'Back' | translate}}
+    </button>
+    <button class="btn btn-primary" ng-click="ok()">
+        <i class="fa fa-check"></i>
+        {{'Confirm' | translate}}
+    </button>
+</div>

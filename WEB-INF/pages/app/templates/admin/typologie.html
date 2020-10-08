@@ -1,0 +1,822 @@
+<div class="row-fluid">
+    <div class="menuAdmin col-md-3 label label-info headertop" removeonsize="992" classes-list="label label-info" ng-include src="'partials/adminNavbar.html'"></div>
+    <div class="col-md-4 adminContent">
+        <!-- contenu -->
+        <div class="row">
+            <div class="col-md-6">
+                <h2>{{'Admin.Typologie.Ty_Title' | translate}}</h2>
+            </div>
+            <div class="col-md-6" style="margin-top:25px; text-align: right;">
+                <span ng-click="handler.types.create()" class="btn btn-success"><i class="fa fa-plus"></i> {{'Admin.Typologie.Ty_Create' | translate}}</span>
+            </div>
+        </div>
+
+        <div class="well" style="margin-bottom: 0; padding-bottom: 0;">
+
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-search fa-fw"></i></span>
+                <input placeholder="{{'Search' | translate}}" ng-model="handler.types.searchValue" ng-change="handler.types.search()" class="form-control unvalidate" type="text">
+            </div>
+
+            <div style="height:45px;" ng-if="handler.types.maxSize < handler.types.total">
+                <span class="text-warning float-right">
+                    {{handler.types.page*handler.types.maxSize +1}}-{{(handler.types.page+1)*handler.types.maxSize < handler.types.total ? (handler.types.page+1)*handler.types.maxSize : handler.types.total}} {{'On' | translate}} {{handler.types.total}}
+                    <span class="btn btn-default fa fa-chevron-left force-display" ng-disabled="handler.types.page === 0" ng-click="handler.types.pagine(-1)"></span>
+                    <span class="btn btn-default fa fa-chevron-right force-display" ng-disabled="handler.types.page+1 >= (handler.types.total/handler.types.maxSize)" ng-click="handler.types.pagine(1)"></span>
+                </span>
+            </div>
+
+            <abn-tree-types ng-cloak tree-data="handler.types.subList"
+                            on-select="handler.types.select(branch)"
+                            on-delete="handler.types.remove(branch)"
+                            on-create="handler.types.createSub(branch)"
+                            search="handler.types.searchValue"
+                            selection="simulateSelectType"></abn-tree-types>
+        </div>
+    </div>
+    <div ng-if="!empty(handler.types.selected)" ng-cloak class="col-md-8">
+        <!-- detail type + sous-type -->
+        <h2 ng-if="!handler.types.selected.isNew">{{'Admin.Typologie.Ty_Edit' | translate}} {{handler.types.selected.id}}</h2>
+        <h2 ng-if="handler.types.selected.isNew">{{'Admin.Typologie.Ty_Create_Title' | translate}}</h2>
+        <form role="form" name='typeForm' novalidate>
+            <div class="well">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3>{{'Admin.Typologie.Ty_General' | translate}}</h3>
+                        <div class="form-group mandatory-group">
+                            <label for="idType">{{'Name' | translate}}</label>
+                            <span ng-if="typeForm.idType.$error.pattern" class="label label-danger"><i
+                                    class="fa fa-exclamation-circle"></i> Interdits : ' " &amp; > <</span>
+                            <span class="label label-danger"><i class="fa fa-warning"></i> {{'Mandatory' | translate}}</span>
+                            <span class="label label-info"><i class="fa fa-info-circle"></i> Max : 28</span>
+                            <span class="label label-info"><i class="fa fa-info-circle"></i> Min : 3</span>
+                            <input id="idType" type="text" class="form-control" ng-change="dashChanged=true"
+                                   ng-minlength="3" ng-maxlength="28" ng-model="handler.types.edited.id" name="idType"
+                                   ng-pattern="/^[^\'&quot;&amp;><]*$/" required>
+                        </div>
+                        <div class="form-group mandatory-group">
+                            <label for="desc">{{'Admin.Typologie.Ty_Desc' | translate}}</label>
+                            <span ng-if="typeForm.desc.$error.pattern" class="label label-danger"><i
+                                    class="fa fa-exclamation-circle"></i> Interdits : ' " &amp; > <</span>
+                            <span class="label label-danger"><i class="fa fa-warning"></i> {{'Mandatory' | translate}}</span>
+                            <span class="label label-info"><i class="fa fa-info-circle"></i> Min : 3</span>
+                            <input id="desc" type="text" class="form-control" ng-change="dashChanged=true"
+                                   ng-minlength="3" ng-model="handler.types.edited.desc" name="desc"
+                                   ng-pattern="/^[^\'&quot;&amp;><]*$/" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h3>{{'Admin.Typologie.Ty_Tdt' | translate}}</h3>
+                        <div class="form-group">
+                            <label for="tdtNom">{{'Name' | translate}}</label>
+                            <select id="tdtNom" class="form-control unvalidate" ng-change="dashChanged=true" ng-model="handler.types.edited.tdtNom" name="tdtNom" required>
+                                <option value="pas de TdT">{{'pas de TdT' | translate}}</option>
+                                <option ng-value="el.value" ng-repeat="el in tdtNomOptions">{{el.key}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="tdtProtocole">{{'Admin.Typologie.Ty_Protocol' | translate}}</label>
+                            <select ng-change="handler.types.changeProtocol()" id="tdtProtocole"
+                                    class="form-control unvalidate"
+                                    ng-model="handler.types.edited.tdtProtocole" name="tdtProtocole" required>
+                                <option ng-value="el.value" ng-repeat="el in tdtProtocoleOptions">{{el.key}}</option>
+                                <option value="aucun">{{'None' | translate}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3>{{'Admin.Typologie.Ty_Format' | translate}}</h3>
+                        <div class="form-group">
+                            <label for="sig_format">{{'Admin.Typologie.Ty_Format' | translate}}</label>
+                            <select ng-if="handler.types.edited.tdtProtocole != 'ACTES'" id="sig_format"
+                                    class="form-control unvalidate" ng-change="dashChanged=true"
+                                    ng-model="handler.types.edited.sigFormat" name="sig_format" required
+                                    ng-disabled="handler.types.edited.tdtProtocole != 'aucun'">
+                                <option value="AUTO">-- Sélection automatique --</option>
+                                <option ng-if="properties['parapheur.admin.signature.pkcs1.show'] == 'true'" value="PKCS#1/sha256">PKCS#1 (compatible EBICS-TS)</option>
+                                <option value="PKCS#7/single">PKCS#7 simple (compatible ACTES)</option>
+                                <option ng-if="properties['parapheur.admin.signature.pkcs7aio.show'] == 'true'" value="PKCS#7/multiple">PKCS#7 all-in-one</option>
+                                <!--  option value="CAdES/basic">CAdES profil de base</option -->
+                                <option value="PAdES/basic">PAdES profil ISO32000-1 (signature de PDF)</option>
+                                <option value="PAdES/basicCertifie">PAdES profil ISO32000-1 (verrouille le PDF après signature)</option>
+                                <option value="XAdES/enveloped">XAdES enveloppée (PESv2 HELIOS)</option>
+                                <option ng-if="properties['parapheur.admin.signature.xadesdia.show'] == 'true'" value="XAdES/DIA">XAdES pour DIA</option>
+                                <option ng-if="properties['parapheur.admin.signature.xadesdet.show'] == 'true'" value="XAdES/detached">XAdES détachée</option>
+                                <option ng-if="properties['parapheur.admin.signature.xadesecd.show'] == 'true'" value="XAdES132/detached">XAdES 1.3.2 détachée (compatible ANTS-ECD)</option>
+                                <!-- option value="XAdES-T/enveloped">XAdES-T enveloppée</option  -->
+                            </select>
+
+                            <select ng-if="handler.types.edited.tdtProtocole == 'ACTES'" id="sig_format"
+                                    class="form-control unvalidate" ng-change="dashChanged=true"
+                                    ng-model="handler.types.edited.sigFormat" name="sig_format" required>
+                                <option value="PKCS#7/single">PKCS#7 simple (compatible ACTES)</option>
+                                <option value="PAdES/basic">PAdES profil ISO32000-1 (signature de PDF)</option>
+                                <option value="PAdES/basicCertifie">PAdES profil ISO32000-1 (verrouille le PDF après signature)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6" ng-if="handler.types.showOverrideButton()">
+                        <h3>{{'Admin.Typologie.Ty_Override' | translate}}</h3>
+                        <div ng-if="!handler.types.edited.isNew">
+                            <div ng-if="handler.types.showOverrideRadio()">
+                                <div class="radio">
+                                    <label for="overTrue">
+                                        <input class="unvalidate" id="overTrue" ng-model="handler.types.edited.tdtOverride" type="radio" value="true" name="overrideTdt" required>{{'Admin.Typologie.Ty_Enable' | translate}}
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label for="overFalse">
+                                        <input class="unvalidate" id="overFalse" ng-model="handler.types.edited.tdtOverride" type="radio" value="false" name="overrideTdt" required>{{'Admin.Typologie.Ty_Disable' | translate}}
+                                    </label>
+                                </div>
+                            </div>
+
+                            <button ng-click="handler.types.launchOverride()" class="btn btn-info col-md-12 force-display">
+                                <i class="fa" ng-class="handler.types.getOverrideButtonIcon()"></i>
+                                {{handler.types.getOverrideButtonName()}}
+                            </button>
+                        </div>
+
+                        <div ng-if="handler.types.edited.isNew">
+                            <p class="text-danger"> {{'Admin.Typologie.Ty_Not_Created' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <button ng-if="!handler.types.edited.isNew" ng-click="handler.types.update()" type="submit" class="btn btn-primary">
+                        <i class="fa fa-floppy-o"></i>
+                        {{'Save' | translate}}
+                    </button>
+                    <button ng-if="handler.types.edited.isNew" ng-click="handler.types.save()" type="submit" class="btn btn-primary">
+                        <i class="fa fa-floppy-o"></i>
+                        {{'Save' | translate}}
+                    </button>
+                    <button type="submit" class="btn btn-primary" disabled>
+                        <i class="fa fa-floppy-o"></i>
+                        {{'Save' | translate}}
+                    </button>
+                    <span ng-if="handler.types.errorType != undefined" class="text-danger">
+                        <i class="fa fa-warning"></i>
+                        {{handler.types.errorType}}
+                    </span>
+                    <span style="position: relative; margin-left: 30px;"  ng-if="handler.types.saving">
+                        <span us-spinner="{radius:10, width:4, length: 8}"></span>
+                    </span>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div ng-if="!empty(handler.types.selectedSubtype)" ng-cloak class="col-md-8">
+        <!-- detail sous-type -->
+        <h2 ng-if="!!handler.types.selectedSubtype.id">{{'Admin.Typologie.Ty_Sub_Title' | translate}} {{handler.types.selectedSubtype.id}}</h2>
+        <h2 ng-if="!handler.types.selectedSubtype.id">{{'Admin.Typologie.Ty_Sub_Create_Title' | translate}}</h2>
+        <form role="form" name='sousTypeForm' novalidate>
+            <div class="well">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#general" bs-tab><i class="fa fa-info-circle"></i> {{'Admin.Typologie.Ty_General' | translate}}</a></li>
+                    <li><a href="#permissions" bs-tab><i class="fa fa-ban"></i> {{'Admin.Typologie.Ty_Sub_PermCreate' | translate}}</a></li>
+                    <li><a href="#permissionsFilters" bs-tab><i class="fa fa-eye"></i> {{'Admin.Typologie.Ty_Sub_PermSee' | translate}}</a></li>
+                    <li><a href="#circuit" bs-tab><i class="fa fa-road"></i> {{'Admin.Typologie.Ty_Sub_Wo' | translate}}</a></li>
+                    <li><a href="#metadonnees" bs-tab><i class="fa fa-code"></i> {{'Admin.Typologie.Ty_Sub_Meta' | translate}}</a></li>
+                    <li><a href="#calques" bs-tab><i class="fa fa-clone"></i> {{'Admin.Typologie.Ty_Sub_Cal' | translate}}</a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class='tab-pane active' id='general'>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h3>{{'Admin.Typologie.Ty_Sub_Sub' | translate}} "{{handler.types.selectedSubtype.parent}}"</h3>
+                                    <div class="form-group mandatory-group">
+                                        <label for="idSousType">{{'Name' | translate}}</label>
+                                        <span ng-if="sousTypeForm.idSousType.$error.pattern" class="label label-danger"><i
+                                                class="fa fa-exclamation-circle"></i> Interdits : ' " &amp; > <</span>
+                                        <span class="label label-danger"><i class="fa fa-warning"></i> {{'Mandatory' | translate}}</span>
+                                        <span class="label label-info"><i class="fa fa-info-circle"></i> Min : 2</span>
+                                        <input id="idSousType" type="text" class="form-control" ng-minlength="2"
+                                               ng-model="handler.types.editedSubtype.id" name="idSousType"
+                                               ng-pattern="/^[^\'&quot;&amp;><]*$/" required>
+                                    </div>
+                                    <div class="form-group mandatory-group">
+                                        <label for="descSousType">{{'Description' | translate}}</label>
+                                        <span ng-if="sousTypeForm.descSousType.$error.pattern"
+                                              class="label label-danger"><i class="fa fa-exclamation-circle"></i> Interdits : ' " &amp; > <</span>
+                                        <span class="label label-danger"><i class="fa fa-warning"></i> {{'Mandatory' | translate}}</span>
+                                        <span class="label label-info"><i class="fa fa-info-circle"></i> Min : 2</span>
+                                        <input id="descSousType" type="text" class="form-control" ng-minlength="2"
+                                               ng-model="handler.types.editedSubtype.desc" name="descSousType"
+                                               ng-pattern="/^[^\'&quot;&amp;><]*$/" required>
+                                    </div>
+                                    <h3>{{'Admin.Typologie.Ty_Sub_Opt' | translate}}</h3>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input class="unvalidate" ng-model="handler.types.editedSubtype.digitalSignatureMandatory" ng-true-value="true" ng-false-value="false" type="checkbox"> {{'Admin.Typologie.Ty_Sub_SigMand' | translate}}
+                                        </label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input class="unvalidate" ng-model="handler.types.editedSubtype.readingMandatory" ng-true-value="true" ng-false-value="false" type="checkbox"> {{'Admin.Typologie.Ty_Sub_ReadMand' | translate}}
+                                        </label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input class="unvalidate" ng-model="handler.types.editedSubtype.includeAttachments" ng-true-value="true" ng-false-value="false" type="checkbox"> {{'Admin.Typologie.Ty_Sub_PJ' | translate}}
+                                        </label>
+                                    </div>
+                                    <div class="checkbox" ng-if="isAcceptingMultidoc()">
+                                        <label>
+                                            <input class="unvalidate" ng-model="handler.types.editedSubtype.multiDocument" ng-true-value="true" ng-false-value="false" type="checkbox"> {{'Admin.Typologie.Ty_Sub_µdoc' | translate}} <i class="fa fa-question-circle" tooltip="{{'Admin.Typologie.Ty_Sub_µdoc_info' | translate}}"></i>
+                                        </label>
+                                    </div>
+                                    <div class="checkbox" ng-if="isAcceptingAttest() && properties['parapheur.ihm.attest.show'] == 'true'" >
+                                        <label>
+                                            <input class="unvalidate" ng-model="handler.types.editedSubtype.hasToAttest" ng-true-value="true" ng-false-value="false" type="checkbox"> {{'Admin.Typologie.Ty_Sub_Attest' | translate}}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='tab-pane' id='permissions'>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <h3>{{'Admin.Typologie.Ty_Sub_PermCreate' | translate}}</h3>
+                                <div class="checkbox">
+                                    <label>
+                                        <input class="unvalidate" ng-model="handler.types.editedSubtype.visibility" type="checkbox" ng-false-value="private" ng-true-value="public"> {{'Admin.Typologie.Ty_Sub_Public' | translate}}
+                                    </label>
+                                </div>
+                                <div class="col-md-12 no-padding">
+                                    <div class="row" ng-if="handler.types.editedSubtype.visibility !== 'public'">
+                                        <div class="form-group col-md-4 no-padding">
+                                            <div class="col-md-12">
+                                                <h4>{{'Admin.Typologie.Ty_Sub_Desks' | translate}}</h4>
+                                                <div>
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-search fa-fw"></i></span>
+                                                        <input placeholder="{{'Search' | translate}}" ng-model="handler.bureaux.searchValue" ng-change="handler.bureaux.search()" class="form-control unvalidate" type="text" ng-enter="handler.bureaux.search()">
+                                                    </div>
+
+                                                    <div style="height:15px;" ng-if="handler.bureaux.maxSize < handler.bureaux.total">
+                                                <span class="text-warning float-right">
+                                                    {{handler.bureaux.page*handler.bureaux.maxSize +1}}-{{(handler.bureaux.page+1)*handler.bureaux.maxSize < handler.bureaux.total ? (handler.bureaux.page+1)*handler.bureaux.maxSize : handler.bureaux.total}} {{'On' | translate}} {{handler.bureaux.total}}
+                                                    <span class="btn btn-default fa fa-chevron-left force-display" ng-disabled="handler.bureaux.page === 0" ng-click="handler.bureaux.pagine(-1)"></span>
+                                                    <span class="btn btn-default fa fa-chevron-right force-display" ng-disabled="handler.bureaux.page+1 >= (handler.bureaux.total/handler.bureaux.maxSize)" ng-click="handler.bureaux.pagine(1)"></span>
+                                                </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <span class="text-info" ng-if="handler.bureaux.total === 0"><i class="fa fa-info-circle"></i> {{'Admin.Typologie.Ty_Sub_No_Result' | translate}}</span>
+                                            <span class="text-info" ng-if="handler.bureaux.subListForCreation.length === 0 && handler.bureaux.total > 0"><i class="fa fa-info-circle"></i> {{'Admin.Typologie.Ty_Sub_Desks_Sel_All' | translate}}</span>
+                                            <ul class="list-unstyled nav nav-pills nav-stacked adminContent list-datas col-md-12 no-margin">
+                                                <li ng-repeat="bureau in handler.bureaux.subList" ng-switch on="handler.types.editedSubtype.parapheurs.indexOf(bureau.id)">
+                                                    <a ng-click="handler.bureaux.selectForCreation(bureau)" ng-switch-when="-1">
+                                                        <i class="fa fa-plus-circle text-success"></i> {{bureau.name}}
+                                                    </a>
+                                                    <a class="disabled" ng-switch-default>
+                                                        {{bureau.name}}
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                        <div class="form-group col-md-4 no-padding">
+                                            <div class="col-md-12">
+                                                <h4>{{'Admin.Typologie.Ty_Sub_Gr' | translate}}</h4>
+                                                <div>
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><i class="fa fa-search fa-fw"></i></span>
+                                                        <input placeholder="{{'Search' | translate}}" ng-model="handler.groupes.searchValue" ng-change="handler.groupes.search()" class="form-control unvalidate" type="text" ng-enter="handler.groupes.search()">
+                                                    </div>
+
+                                                    <div style="height:15px;" ng-if="handler.groupes.maxSize < handler.groupes.total">
+                                                    <span class="text-warning float-right">
+                                                        {{handler.groupes.page*handler.groupes.maxSize +1}}-{{(handler.groupes.page+1)*handler.groupes.maxSize < handler.groupes.total ? (handler.groupes.page+1)*handler.groupes.maxSize : handler.groupes.total}} sur {{handler.groupes.total}}
+                                                        <span class="btn btn-default fa fa-chevron-left force-display" ng-disabled="handler.groupes.page === 0" ng-click="handler.groupes.pagine(-1)"></span>
+                                                        <span class="btn btn-default fa fa-chevron-right force-display" ng-disabled="handler.groupes.page+1 >= (handler.groupes.total/handler.groupes.maxSize)" ng-click="handler.groupes.pagine(1)"></span>
+                                                    </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <span class="text-info" ng-if="handler.groupes.total === 0"><i class="fa fa-info-circle"></i> {{'Admin.Typologie.Ty_Sub_No_Result' | translate}}</span>
+                                            <span class="text-info" ng-if="handler.groupes.subListForCreation.length === 0 && handler.groupes.total > 0"><i class="fa fa-info-circle"></i> {{'Admin.Typologie.Ty_Sub_Gr_Sel_All' | translate}}</span>
+                                            <ul class="list-unstyled nav nav-pills nav-stacked adminContent list-datas col-md-12 no-margin">
+                                                <li ng-repeat="group in handler.groupes.subList" ng-switch on="handler.types.editedSubtype.groups.indexOf(group.id)">
+                                                    <a ng-click="handler.groupes.selectForCreation(group)" ng-switch-when="-1">
+                                                        <i class="fa fa-plus-circle text-success"></i> {{group.shortName}}
+                                                    </a>
+                                                    <a class="disabled" ng-switch-default>
+                                                        {{group.shortName}}
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <h3>{{'Admin.Typologie.Ty_Sub_Desks_Sel' | translate}}</h3>
+                                            <span ng-if="handler.types.editedSubtype.parapheurs.length === 0" class="text-info"><i class="fa fa-info-circle"></i> {{'Admin.Typologie.Ty_Sub_Desks_None' | translate}}</span>
+                                            <ul class="list-unstyled pointer">
+                                                <li class="hover-li" ng-click="handler.bureaux.unselectForCreation(bureau.id)" ng-repeat="bureau in (handler.bureaux.list() | sameId:handler.types.editedSubtype.parapheurs)"><i class="text-danger fa fa-times-circle"></i> {{bureau.name}}</li>
+                                            </ul>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <h3>{{'Admin.Typologie.Ty_Sub_Gr_Sel' | translate}}</h3>
+                                            <span ng-if="handler.types.editedSubtype.groups.length === 0" class="text-info"><i class="fa fa-info-circle"></i> {{'Admin.Typologie.Ty_Sub_Gr_None' | translate}}</span>
+                                            <ul class="list-unstyled pointer">
+                                                <li class="hover-li" ng-click="handler.groupes.unselectForCreation(group.id)" ng-repeat="group in (handler.groupes.list() | sameId:handler.types.editedSubtype.groups)"><i class="text-danger fa fa-times-circle"></i> {{group.shortName}}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='tab-pane' id='permissionsFilters'>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <h3>{{'Admin.Typologie.Ty_Sub_PermSee' | translate}}</h3>
+                                <div class="checkbox">
+                                    <label>
+                                        <input class="unvalidate" ng-model="handler.types.editedSubtype.visibilityFilter" type="checkbox" ng-false-value="private" ng-true-value="public"> {{'Admin.Typologie.Ty_Sub_Public' | translate}}
+                                    </label>
+                                </div>
+                                <div class="col-md-12 no-padding">
+
+                                    <div ng-if="handler.types.editedSubtype.visibilityFilter !== 'public'" class="form-group col-md-4 no-padding">
+                                        <div class="col-md-12">
+                                            <h4>{{'Admin.Typologie.Ty_Sub_Desks' | translate}}</h4>
+                                            <div>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-search fa-fw"></i></span>
+                                                    <input placeholder="{{'Search' | translate}}" ng-model="handler.bureaux.searchValue" ng-change="handler.bureaux.search()" class="form-control unvalidate" type="text" ng-enter="handler.bureaux.search()">
+                                                </div>
+
+                                                <div style="height:15px;" ng-if="handler.bureaux.maxSize < handler.bureaux.total">
+                                                <span class="text-warning float-right">
+                                                    {{handler.bureaux.page*handler.bureaux.maxSize +1}}-{{(handler.bureaux.page+1)*handler.bureaux.maxSize < handler.bureaux.total ? (handler.bureaux.page+1)*handler.bureaux.maxSize : handler.bureaux.total}} sur {{handler.bureaux.total}}
+                                                    <span class="btn btn-default fa fa-chevron-left force-display" ng-disabled="handler.bureaux.page === 0" ng-click="handler.bureaux.pagine(-1)"></span>
+                                                    <span class="btn btn-default fa fa-chevron-right force-display" ng-disabled="handler.bureaux.page+1 >= (handler.bureaux.total/handler.bureaux.maxSize)" ng-click="handler.bureaux.pagine(1)"></span>
+                                                </span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <span class="text-info" ng-if="handler.bureaux.total === 0"><i class="fa fa-info-circle"></i> {{'Admin.Typologie.Ty_Sub_No_Result' | translate}}</span>
+                                        <span class="text-info" ng-if="handler.bureaux.subListForFilter.length === 0 && handler.bureaux.total > 0"><i class="fa fa-info-circle"></i> {{'Admin.Typologie.Ty_Sub_Desks_Sel_All' | translate}}</span>
+                                        <ul class="list-unstyled nav nav-pills nav-stacked adminContent list-datas col-md-12 no-margin">
+                                            <li ng-repeat="bureau in handler.bureaux.subList" ng-switch on="handler.types.editedSubtype.parapheursFilters.indexOf(bureau.id)">
+                                                <a ng-click="handler.bureaux.selectForFilter(bureau)" ng-switch-when="-1">
+                                                    <i class="fa fa-plus-circle text-success"></i> {{bureau.name}}
+                                                </a>
+                                                <a class="disabled" ng-switch-default>
+                                                    {{bureau.name}}
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div ng-if="handler.types.editedSubtype.visibilityFilter !== 'public'" class="form-group col-md-4 no-padding">
+                                        <div class="col-md-12">
+                                            <h4>{{'Admin.Typologie.Ty_Sub_Gr' | translate}}</h4>
+                                            <div>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="fa fa-search fa-fw"></i></span>
+                                                    <input placeholder="{{'Search' | translate}}" ng-model="handler.groupes.searchValue" ng-change="handler.groupes.search()" class="form-control unvalidate" type="text" ng-enter="handler.groupes.search()">
+                                                </div>
+
+                                                <div style="height:15px;" ng-if="handler.groupes.maxSize < handler.groupes.total">
+                                                    <span class="text-warning float-right">
+                                                        {{handler.groupes.page*handler.groupes.maxSize +1}}-{{(handler.groupes.page+1)*handler.groupes.maxSize < handler.groupes.total ? (handler.groupes.page+1)*handler.groupes.maxSize : handler.groupes.total}} sur {{handler.groupes.total}}
+                                                        <span class="btn btn-default fa fa-chevron-left force-display" ng-disabled="handler.groupes.page === 0" ng-click="handler.groupes.pagine(-1)"></span>
+                                                        <span class="btn btn-default fa fa-chevron-right force-display" ng-disabled="handler.groupes.page+1 >= (handler.groupes.total/handler.groupes.maxSize)" ng-click="handler.groupes.pagine(1)"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <span class="text-info" ng-if="handler.groupes.total === 0"><i class="fa fa-info-circle"></i> {{'Admin.Typologie.Ty_Sub_No_Result' | translate}}</span>
+                                        <span class="text-info" ng-if="handler.groupes.subListForFilter.length === 0 && handler.groupes.total > 0"><i class="fa fa-info-circle"></i> {{'Admin.Typologie.Ty_Sub_Gr_Sel_All' | translate}}</span>
+                                        <ul class="list-unstyled nav nav-pills nav-stacked adminContent list-datas col-md-12 no-margin">
+                                            <li ng-repeat="group in handler.groupes.subList" ng-switch on="handler.types.editedSubtype.groupsFilters.indexOf(group.id)">
+                                                <a ng-click="handler.groupes.selectForFilter(group)" ng-switch-when="-1">
+                                                    <i class="fa fa-plus-circle text-success"></i> {{group.shortName}}
+                                                </a>
+                                                <a class="disabled" ng-switch-default>
+                                                    {{group.shortName}}
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <div ng-if="handler.types.editedSubtype.visibilityFilter !== 'public'" class="col-md-4">
+                                        <h3>{{'Admin.Typologie.Ty_Sub_Desks_Sel' | translate}}</h3>
+                                        <span ng-if="handler.types.editedSubtype.parapheursFilters.length === 0" class="text-info"><i class="fa fa-info-circle"></i> {{'Admin.Typologie.Ty_Sub_Desks_None' | translate}}</span>
+                                        <ul class="list-unstyled pointer">
+                                            <li class="hover-li" ng-click="handler.bureaux.unselectForFilter(bureau.id)" ng-repeat="bureau in (handler.bureaux.list() | sameId:handler.types.editedSubtype.parapheursFilters)"><i class="text-danger fa fa-times-circle"></i> {{bureau.name}}</li>
+                                        </ul>
+                                        <h3>{{'Admin.Typologie.Ty_Sub_Gr_Sel' | translate}}</h3>
+                                        <span ng-if="handler.types.editedSubtype.groupsFilters.length === 0" class="text-info"><i class="fa fa-info-circle"></i> {{'Admin.Typologie.Ty_Sub_Gr_None' | translate}}</span>
+                                        <ul class="list-unstyled pointer">
+                                            <li class="hover-li" ng-click="handler.groupes.unselectForFilter(group.id)" ng-repeat="group in (handler.groupes.list() | sameId:handler.types.editedSubtype.groupsFilters)"><i class="text-danger fa fa-times-circle"></i> {{group.shortName}}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='tab-pane' id='circuit'>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="searchCircuit" class="control-label legendLabel">{{'Admin.Typologie.Ty_Sub_Wo_Sel' | translate}}</label>
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div>
+                                                    <div class="input-group">
+                                                        <input placeholder="{{'Search' | translate}}" name="searchCircuit" id="searchCircuit" ng-model="searchCircuit" class="form-control unvalidate" type="text">
+                                                        <span class="input-group-btn">
+                                                            <button class="btn btn-success force-display" ng-click="handler.circuits.search(searchCircuit)" type="submit">
+                                                                <i class="fa fa-search"></i>
+                                                                {{'Find' | translate}}
+                                                            </button>
+                                                        </span>
+                                                    </div>
+                                                    <div style="height:35px;" ng-if="handler.circuits.total != handler.circuits.list.length">
+                                                        <span class="text-warning float-right">
+                                                            {{handler.circuits.page*handler.circuits.maxSize +1}}-{{(handler.circuits.page+1)*handler.circuits.maxSize < handler.circuits.total ? (handler.circuits.page+1)*handler.circuits.maxSize : handler.circuits.total}} sur {{handler.circuits.total}}
+                                                            <span class="btn btn-default fa fa-chevron-left force-display" ng-disabled="handler.circuits.page === 0" ng-click="handler.circuits.pagine(-1)"></span>
+                                                            <span class="btn btn-default fa fa-chevron-right force-display" ng-disabled="handler.circuits.page+1 >= (handler.circuits.total/handler.circuits.maxSize)" ng-click="handler.circuits.pagine(1)"></span>
+                                                        </span>
+                                                    </div>
+                                                    <span ng-if="handler.circuits.pagedList.length > 0 && handler.circuits.pagedList[0].length === 0" class="text-info">
+                                                        <i class="fa fa-info-circle"></i> {{'Admin.Typologie.Ty_Sub_No_Result' | translate}}
+                                                    </span>
+                                                </div>
+                                                <ul class="list-unstyled nav nav-pills nav-stacked adminContent list-datas" style="margin-top: 0px">
+                                                    <li ng-repeat="circuit in handler.circuits.list">
+                                                        <a ng-click="circuit.name === handler.types.editedSubtype.circuit ? handler.circuits.select() : handler.circuits.select(circuit)">
+                                                            <i ng-if="circuit.name === handler.types.editedSubtype.circuit" class="fa fa-dot-circle-o text-success"></i><i ng-if="circuit.name !== handler.types.editedSubtype.circuit" style="width: 13px;display:inline-block;"></i> {{circuit.name}}
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12" ng-if="handler.types.hasCachet() && handler.types.canCachet()">
+                                            <hr/>
+                                            <div class="form-group mandatory-group">
+                                                <label for="cachetCert">Certificat de cachet serveur</label>
+                                                <span ng-if="!!handler.types.editedSubtype.circuit" class="label label-danger"><i class="fa fa-warning"></i> {{'Mandatory' | translate}}</span>
+                                                <select id="cachetCert" class="form-control"
+                                                        ng-model="handler.types.editedSubtype.cachetCertificate" name="cachetCert"
+                                                        ng-options="cert.id as cert.title for cert in cachetCerts"
+                                                        ng-required="!!handler.types.editedSubtype.circuit">
+                                                    <option></option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-12 checkbox">
+                                                <label>
+                                                    <input class="unvalidate" ng-model="handler.types.editedSubtype.isCachetAuto" ng-true-value="true" ng-false-value="false" type="checkbox">
+                                                    Étape de cachet serveur automatique
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12" ng-if="handler.types.hasPastellMailsec()">
+                                            <hr/>
+                                            <div class="form-group mandatory-group">
+                                                <label for="mailsecPastell">Connecteur Mail-sécurisé Pastell</label>
+                                                <span ng-if="!!handler.types.editedSubtype.circuit" class="label label-danger"><i class="fa fa-warning"></i> {{'Mandatory' | translate}}</span>
+                                                <select id="mailsecPastell" class="form-control"
+                                                        ng-model="handler.types.editedSubtype.pastellMailsec" name="mailsecPastell"
+                                                        ng-options="conn.id as conn.title for conn in pastellMailsec"
+                                                        ng-required="!!handler.types.editedSubtype.circuit">
+                                                    <option></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-12">
+                                        {{'Admin.Typologie.Ty_Sub_Wo_Selected' | translate}} :
+                                        <ul class="list-unstyled nav nav-pills nav-stacked adminContent list-datas">
+                                            <li ng-if="!!handler.types.editedSubtype.circuit">
+                                                <a ng-click="handler.circuits.select()">
+                                                    <i class="fa fa-times-circle text-danger"></i> {{handler.types.editedSubtype.circuit}}
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <div ng-if="!handler.types.editedSubtype.circuit" class="text-info">
+                                            <i class="fa fa-info-circle"></i> {{'Admin.Typologie.Ty_Sub_Wo_None' | translate}}
+                                        </div>
+                                    </div>
+                                    <div ng-if="!handler.types.editedSubtype.circuit" class="col-md-12">
+                                        <span class="text-info"><i class="fa fa-info-circle"></i> {{'Admin.Typologie.Ty_Sub_Wo_None_Info' | translate}}</span>
+                                        <div class="col-md-12">
+                                            <div ui-ace="{
+                                                  useWrapMode : true,
+                                                  showGutter: true,
+                                                  theme:'twilight',
+                                                  mode: 'groovy'
+                                            }" ng-model="handler.types.editedSubtype.script" style="height:400px;"></div>
+                                        </div>
+                                    </div>
+                                    <div ng-if="handler.types.editedSubtype.circuit" class="col-md-12">
+                                        <h3>{{'Admin.Typologie.Ty_Sub_Wo_Step' | translate}}</h3>
+                                        <ul class="list-unstyled">
+                                            <li ng-repeat="etape in handler.circuits.selected.etapes">
+                                                <span class="action" ng-switch="etape.actionDemandee.toLowerCase()">
+                                                    <i tooltip="Visa" ng-switch-when="visa" class="fa fa-check-square-o"></i>
+                                                    <i tooltip="Signature" ng-switch-when="signature" class="fa ls-signature"></i>
+                                                    <i tooltip="Mail sécurisé Pastell" ng-switch-when="mailsecpastell" class="fa fa-envelope-o"></i>
+                                                    <i tooltip="Mail sécurisé S²LOW" ng-switch-when="mailsec" class="fa fa-envelope"></i>
+                                                    <i tooltip="Télé-transmission" ng-switch-when="tdt" class="fa fa-cloud-upload"></i>
+                                                    <i tooltip="Cachet serveur" ng-switch-when="cachet" class="fa ls-stamp"></i>
+                                                    <i tooltip="Fin de circuit" ng-switch-when="archivage" class="fa fa-flag-checkered"></i>
+                                                </span>
+                                                <span ng-if="!etape.parapheur">
+                                                    {{(etape.transition | translate) + "..."}}
+                                                </span>
+                                                <span ng-if="!!etape.parapheur">
+                                                    {{etape.parapheurName}}
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 checkbox" ng-if="handler.types.getProtocol() === 'HELIOS'">
+                            <label>
+                                <input class="unvalidate" ng-model="handler.types.editedSubtype.isTdtAuto" ng-true-value="true" ng-false-value="false" type="checkbox">
+                                Étape d'envoi au TdT automatique
+                            </label>
+                        </div>
+
+                    </div>
+
+                    <div class='tab-pane' id='metadonnees'>
+                        <div class="col-md-12 no-padding" ng-if="!isMetaInited">
+                            <span class="text text-info">Chargement des metadonnées en cours ...</span>
+                        </div>
+                        <div class="col-md-12 no-padding" ng-if="isMetaInited">
+                            <div class="col-md-12">
+                                <h3>{{'Admin.Typologie.Ty_Sub_Meta' | translate}}</h3>
+                                <div class="col-md-6">
+                                    <p><b>{{'Admin.Typologie.Ty_Sub_Meta_Avail' | translate}}</b></p>
+                                    <span class="text-info" ng-if="(handler.metadonnees.list() | notSameIdInArray:handler.types.editedSubtype.metadatas).length === 0"><i class="fa fa-info-circle"></i> {{'None_f' | translate}}</span>
+                                    <ul class="list-unstyled nav nav-pills nav-stacked adminContent list-datas">
+                                        <li ng-repeat="meta in (handler.metadonnees.list() | notSameIdInArray:handler.types.editedSubtype.metadatas)">
+                                            <a ng-click="handler.types.addMetadata(meta)">
+                                                <i class="fa fa-plus-circle text-success"></i>
+                                                {{meta.name}}
+                                            </a>
+
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><b>{{'Admin.Typologie.Ty_Sub_Meta_Actual' | translate}}</b></p>
+                                    <span class="text-info" ng-if="handler.types.editedSubtype.metadatas.length === 0"><i class="fa fa-info-circle"></i> {{'None_f' | translate}}</span>
+                                    <div ng-repeat="currentMeta in handler.types.editedSubtype.metadatas">
+                                        <div style="margin-top:16px;"
+                                             ng-init="meta = (handler.metadonnees.list() | findWithId:currentMeta.id)"
+                                             ng-show="meta.name">
+                                            <span ng-if="!meta.name"
+                                                  ng-init="handler.types.editedSubtype.metadatas.splice($index, 1);"></span>
+                                            <div class="row">
+                                                <p><i tooltip="{{'Delete' | translate}}"
+                                                      class="fa fa-times-circle text-danger pointer"
+                                                      ng-click="handler.types.editedSubtype.metadatas.splice($index, 1);"
+                                                      ng-if="!currentMeta.fromCircuit"></i>
+                                                    <b>{{meta.name}}</b></p>
+                                            </div>
+                                            <span class="text-info" ng-if="currentMeta.fromCircuit">
+                                                <i class="fa fa-info-circle"></i>
+                                                Métadonnée relative au circuit
+                                            </span>
+                                            <div class="row" ng-if="!currentMeta.fromCircuit">
+                                                <div class="col-md-12" ng-switch on="meta.type">
+                                                    <div class="row">
+                                                        <div class="form-group" ng-switch-when="DATE"
+                                                             ng-hide="meta.hasValues">
+                                                            <label class="sr-only" for="{{currentMeta.id}}">{{'Admin.Typologie.Ty_Sub_Meta_Default'
+                                                                | translate}}</label>
+                                                            <div class="input-group col-md-12" style="padding: 0;">
+                                                                <input placeholder="{{'Admin.Typologie.Ty_Sub_Meta_Default' | translate}}"
+                                                                       ng-cloak="" ip-id="currentMeta.id"
+                                                                       return-format="yy-mm-dd" readonly="true"
+                                                                       ip-datepicker type="text"
+                                                                       ng-model="currentMeta.default"
+                                                                       class="form-control unvalidate">
+                                                                <span ng-click="currentMeta.default = ''"
+                                                                      class="pointer input-group-addon">X</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group" ng-switch-when="STRING"
+                                                             ng-hide="meta.hasValues">
+                                                            <label class="sr-only" for="{{currentMeta.id}}">{{'Admin.Typologie.Ty_Sub_Meta_Default'
+                                                                | translate}}</label>
+                                                            <input type="text" class="form-control unvalidate"
+                                                                   id="{{currentMeta.id}}"
+                                                                   ng-model="currentMeta.default"
+                                                                   placeholder="{{'Admin.Typologie.Ty_Sub_Meta_Default' | translate}}">
+                                                        </div>
+                                                        <div class="form-group" ng-switch-when="URL"
+                                                             ng-hide="meta.hasValues">
+                                                            <label class="sr-only" for="{{currentMeta.id}}">{{'Admin.Typologie.Ty_Sub_Meta_Default'
+                                                                | translate}}</label>
+                                                            <input type="text" class="form-control unvalidate"
+                                                                   id="{{currentMeta.id}}"
+                                                                   ng-model="currentMeta.default"
+                                                                   placeholder="{{'Admin.Typologie.Ty_Sub_Meta_Default' | translate}}">
+                                                        </div>
+                                                        <div class="form-group mandatory-group-abs"
+                                                             ng-switch-when="INTEGER"
+                                                             ng-hide="meta.hasValues">
+                                                            <label class="sr-only" for="{{currentMeta.id}}">{{'Admin.Typologie.Ty_Sub_Meta_Default'
+                                                                | translate}}</label>
+                                                            <span class="label label-info">
+                                                                <i class="fa-info-circle fa"></i>
+                                                                {{'Admin.Typologie.Ty_Sub_Meta_Int'
+                                                                | translate}}
+                                                            </span>
+                                                            <input type="text" integer id="{{currentMeta.id}}"
+                                                                   ng-model="currentMeta.default" class="form-control"
+                                                                   placeholder="{{'Admin.Typologie.Ty_Sub_Meta_Default' | translate}}">
+                                                        </div>
+                                                        <div class="form-group mandatory-group-abs"
+                                                             ng-switch-when="DOUBLE"
+                                                             ng-hide="meta.hasValues">
+                                                            <label class="sr-only" for="{{currentMeta.id}}">{{'Admin.Typologie.Ty_Sub_Meta_Default'
+                                                                | translate}}</label>
+                                                            <span class="label label-info">
+                                                                <i class="fa-info-circle fa"></i>
+                                                                {{'Admin.Typologie.Ty_Sub_Meta_Double'
+                                                                | translate}}
+                                                            </span>
+                                                            <input type="text" decimal id="{{currentMeta.id}}"
+                                                                   ng-model="currentMeta.default" class="form-control"
+                                                                   placeholder="{{'Admin.Typologie.Ty_Sub_Meta_Default' | translate}}">
+                                                        </div>
+                                                        <div class="form-group" style="padding: 0;"
+                                                             ng-switch-when="BOOLEAN">
+                                                            <label class="sr-only" for="{{currentMeta.id}}">{{'Admin.Typologie.Ty_Sub_Meta_Default'
+                                                                | translate}}</label>
+                                                            <select id="{{currentMeta.id}}"
+                                                                    ng-model="currentMeta.default"
+                                                                    class="form-control unvalidate"
+                                                                    ng-options="item.value as item.key for item in boolvalues">
+                                                                <option value="">{{'Admin.Typologie.Ty_Sub_Meta_Default'
+                                                                    | translate}}
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group" style="padding: 0;"
+                                                             ng-show="meta.hasValues">
+                                                            <label class="sr-only" for="{{currentMeta.id}}">{{'Admin.Typologie.Ty_Sub_Meta_Default'
+                                                                | translate}}</label>
+                                                            <select id="{{currentMeta.id}}"
+                                                                    ng-model="currentMeta.default"
+                                                                    class="form-control unvalidate"
+                                                                    ng-options="value.value as value.value for value in meta.values">
+                                                                <option value="">{{'Admin.Typologie.Ty_Sub_Meta_Default'
+                                                                    | translate}}
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-inline">
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input class="unvalidate" ng-model="currentMeta.mandatory"
+                                                                   ng-true-value="true" ng-false-value="false"
+                                                                   type="checkbox"> {{'Mandatory' | translate}}
+                                                        </label>
+                                                    </div>
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input class="unvalidate" ng-model="currentMeta.editable"
+                                                                   ng-true-value="true" ng-false-value="false"
+                                                                   type="checkbox"> {{'Admin.Typologie.Ty_Sub_Meta_Edit'
+                                                            | translate}}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='tab-pane' id='calques' style="overflow:visible;">
+                        <div class="col-md-12 no-padding">
+                            <div class="col-md-6">
+
+                                <script type="text/ng-template" id="popover_info_multidoc_calque">
+                                    <span class="text-info" role="menu" aria-labelledby="dropdownMenuDocs">
+                                            <i class="fa fa-info-circle"></i>
+                                            {{'Admin.Typologie.muDocs_Info1' | translate}}<br>
+                                            {{'Admin.Typologie.muDocs_Info2' | translate}}<br>
+                                            {{'Admin.Typologie.muDocs_Info3' | translate}} <br>' 1-3,5 ' <br>{{'Admin.Typologie.muDocs_Info4' | translate}}
+                                        <br> {{'Admin.Typologie.muDocs_Info5' | translate}}
+                                        </span>
+                                </script>
+                                <h3>{{'Admin.Typologie.Ty_Sub_Cal' | translate}}
+                                    <button style="float:right;" ng-if="handler.types.editedSubtype.multiDocument" class="btn btn-default fa fa-info-circle" id="dropdownMenuDocs" type="button" bs-popover="'popover_info_multidoc_calque'" data-trigger="click">
+                                    </button>
+                                </h3>
+
+                                <div class="col-md-6">
+                                    <p><b>{{'Admin.Typologie.Ty_Sub_Meta_Avail' | translate}}</b></p>
+                                    <span class="text-info" ng-if="(handler.calques.list() | notSameIdInArray:handler.types.editedSubtype.calques).length === 0"><i class="fa fa-info-circle"></i> {{'None' | translate}}</span>
+                                    <ul class="list-unstyled nav nav-pills nav-stacked adminContent list-datas">
+                                        <li ng-repeat="calque in (handler.calques.list() | notSameIdInArray:handler.types.editedSubtype.calques)">
+                                            <a ng-click="handler.types.addCalque(calque)">
+                                                <i class="fa fa-plus-circle text-success"></i>
+                                                {{calque.name}}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><b>{{'Admin.Typologie.Ty_Sub_Cal_Actual' | translate}}</b></p>
+                                    <span class="text-info" ng-if="handler.types.editedSubtype.calques.length === 0"><i class="fa fa-info-circle"></i> {{'None' | translate}}</span>
+                                    <ul class="list-unstyled nav nav-pills nav-stacked adminContent list-datas">
+                                        <li ng-repeat="currentCalque in handler.types.editedSubtype.calques">
+                                            <a ng-init="calque = (handler.calques.list() | findWithId:currentCalque.id)" ng-click="handler.types.editedSubtype.calques.splice($index, 1);">
+                                                <i class="fa fa-times-circle text-danger"></i>
+                                                {{calque.name}}
+                                            </a>
+                                            <input class="form-control" ng-if="handler.types.editedSubtype.multiDocument" ng-model="currentCalque.numDocument" type="text" ng-pattern="/^(?:\d+(?:\-\d+){0,1}\,)*(?:\d+(?:\-\d*){0,1})$/" required>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h3>{{'Admin.Typologie.Ty_Sub_Cal_Ann' | translate}}</h3>
+                                <div class="col-md-6">
+                                    <p><b>{{'Admin.Typologie.Ty_Sub_Meta_Avail' | translate}}</b></p>
+                                    <span class="text-info" ng-if="(handler.calques.list() | notSameId:handler.types.editedSubtype.calquesAnnexes).length === 0"><i class="fa fa-info-circle"></i> {{'None' | translate}}</span>
+                                    <ul class="list-unstyled nav nav-pills nav-stacked adminContent list-datas">
+                                        <li ng-repeat="calque in (handler.calques.list() | notSameId:handler.types.editedSubtype.calquesAnnexes)">
+                                            <a ng-click="handler.types.addCalqueAnnexe(calque)">
+                                                <i class="fa fa-plus-circle text-success"></i>
+                                                {{calque.name}}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><b>{{'Admin.Typologie.Ty_Sub_Cal_Actual' | translate}}</b></p>
+                                    <span class="text-info" ng-if="handler.types.editedSubtype.calquesAnnexes.length === 0"><i class="fa fa-info-circle"></i> {{'None' | translate}}</span>
+                                    <ul class="list-unstyled nav nav-pills nav-stacked adminContent list-datas">
+                                        <li ng-repeat="currentCalque in handler.types.editedSubtype.calquesAnnexes">
+                                            <a ng-init="calque = (handler.calques.list() | findWithId:currentCalque)" ng-click="handler.types.editedSubtype.calquesAnnexes.splice($index, 1);">
+                                                <i class="fa fa-times-circle text-danger"></i>
+                                                {{calque.name}}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <button ng-if="!handler.types.editedSubtype.isNew" ng-click="handler.types.updateSub()" type="submit" class="btn btn-primary force-display" ng-disabled="!sousTypeForm.$valid || !handler.types.hasCachetSelected()">
+                        <i class="fa fa-floppy-o"></i>
+                        {{'Save' | translate}}
+                    </button>
+                    <button ng-if="handler.types.editedSubtype.isNew" ng-click="handler.types.saveSub()" type="submit" class="btn btn-primary force-display" ng-disabled="!sousTypeForm.$valid || !handler.types.hasCachetSelected()">
+                        <i class="fa fa-floppy-o"></i>
+                        {{'Save' | translate}}
+                    </button>
+                    <span ng-if="handler.types.errorSubtype != undefined" class="text-danger">
+                        <i class="fa fa-warning"></i>
+                        {{handler.types.errorSubtype}}
+                    </span>
+                    <span ng-if="handler.types.hasCachet() && !handler.types.canCachet() && !!handler.types.editedSubtype.circuit" class="text-danger">
+                        <i class="fa fa-warning"></i>
+                        Erreur ! Le cachet serveur n'est disponible que pour de la signature PAdES !
+                    </span>
+                    <span style="position: relative; margin-left: 30px;"  ng-if="handler.types.saving">
+                        <span us-spinner="{radius:10, width:4, length: 8}"></span>
+                    </span>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

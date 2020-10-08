@@ -1,0 +1,9 @@
+{
+  "journalModal": {
+    "event_log": "Journal d'événements",
+    "date": "Date",
+    "name": "Nom",
+    "annotation_observation": "Annotation / observation",
+    "state": "État"
+  }
+}

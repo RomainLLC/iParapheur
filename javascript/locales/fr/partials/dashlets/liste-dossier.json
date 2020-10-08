@@ -1,0 +1,23 @@
+{
+  "liste-dossier": {
+    "toTransmit": "À transmettre",
+    "toTreat": "À traiter",
+    "endOfCircuit": "En fin de circuit",
+    "returned": "Rejetés",
+    "pending": "En cours",
+    "upcoming": "À venir",
+    "retrievables": "Récupérables",
+    "late": "En retard",
+    "treated": "Traités",
+    "delegatedFolders": "Dossiers en délégation",
+    "previousPage": "Page précédente",
+    "nextPage": "Page suivante",
+    "noFolderFound": "Aucun dossier trouvé",
+    "availableFilters": "Filtres disponibles :",
+    "customList": "Liste personnalisée",
+    "custom": "Personnalisé",
+    "noFilter": "Sans filtre",
+    "traySelection": "Sélection de bannette",
+    "filterSelection": "Sélection de filtre"
+  }
+}

@@ -1,0 +1,36 @@
+<div id="liste-dossiers" class="well dashlet">
+    <h3 ng-click="element.show = !element.show" class="pointer text-info">{{'liste-dossier.customList' | translate}}</h3>
+    <div class="dashlet-content" bn-slide-show="element.show">
+
+        <fieldset id="select-filter" class="filters">
+            <label class="">{{'liste-dossier.availableFilters' | translate}}</label>
+            <select ng-options="el.key as el.value group by el.group for el in apercu.options.filters()" ng-if="nav"
+                    ng-model="currentFilterName"
+                    ng-init="currentFilterName = nav.selected ? nav.selected : dashFilter.dossier"
+                    ng-change="changeFilter(currentFilterName)" class="form-control">
+            </select>
+        </fieldset>
+        <div class="navigation">
+            <span class="btn btn-default" ng-click="changePage(false)" ng-disabled="!nav.hasPrev" tooltip="Page précédente">
+                <i class="fa fa-chevron-left"></i>
+            </span>
+            <span class="btn btn-default" ng-click="changePage(true)" ng-disabled="!nav.hasNext" tooltip="Page suivante">
+                <i class="fa fa-chevron-right"></i>
+            </span>
+        </div>
+        <hr>
+        <ul id="dossiers-list" class="nav nav-pills nav-stacked list-circuits">
+            <li ng-repeat="dossierInfo in dossiers" ng-class="dossier.id === dossierInfo.id ? 'active' : ''">
+                <a ng-class="dossierInfo.locked ? (dossier.id === dossierInfo.id ? 'active pending' : 'pending') : (dossier.id === dossierInfo.id ? 'active' : '')" ng-click="selectNextDossier(dossierInfo)">{{dossierInfo.title}}</a>
+            </li>
+        </ul>
+        <span class="text text-info" ng-if="dossiers.length === 0">
+            <span style="height:20px; display:block;" ng-if="gettingDossier">
+                <span style="position: absolute; width: 0px; z-index: 2000000000; left: 50%;" us-spinner="{radius:6, width:4, length: 8}" ></span>
+            </span>
+            <span ng-if="!gettingDossier">
+                <i class="fa fa-info-circle"></i> {{'liste-dossier.noFolderFound' | translate}}
+            </span>
+        </span>
+    </div>
+</div>

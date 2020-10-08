@@ -1,0 +1,85 @@
+<div>
+    <div style="top:100px;" class="nextDossierInfo" ng-if="!archiland.isInit">
+                <span class="text text-info">
+                    {{'Admin.Avance.getting_infos' | translate}}
+                </span>
+        <span style="position: relative; width: 0px; z-index: 2000000000; right: 140px; top: 100px;" us-spinner="{radius:20, width:8, length: 16}" ></span>
+    </div>
+    <div class="col-md-12" ng-if="archiland.isInit">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>{{'Admin.Avance.Archiland.title' | translate}}</h3>
+            </div>
+        </div>
+        <div class="row">
+            <form class="form-horizontal">
+                <div class="col-md-12">
+
+                    <div class="row">
+                        <div class="form-group col-md-4">
+                            <div>
+                                <div class="radio">
+                                    <label for="connecteurActivArchi">
+                                        <input class="unvalidate" id="connecteurActivArchi" ng-model="archiland.config.enabled" type="radio" value="true" name="connecteurStateArchi">{{'Admin.Avance.Archiland.enable' | translate}}
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label for="connecteurDesactivArchi">
+                                        <input class="unvalidate" id="connecteurDesactivArchi" ng-model="archiland.config.enabled" type="radio" value="false" name="connecteurStateArchi">{{'Admin.Avance.Archiland.disable' | translate}}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="idArchi">{{'Admin.Avance.Archiland.id' | translate}}</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control unvalidate" id="idArchi" name="idArchi" ng-model="archiland.config.user">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="passwordArchi">{{'Admin.Avance.Archiland.passwd' | translate}}</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control unvalidate" id="passwordArchi" name="passwordArchi" ng-model="archiland.config.password">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="serverArchi">{{'Admin.Avance.Archiland.msg_server' | translate}}</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control unvalidate" id="serverArchi" name="serverArchi" ng-model="archiland.config.host">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="portArchi">{{'Admin.Avance.Archiland.server_port' | translate}}</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control unvalidate" id="portArchi" name="portArchi" ng-model="archiland.config.port">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="sirenArchi">{{'Admin.Avance.Archiland.siren' | translate}}</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control unvalidate" id="sirenArchi" name="sirenArchi" ng-model="archiland.config.collectivite">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="serviceArchi">{{'Admin.Avance.Archiland.services' | translate}}</label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control unvalidate" id="serviceArchi" name="serviceArchi" ng-model="archiland.config.services">
+                            </textarea>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-12">
+                    <input type="button" ng-click="archiland.set()" class="btn btn-success force-display" value="{{'Admin.Avance.Archiland.save' | translate}}">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

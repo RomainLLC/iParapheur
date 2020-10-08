@@ -1,0 +1,26 @@
+<div>
+    <h2 class="underscore">{{'Options.Ord_Title' | translate}}</h2>
+    <form name='orderBureaux' class="form-horizontal" ng-class="{launched: !orderChanged}" novalidate>
+        <div class="form-group">
+            <div class="controls col-md-6">
+                <div class="col-md-12">
+                    <ul class="enabledColumns orderBureaux container-fluid" ng-mousedown="orderChanged=true" ui-sortable ng-model="orderedBureaux">
+                        <li ng-repeat="item in orderedBureaux" class="col-md-12 btn btn-default force-display">{{item.name}}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+
+            <div class="controls col-md-4">
+                <button type="submit" ng-init="orderChanged = false; orderSaved = false;" ng-click="saveOrderPrefs(); orderChanged = false; orderSaved = true;" class="btn btn-primary">
+                    <i class="fa fa-floppy-o"></i>
+                    {{'Options.Dash_Save' | translate}}</button>
+                <button class="btn btn-primary" disabled>
+                    <i class="fa fa-floppy-o"></i>
+                    {{'Options.Dash_Save' | translate}}</button>
+            </div>
+            <div class="alert alert-success col-md-4" ng-show="!orderChanged && orderSaved">{{'Options.Dash_Success' | translate}}</div>
+        </div>
+    </form>
+</div>

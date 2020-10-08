@@ -1,0 +1,29 @@
+<div class="row-fluid">
+    <div class="menuAdmin col-md-3 label label-info headertop" removeonsize="992" classes-list="label label-info" ng-include src="'partials/adminNavbar.html'"></div>
+    <div>
+        <!-- contenu -->
+        <div class="col-md-3 adminContent">
+            <h2>Node browser</h2>
+            <ul>
+                <li ng-click="goToPathIndex($index)" ng-repeat="path in rootPath">
+                    {{path}}
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-md-9 adminContent">
+            <h2>Propriétés</h2>
+            <ul>
+                <li ng-repeat="(key, value) in objectProps">
+                    {{key}} : {{value}}
+                </li>
+            </ul>
+            <h2>Navigation</h2>
+            <ul>
+                <li ng-click="selectNode(item.name)" ng-repeat="item in datatree.items">
+                    {{item.name}}
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

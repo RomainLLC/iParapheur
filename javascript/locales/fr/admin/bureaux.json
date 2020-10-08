@@ -1,0 +1,72 @@
+{
+  "Admin": {
+    "Bureaux": {
+      "Edit": "Modifier le bureau",
+      "Required": "Requis",
+      "Bu_Title": "Gestion des bureaux",
+      "Bu_Filter": "Rechercher par nom, titre ou utilisateurs",
+      "Bu_Create": "Créer un bureau",
+      "Bu_Filter_Info": "Recherche sensible aux accents",
+      "Bu_Show_All": "Agrandir",
+      "Bu_Hide_All": "Réduire",
+      "Bu_Deleg": "Délégation",
+      "Bu_Begin": "Début",
+      "Bu_Fin": "Fin",
+      "Bu_Target": "Bureau cible",
+      "Bu_Prop": "Propriétaires",
+      "Bu_Sec": "Secretaires",
+      "Bu_Shortname": "Nom court",
+      "Bu_Name": "Titre",
+      "Bu_Desc": "Description",
+      "Bu_Edit": "Modifier",
+      "Bu_No_Deleg": "Aucune délégation",
+
+
+      "_comment": "--- MODAL ---",
+      "BuMod_Create": "Créer un bureau",
+      "BuMod_Edit": "Modifier le bureau",
+      "BuMod_Saving": "Sauvegarde en cours...",
+      "BuMod_Pattern": "Attention, ceci doit terminer par un caractère alphanumérique et les caractères suivants sont interdits : & \" £ * / < > ? % | + ;",
+      "BuMod_Isdiff": "Un bureau ayant le même nom existe déjà",
+
+      "BuMod_General": "Général",
+      "BuMod_Show_Next": "Afficher les dossiers à venir",
+      "BuMod_Sup" : "Supérieur Hiérarchique",
+      "BuMod_Actual" : "Actuel",
+
+      "BuMod_Actors": "Acteurs",
+      "BuMod_Result": "Utilisateurs",
+      "BuMod_Result_None": "Aucun résultat",
+      "BuMod_None_Prop": "Aucun propriétaire",
+      "BuMod_None_Sec": "Aucun secrétaire",
+
+      "BuMod_Habil": "Habilitations",
+      "BuMod_Habil_All": "Toutes les habilitations sont activées",
+      "BuMod_Habil_Select": "Sélectionner les habilitations",
+      "BuMod_Habil_Create": "Créer des dossiers",
+      "BuMod_Habil_Handle": "Traiter des dossiers",
+      "BuMod_Habil_Chain": "Enchaîner des dossiers terminés dans un nouveau circuit",
+      "BuMod_Habil_Archive": "Traiter des dossiers en fin de circuit",
+      "BuMod_Habil_Send": "Gérer des dossiers avec le secrétariat",
+
+      "BuMod_Meta": "Métadonnées",
+      "BuMod_Meta_Info": "Métadonnées visibles dans les filtres utilisateur",
+
+      "BuMod_Assoc": "Bureaux associés",
+      "BuMod_Assoc_Info": "Les bureaux sélectionnés seront présentés dans les écrans de gestion de délégation et opérations de transfert de signature ou de visa, demande d'avis complémentaire, bureaux variables et \"Notifier\"",
+      "BuMod_Assoc_All": "Tout sélectionner",
+      "BuMod_Assoc_SelNone": "Ne rien sélectionner",
+      "BuMod_Assoc_Select": "Bureaux sélectionnés",
+      "BuMod_Assoc_None": "Aucun bureau",
+
+      "BuMod_Deleg": "Délégation",
+      "BuMod_Deleg_State": "État actuel",
+      "BuMod_Deleg_Enabled": "Activé",
+      "BuMod_Deleg_Disabled": "Désactivé",
+      "BuMod_Deleg_Required": "Au moins une des deux dates est requise",
+      "BuMod_Deleg_Enable": "Activer la délégation",
+      "BuMod_Deleg_Current": "Dossiers en cours",
+      "BuMod_Deleg_Loop": "Attention : Délégation en boucle ! Cette configuration ne sera pas sauvegardée."
+    }
+  }
+}

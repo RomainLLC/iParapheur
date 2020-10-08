@@ -1,0 +1,175 @@
+<!--
+
+        This file is part of IPARAPHEUR-WEB.
+
+        Copyright (c) 2012, ADULLACT-Projet
+        Initiated by ADULLACT-Projet S.A.
+        Developped by ADULLACT-Projet S.A.
+
+        contact@adullact-projet.coop
+
+        IPARAPHEUR-WEB is free software: you can redistribute it and/or modify
+        it under the terms of the GNU Affero General Public License as published by
+        the Free Software Foundation, either version 3 of the License, or
+        (at your option) any later version.
+
+        IPARAPHEUR-WEB is distributed in the hope that it will be useful,
+        but WITHOUT ANY WARRANTY; without even the implied warranty of
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        GNU Affero General Public License for more details.
+
+        You should have received a copy of the GNU Affero General Public License
+        along with IPARAPHEUR-WEB.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+
+<div ng-controller="NavbarController" class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-exl-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+
+        <!--Logged in-->
+        <a ng-if="isLoggedIn" href="#/" class="brand" ng-show="!showBrand">
+            <img class="brand logo" imageonload="logoLoaded()"
+                 ng-src="{{'/themes/' + (config.tenant ? config.tenant + '/' : '') + 'logo.png'}}">
+        </a>
+        <a ng-if="showBrand && isLoggedIn" class="navbar-brand" href="#/">i-Parapheur</a>
+
+        <!--Logged out-->
+        <span ng-if="!isLoggedIn" class="brand" ng-show="!showBrand">
+            <img class="brand logo" imageonload="logoLoaded()"
+                 ng-src="{{'/themes/' + (config.tenant ? config.tenant + '/' : '') + 'logo.png'}}">
+        </span>
+        <span ng-if="showBrand && !isLoggedIn" class="navbar-brand">i-Parapheur</span>
+
+    </div>
+    <div ng-if="isLoggedIn" class="collapse navbar-collapse navbar-exl-collapse">
+        <ul class="nav navbar-nav">
+            <li ng-class="{active:pagename()=='/bureaux' || pagename()=='/' || pagename()==''}" class="desk icon">
+                <a href="#/bureaux" tooltip="{{'ChoixBureau' | translate}}" tooltip-placement="bottom">
+                    <i class="fa fa-home fa-lg"></i>
+                </a>
+            </li>
+            <li bureau is-thumbnail="false" b="currentBureau" ng-show="!empty(currentBureau)" id="currentBureauLi"
+                ng-class="{active:pagename()=='/dashboard'}">
+            </li>
+            <li ng-show="pagename().substring(0,10) == '/dashboard' || pagename()=='/archives'">
+                <button ng-disabled="flags.backdrop" ng-click="showFiltersWindow()" ip-slide="#dashboard-filters"
+                        class="btn btn-info show-hide-filters navbar-btn" type="button" id="show-hide-filters">
+                    <i class="fa fa-filter"></i>
+                    {{"Filters" | translate}}
+                </button>
+            </li>
+        </ul>
+        <form role="search" id="navBarSearch" class="navbar-form navbar-right">
+            <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-search fa-fw"></i></span>
+                    <input ng-disabled="flags.backdrop" type="text" size="22" class="form-control unvalidate"
+                           placeholder="{{pagename() === '/archives' ? ('Search_Archive' | translate) : ('Search_Dossier' | translate)}}"
+                           ng-model="asyncSelected.title"
+                           typeahead="dossier as dossier.title for dossier in getDossiersNavbar($viewValue)"
+                           typeahead-loading="loadingLocations" typeahead-on-select="selectAsyncDossier($model)">
+                </div>
+
+            </div>
+        </form>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown auto"
+                ng-class="{active:pagename()=='/options' || pagename().indexOf('/admin') !== -1 || pagename()=='/delegation' || pagename()=='/about'}">
+                <a class="dropdown-toggle">{{config.fullname}}<b class="caret"></b></a>
+                <ul class="dropdown-menu user">
+                    <li ng-class="{active:pagename()=='/options'}">
+                        <a href="#/options">
+                            <i class="fa fa-fw fa-cogs"></i>
+                            {{"Prefs" | translate}}
+                        </a>
+                    </li>
+                    <li ng-class="{active:pagename()=='/stats'}">
+                        <a href="#/stats">
+                            <i class="fa fa-fw fa-bar-chart-o"></i>
+                            {{"Stats" | translate}}
+                        </a>
+                    </li>
+                    <li ng-show="config.isAdmin || config.isAdminCircuits() || config.isAdminFonctionnel()"
+                        ng-class="{active:pagename().indexOf('/admin') !== -1}">
+                        <a href="#/admin">
+                            <i class="fa fa-fw fa-wrench"></i>
+                            {{"Admin_Title" | translate}}
+                        </a>
+                    </li>
+                    <li ng-show="!empty(currentBureau)" id="topbarDelegation"
+                        ng-class="{active:pagename()=='/delegation'}">
+                        <a href="#/delegation">
+                            <i class="fa fa-fw fa-share"></i>
+                            {{"Deleg" | translate}}
+                        </a>
+                    </li>
+                    <li class="divider"></li>
+                    <li ng-class="{active:pagename()=='/policy'}">
+                        <a href="#/policy">
+                            <i class="fa fa-user-secret fa-fw"></i>
+                            {{"Policy" | translate}}
+                        </a>
+                    </li>
+                    <li ng-class="{active:pagename()=='/about'}">
+                        <a href="#/about">
+                            <i class="fa fa-question fa-fw"></i>
+                            {{"About.About" | translate}}
+                        </a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a ng-if="config.connexionType === 'default'" id="logout" ng-click="logout()"
+                           href="{{context + '/dologout'}}">
+                            <i class="fa fa-sign-out fa-fw"></i>
+                            {{"Logout" | translate}}
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <ul ng-show="!empty(currentBureau) && currentBureau.habilitation.transmettre !== false" id="newFolderNav"
+            class="nav navbar-nav navbar-right">
+            <li class="auto">
+                <span style="margin-right: 15px;" ng-class="{disabled:pagename()=='/nouveau'}"
+                        tooltip="{{'NewDossier' | translate}}" tooltip-placement="bottom"
+                        ng-click="cleanCurrentDossier(); redirectToNew()"
+                        class="btn btn-success  navbar-btn">
+                    <i class="fa fa-plus"></i>
+                    {{"NewDossier" | translate}}
+                </span>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right" ng-if="properties['parapheur.ihm.archives.show'] === 'true'">
+            <li class="icon" ng-class="{active:pagename()=='/archives'}">
+                <a href="#/archives" tooltip="{{'ArchiveExplorer' | translate}}" tooltip-placement="bottom">
+                    <i class="fa-inbox fa fa-lg"></i>
+                </a>
+            </li>
+        </ul>
+        <ul class="nav navbar-right">
+            <li id="activityMonitor"></li>
+        </ul>
+    </div>
+</div>
+
+<div ng-if="loadingBureaux" style="position:absolute;left:0;right:0;">
+    <div style="position:relative;" class="nextDossierInfo">
+        <span class="text text-info col-md-12" style="margin-bottom:3%;">
+            <i class="fa fa-info-circle"></i> {{'Retrieving_desks___' | translate}}
+        </span>
+        <div style="width:100px;height:100px;" class="css-loader"></div>
+    </div>
+</div>
+
+<div ng-if="errorNotification.id" class="block-notification" ng-mouseover="stopErrorTask()"
+     ng-mouseleave="startErrorTask()">
+    <span class="alert alert-danger"><i class="fa fa-warning"></i> {{"ErrorDossier" | translate}}
+        <a class="pointer" ng-click="selectAsyncDossier(errorNotification)">{{errorNotification.titre}}</a> : {{errorNotification.message}}
+    </span>
+</div>

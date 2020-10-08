@@ -1,0 +1,6 @@
+<div id="annoter" class="well dashlet" ng-show="dossier.actions.indexOf('REJET') !== -1">
+    <h3 ng-click="element.show = !element.show" class="pointer text-info">{{'annoter.annotate' | translate}}</h3>
+    <div class="dashlet-content" bn-slide-show="element.show" >
+        <textarea style="resize: vertical; margin-bottom:10px;" ng-change="changedAnnotation(local.annot)" ng-model="local.annot" class="form-control" rows="3"></textarea>
+    </div>
+</div>

@@ -1,0 +1,19 @@
+{
+  "validationModal": {
+    "folders_validation": "Validation de dossiers",
+    "destination": "Destination",
+    "type_your_search_tooltip": "Tapez votre recherche puis choisissez un bureau afin de le sélectionner.",
+    "search_by_title_name_or_user": "Recherche par titre, nom, ou utilisateur",
+    "no_folder_selected": "Pas de bureau selectionné",
+    "selected_folder": "Bureau selectionné",
+    "you_can_t_move_this_folder_in_any_desk": "Vous ne pouvez transférer ce dossier vers aucun bureau.",
+    "public_annotation": "Annotation publique",
+    "private_annotation": "Annotation privée",
+    "folder_list": "Liste des dossiers",
+    "consecutive_steps": "Etapes consécutives",
+    "validate_every_consecutive_step": "Valider toutes les étapes consécutives",
+    "retrieving_signature_informations": "Récupération des informations de signature",
+    "handled_folders": "Dossier(s) traité(s)",
+    "please_notify_me_when_validated": "Je souhaite être notifié de la validation de ce dossier"
+  }
+}

@@ -1,0 +1,267 @@
+/*noinspection CssOptimizeSimilarProperties*/
+.libriciel-background {
+    height: calc(101vh - (2 * 51px));
+    background-color: #E0EFFA;
+    background-image: linear-gradient(-1.2217rad, rgba(255, 255, 255, 0.5) 10%, transparent 10%),
+    linear-gradient(1.2217rad, transparent 85%, rgba(255, 255, 255, 0.5) 85%),
+    linear-gradient(-0.6981rad, rgba(255, 255, 255, 0.5) 15%, transparent 15%),
+    linear-gradient(1.2217rad, rgba(255, 255, 255, 0.5) 20%, transparent 20%),
+    linear-gradient(-0.7853rad, rgba(66, 161, 227, 0.08) 30%, transparent 30%),
+    linear-gradient(0.6981rad, rgba(217, 236, 250, 0.5) 40%, transparent 40%),
+    linear-gradient(1.3962rad, transparent 65%, rgba(255, 255, 255, 0.31) 65%),
+    linear-gradient(-1.0471rad, rgba(217, 236, 250, 0.5) 50%, transparent 50%),
+    linear-gradient(1.0471rad, rgba(255, 255, 255, 0.5) 60%, transparent 60%),
+    linear-gradient(-1.3962rad, rgba(255, 255, 255, 0.5) 70%, transparent 70%),
+    linear-gradient(1.3089rad, rgba(142, 199, 241, 0.5) 80%, transparent 80%),
+    linear-gradient(-1.3089rad, rgba(58, 139, 215, 0.55) 90%, transparent 90%),
+    linear-gradient(-1.3962rad, rgba(255, 255, 255, 0.5) 65%, transparent 70%);
+    display: flex;
+    align-items: center;
+    margin-top: 51px;
+}
+
+/* Form */
+
+.login-block {
+    border: 1px solid #080808;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    background-color: white;
+    display: flex;
+    padding: 0;
+}
+
+.collectivity-block {
+    background-color: #173A94;
+    border-right: solid #080808 1px;
+    padding: 30px;
+    display: flex;
+    align-items: center;
+}
+
+.collectivity-logo {
+    max-height: 100%;
+    max-width: 100px;
+}
+
+.form-block {
+    width: 546px;
+    padding: 24px 60px 48px 60px;
+}
+
+.main-logo {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    max-height: 66px;
+    width: 100%;
+    display: inline-block;
+}
+
+.control-label.normal-left {
+    text-align: left;
+    font-weight: normal;
+    padding-left: 0;
+}
+
+.color-inverse {
+    background-color: #222;
+    color: white;
+}
+
+.buffer-top {
+    margin-top: 12px;
+}
+
+.double-buffer-top {
+    margin-top: 24px;
+}
+
+/* /Form */
+
+/* Navbar */
+
+.navbar-font-buffer-top {
+    padding-top: 12px;
+}
+
+.navbar-icon-selected {
+    height: 34px;
+}
+
+.navbar-icon-reduced {
+    opacity: 0.5;
+    height: 29px;
+}
+
+.navbar-icons-buffer-top {
+    padding-top: 12px;
+}
+
+.navbar-text-buffer-top {
+    padding-top: 6px;
+}
+
+.navbar-font-reduced {
+    font-size: 22px;
+}
+
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
+
+.upper-logo {
+    max-height: 20px;
+}
+
+.row {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.form-horizontal .form-group {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.navbar-text {
+    color: #777;
+}
+
+#sizing-addon-password {
+    min-width:36px;
+}
+
+#sizing-addon-mail {
+    max-width:36px;
+}
+
+.fa-envelope {
+    font-size: 12px !important;
+}
+
+.no-buffer-bottom {
+    margin-bottom:0;
+}
+
+.navbar-fixed-bottom {
+    color: #777 !important;
+}
+
+.navbar-icons {
+    opacity: 0.3;
+    height: 29px;
+}
+
+.navbar-icons-selected {
+    opacity: 1;
+    height: 34px;
+}
+
+a:hover
+{
+    text-decoration:none;
+}
+
+/* /Navbar */
+
+.input-group-addon, .input-group-btn {
+    width:36px !important;
+}
+
+.form-group {
+    margin-bottom: 12px;
+}
+
+
+.forget-password {
+    text-align:center;
+    display: block;
+}
+
+.forget-password:hover {
+    cursor: pointer;
+}
+
+#forgot-form {
+    display:none;
+}
+
+.btn-cancel {
+    margin-right: 10px !important;
+}
+
+.info-reset {
+    margin-top: 15px !important;
+}
+
+[id^='state-'] {
+    display:none;
+}
+
+meter {
+    position: absolute;
+    bottom: -21px;
+    left: 36px;
+    width: 248px;
+
+    /* Reset the default appearance */
+    -moz-appearance: none;
+    appearance: none;
+
+    margin: 0 auto 1em;
+    height: 0.5em;
+
+    /* Applicable only to Firefox */
+    background: none;
+}
+
+meter::-webkit-meter-bar {
+    background: none;
+}
+
+/* Webkit based browsers */
+meter[value="1"]::-webkit-meter-optimum-value { background: #E51809; }
+meter[value="2"]::-webkit-meter-optimum-value { background: #FFAB03; }
+meter[value="3"]::-webkit-meter-optimum-value { background: #FFE00A; }
+meter[value="4"]::-webkit-meter-optimum-value { background: #83CB91; }
+meter[value="5"]::-webkit-meter-optimum-value { background: #247D34; }
+
+/* Gecko based browsers */
+meter[value="1"]::-moz-meter-bar { background: #E51809; }
+meter[value="2"]::-moz-meter-bar { background: #FFAB03; }
+meter[value="3"]::-moz-meter-bar { background: #FFE00A; }
+meter[value="4"]::-moz-meter-bar { background: #83CB91; }
+meter[value="5"]::-moz-meter-bar { background: #247D34; }
+
+[class^='force-'] {
+    font-size: 0.9em;
+    color: black;
+    padding: 5px 10px 5px 10px;
+}
+
+.force-0 {
+    background: #EF746B;
+}
+
+.force-1 {
+    background: #FFCD68;
+}
+
+.force-2 {
+    background: #FFEC6C;
+}
+
+.force-3 {
+    background: #ADDDB5;
+}
+
+.force-4 {
+    background: #31A947;
+}
+
+.feedback {
+    font-size: 90%;
+    padding: 0 .25em;
+    margin-top: 1em;
+}

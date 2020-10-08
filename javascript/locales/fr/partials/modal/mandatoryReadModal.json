@@ -1,0 +1,8 @@
+{
+  "mandatoryReadModal": {
+    "folder_reading_is_required": "Lecture du dossier obligatoire",
+    "the_download_link_is_available_below": "Le lien de téléchargement / visualisation est disponible ci-dessous.",
+    "this_folder_have_to_be_read_before_signing": "Ce dossier doit être lu avant de pouvoir être signé.",
+    "xemelios_reader": "Visionneuse Xemelios"
+  }
+}

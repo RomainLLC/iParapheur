@@ -1,0 +1,586 @@
+{
+  "\n                    Erreur : Le type de fichier séléctionné n'est pas géré par le i-Parapheur.\n                ": {
+    "value": "Erreur : Le type de fichier séléctionné n'est pas géré par le i-Parapheur.",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/nom-dossier.html"
+    ]
+  },
+  "\n                    Erreur : Le visuel doit être un fichier PDF.\n                ": {
+    "value": "Erreur : Le visuel doit être un fichier PDF.",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/nom-dossier.html"
+    ]
+  },
+  "\n            Chargement de l'aperçu du dossier...\n        ": {
+    "value": "Chargement de l'aperçu du dossier...",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/templates/apercu.html"
+    ]
+  },
+  "\n            Impossible de charger la visionneuse xemelios\n        ": {
+    "value": "Impossible de charger la visionneuse xemelios",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/templates/apercu.html"
+    ]
+  },
+  " Obligatoire": {
+    "value": "Obligatoire",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/details-dossier.html"
+    ]
+  },
+  "Action en cours de traitement. Dossier suivant sélectionné.": {
+    "value": "Action en cours de traitement. Dossier suivant sélectionné.",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/templates/apercu.html"
+    ]
+  },
+  "Actions": {
+    "value": "Actions",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/templates/admin/stats.html"
+    ]
+  },
+  "Actualisation du dossier, merci de patienter...": {
+    "value": "Actualisation du dossier, merci de patienter...",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/templates/apercu.html"
+    ]
+  },
+  "Agencement de l'écran sauvegardé.": {
+    "value": "Agencement de l'écran sauvegardé.",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/templates/apercu.html"
+    ]
+  },
+  "Ajouter une signature au dossier": {
+    "value": "Ajouter une signature au dossier",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/actions.html"
+    ]
+  },
+  "Annotation privée": {
+    "value": "Annotation privée",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/postit.html",
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/modals/actesModal.html"
+    ]
+  },
+  "Annotation publique": {
+    "value": "Annotation publique",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/modals/actesModal.html"
+    ]
+  },
+  "Annotations publiques": {
+    "value": "Annotations publiques",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/annotations.html"
+    ]
+  },
+  "Annoter": {
+    "value": "Annoter",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/annoter.html"
+    ]
+  },
+  "Annuler": {
+    "value": "Annuler",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/modals/actesModal.html"
+    ]
+  },
+  "Aucun document": {
+    "value": "Aucun document",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/nom-dossier.html"
+    ]
+  },
+  "Aucun dossier trouvé": {
+    "value": "Aucun dossier trouvé",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/liste-dossiers.html"
+    ]
+  },
+  "Aucun visuel à afficher": {
+    "value": "Aucun visuel à afficher",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/templates/apercu.html"
+    ]
+  },
+  "Chargement de la visionneuse xemelios en cours...": {
+    "value": "Chargement de la visionneuse xemelios en cours...",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/templates/apercu.html"
+    ]
+  },
+  "Circuit de validation": {
+    "value": "Circuit de validation",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/circuit.html"
+    ]
+  },
+  "Classification": {
+    "value": "Classification",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/modals/actesModal.html"
+    ]
+  },
+  "Créations": {
+    "value": "Créations",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/templates/admin/stats.html"
+    ]
+  },
+  "Cumul par": {
+    "value": "Cumul par",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/templates/admin/stats.html"
+    ]
+  },
+  "Cumulatif": {
+    "value": "Cumulatif",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/templates/admin/stats.html"
+    ]
+  },
+  "Date de la décision": {
+    "value": "Date de la décision",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/modals/actesModal.html"
+    ]
+  },
+  "Debut": {
+    "value": "Debut",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/templates/admin/stats.html"
+    ]
+  },
+  "Demande d'avis complémentaire": {
+    "value": "Demande d'avis complémentaire",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/actions.html"
+    ]
+  },
+  "Disabled": {
+    "value": "Disabled",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/templates/admin/stats.html"
+    ]
+  },
+  "Dossier": {
+    "value": "Dossier",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/details-dossier.html"
+    ]
+  },
+  "Dossier déplacé, archivé ou supprimé.": {
+    "value": "Dossier déplacé, archivé ou supprimé.",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/templates/apercu.html"
+    ]
+  },
+  "Dossiers Créés": {
+    "value": "Dossiers Créés",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/javascript/app/controllers.js",
+      "iparapheur-surf-webapp/src/main/webapp/javascript/app/controllers/admin/statsAdminController.js"
+    ]
+  },
+  "Dossiers Emis": {
+    "value": "Dossiers Emis",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/javascript/app/controllers.js",
+      "iparapheur-surf-webapp/src/main/webapp/javascript/app/controllers/admin/statsAdminController.js"
+    ]
+  },
+  "Dossiers Instruits": {
+    "value": "Dossiers Instruits",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/javascript/app/controllers.js",
+      "iparapheur-surf-webapp/src/main/webapp/javascript/app/controllers/admin/statsAdminController.js"
+    ]
+  },
+  "Dossiers Refusés": {
+    "value": "Dossiers Refusés",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/javascript/app/controllers.js",
+      "iparapheur-surf-webapp/src/main/webapp/javascript/app/controllers/admin/statsAdminController.js"
+    ]
+  },
+  "Dossiers Traités": {
+    "value": "Dossiers Traités",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/javascript/app/controllers.js",
+      "iparapheur-surf-webapp/src/main/webapp/javascript/app/controllers/admin/statsAdminController.js"
+    ]
+  },
+  "Dossiers en délégation": {
+    "value": "Dossiers en délégation",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/liste-dossiers.html"
+    ]
+  },
+  "Emissions": {
+    "value": "Emissions",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/templates/admin/stats.html"
+    ]
+  },
+  "En cours": {
+    "value": "En cours",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/liste-dossiers.html"
+    ]
+  },
+  "En fin de circuit": {
+    "value": "En fin de circuit",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/liste-dossiers.html"
+    ]
+  },
+  "En retard": {
+    "value": "En retard",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/liste-dossiers.html"
+    ]
+  },
+  "Enchaîner un circuit": {
+    "value": "Enchaîner un circuit",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/actions.html"
+    ]
+  },
+  "Envoyer au secrétariat": {
+    "value": "Envoyer au secrétariat",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/actions.html"
+    ]
+  },
+  "Envoyer par e-mail": {
+    "value": "Envoyer par e-mail",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/actions.html"
+    ]
+  },
+  "Extension attendue : .p7s ou .sig": {
+    "value": "Extension attendue : .p7s ou .sig",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/actions.html"
+    ]
+  },
+  "Faux": {
+    "value": "Faux",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/details-dossier.html"
+    ]
+  },
+  "Filtre par types": {
+    "value": "Filtre par types",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/templates/admin/stats.html"
+    ]
+  },
+  "Filtres disponibles :": {
+    "value": "Filtres disponibles :",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/liste-dossiers.html"
+    ]
+  },
+  "Fin": {
+    "value": "Fin",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/templates/admin/stats.html"
+    ]
+  },
+  "Générer": {
+    "value": "Générer",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/templates/admin/stats.html"
+    ]
+  },
+  "Imprimer": {
+    "value": "Imprimer",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/actions.html"
+    ]
+  },
+  "Instructions": {
+    "value": "Instructions",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/templates/admin/stats.html"
+    ]
+  },
+  "Jour": {
+    "value": "Jour",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/templates/admin/stats.html"
+    ]
+  },
+  "Journal d'événements": {
+    "value": "Journal d'événements",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/actions.html"
+    ]
+  },
+  "Le fichier": {
+    "value": "Le fichier",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/nom-dossier.html"
+    ]
+  },
+  "Liste personnalisée": {
+    "value": "Liste personnalisée",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/liste-dossiers.html"
+    ]
+  },
+  "Mise à jour visuel...": {
+    "value": "Mise à jour visuel...",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/nom-dossier.html"
+    ]
+  },
+  "Mois": {
+    "value": "Mois",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/templates/admin/stats.html"
+    ]
+  },
+  "Métadonnées sauvegardées": {
+    "value": "Métadonnées sauvegardées",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/details-dossier.html"
+    ]
+  },
+  "Nature": {
+    "value": "Nature",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/modals/actesModal.html"
+    ]
+  },
+  "Numéro de l'acte": {
+    "value": "Numéro de l'acte",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/modals/actesModal.html"
+    ]
+  },
+  "Objet": {
+    "value": "Objet",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/modals/actesModal.html"
+    ]
+  },
+  "Obligatoire": {
+    "value": "Obligatoire",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/modals/actesModal.html"
+    ]
+  },
+  "Page précédente": {
+    "value": "Page précédente",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/liste-dossiers.html",
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/templates/apercu.html"
+    ]
+  },
+  "Page suivante": {
+    "value": "Page suivante",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/liste-dossiers.html",
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/templates/apercu.html"
+    ]
+  },
+  "Pas de circuit défini pour ce dossier": {
+    "value": "Pas de circuit défini pour ce dossier",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/circuit.html"
+    ]
+  },
+  "Periode": {
+    "value": "Periode",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/templates/admin/stats.html"
+    ]
+  },
+  "Personnalisé": {
+    "value": "Personnalisé",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/liste-dossiers.html"
+    ]
+  },
+  "Refus": {
+    "value": "Refus",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/templates/admin/stats.html"
+    ]
+  },
+  "Remplacement...": {
+    "value": "Remplacement...",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/nom-dossier.html"
+    ]
+  },
+  "Retournés": {
+    "value": "Retournés",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/liste-dossiers.html"
+    ]
+  },
+  "Récupérables": {
+    "value": "Récupérables",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/liste-dossiers.html"
+    ]
+  },
+  "Résultat": {
+    "value": "Résultat",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/templates/admin/stats.html"
+    ]
+  },
+  "Sans filtre": {
+    "value": "Sans filtre",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/liste-dossiers.html"
+    ]
+  },
+  "Sauvegarde...": {
+    "value": "Sauvegarde...",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/nom-dossier.html"
+    ]
+  },
+  "Sauvegarder les métadonnées": {
+    "value": "Sauvegarder les métadonnées",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/details-dossier.html"
+    ]
+  },
+  "Semaine": {
+    "value": "Semaine",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/templates/admin/stats.html"
+    ]
+  },
+  "Signature sauvegardée": {
+    "value": "Signature sauvegardée",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/actions.html"
+    ]
+  },
+  "Sous-Type": {
+    "value": "Sous-Type",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/templates/admin/stats.html"
+    ]
+  },
+  "Sous-type": {
+    "value": "Sous-type",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/details-dossier.html"
+    ]
+  },
+  "Statistiques": {
+    "value": "Statistiques",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/templates/admin/stats.html"
+    ]
+  },
+  "Statut TdT": {
+    "value": "Statut TdT",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/details-dossier.html"
+    ]
+  },
+  "Suppression...": {
+    "value": "Suppression...",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/nom-dossier.html"
+    ]
+  },
+  "Traitements": {
+    "value": "Traitements",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/templates/admin/stats.html"
+    ]
+  },
+  "Traités": {
+    "value": "Traités",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/liste-dossiers.html"
+    ]
+  },
+  "Transférer le dossier à signer": {
+    "value": "Transférer le dossier à signer",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/actions.html"
+    ]
+  },
+  "Type": {
+    "value": "Type",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/details-dossier.html"
+    ]
+  },
+  "Types": {
+    "value": "Types",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/templates/admin/stats.html"
+    ]
+  },
+  "Valider": {
+    "value": "Valider",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/modals/actesModal.html"
+    ]
+  },
+  "Visibilité": {
+    "value": "Visibilité",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/details-dossier.html"
+    ]
+  },
+  "Vrai": {
+    "value": "Vrai",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/details-dossier.html"
+    ]
+  },
+  "existe déjà !": {
+    "value": "existe déjà !",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/nom-dossier.html"
+    ]
+  },
+  "lu": {
+    "value": "lu",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/details-dossier.html"
+    ]
+  },
+  "non lu": {
+    "value": "non lu",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/details-dossier.html"
+    ]
+  },
+  "À traiter": {
+    "value": "À traiter",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/liste-dossiers.html"
+    ]
+  },
+  "À transmettre": {
+    "value": "À transmettre",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/liste-dossiers.html"
+    ]
+  },
+  "À venir": {
+    "value": "À venir",
+    "files": [
+      "iparapheur-surf-webapp/src/main/webapp/WEB-INF/pages/app/partials/dashlets/liste-dossiers.html"
+    ]
+  }
+}

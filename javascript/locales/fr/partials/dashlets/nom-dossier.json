@@ -1,0 +1,20 @@
+{
+  "nom-dossier": {
+    "noDocument": "Aucun document",
+    "deleting": "Suppression...",
+    "saving": "Sauvegarde...",
+    "replacing": "Remplacement...",
+    "updatingVisual": "Mise à jour du visuel...",
+    "errorFileTypeNotSupported": "Erreur : Le type de fichier séléctionné n'est pas géré par le i-Parapheur.",
+    "errorVisualShouldBeAPdfFile": "Erreur : Le visuel doit être un fichier PDF.",
+    "replaceVisual": "Modifier le visuel",
+    "file-filename-AlreadyExists": "Le fichier -filename- existe déjà !",
+    "download_pdf": "Télécharger le document PDF",
+    "download_attest": "Télécharger l'attestation de signature",
+    "attest_generating": "Attestation de signature en cours de génération",
+    "attest_error": "Erreur lors de la génération de l'attestation de signature",
+    "download": "Télécharger le document original",
+    "visualize": "Visualiser ce document en aperçu",
+    "visual_generating": "Visuel en cours de génération..."
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "rejectModal": {
+    "reject": "Rejeter",
+    "private_annotation": "Annotation privée",
+    "public_annotation": "Annotation publique",
+    "folder_list": "Liste des dossiers",
+    "handled_folders": "Dossier(s) traité(s)"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "confirmationModal": {
+    "confirmation": "Confirmation",
+    "reject_confirmation": "You are about to return the selected folder(s) to your superior :",
+    "get_back_confirmation": "You are about to get back the selected folder(s) :",
+    "delete_confirmation": "You are about to delete the selected folder(s) :",
+    "secretariat_confirmation": "You are about to sned the selected folder(s) to the secretariat :",
+    "recovery_confirmation": "Folder recovery",
+    "handled_folders": "Handled folder(s)"
+  }
+}
+

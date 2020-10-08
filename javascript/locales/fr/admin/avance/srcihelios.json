@@ -1,0 +1,21 @@
+{
+  "Admin": {
+    "Avance": {
+      "SRCI": {
+        "title": "Configuration SRCI HELIOS",
+        "account": "Identifiant du compte proxy",
+        "account_info": "Indiquer l'identifiant du compte déclaré sur le proxy SRCI",
+        "policy_identifier": "PES : Policy Identifier par défaut",
+        "policy_identifier_description": "PES : Policy Description par défaut",
+        "policy_digest": "PES : Policy Digest par défaut",
+        "spuri": "PES : SPURI par défaut",
+        "claimed_role": "PES: Claimed role",
+        "postal_code": "Code postal",
+        "city": "Ville",
+        "country": "Pays",
+        "save_config": "Enregistrer la configuration",
+        "saved": "Configuration sauvegardée."
+      }
+    }
+  }
+}

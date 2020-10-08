@@ -1,0 +1,18 @@
+{
+  "validationModal": {
+    "folders_validation": "Folders validation",
+    "destination": "Destination",
+    "type_your_search_tooltip": "Enter your search, then select a desk.",
+    "search_by_title_name_or_user": "Search by title, name, or user",
+    "no_folder_selected": "No folder selected",
+    "selected_folder": "Selected folder",
+    "you_can_t_move_this_folder_in_any_desk": "You can't move this folder in any desk",
+    "public_annotation": "Public annotation",
+    "private_annotation": "Private annotation",
+    "folder_list": "Folder list",
+    "consecutive_steps": "Consecutive steps",
+    "validate_every_consecutive_step": "Validate every consecutive step",
+    "retrieving_signature_informations": "Retrieving signature informations",
+    "handled_folders": "Handled folder(s)"
+  }
+}

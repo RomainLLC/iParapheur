@@ -1,0 +1,28 @@
+<div class="modal-header">
+    <h3>{{title | i18n}}</h3>
+</div>
+<div class="modal-body row">
+    <p class="text-info"><i class="fa fa-warning"></i> {{message  | i18n}}</p>
+    <div class="col-md-12">
+        <form name="simpleInput" class="form-horizontal" ng-submit="ok()">
+            <div class="form-group mandatory-group">
+                <span class="label label-danger"><i class="fa fa-warning"></i> {{'Mandatory' | translate}}</span>
+                <input class="form-control validation-control" type="text" id="in" name="in" ng-model="ctrl.value" required="required">
+            </div>
+            <!-- Pour l'envoi du formulaire avec touche entrée -->
+            <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/>
+        </form>
+    </div>
+
+</div>
+
+<div class="modal-footer">
+    <span class="btn btn-warning" ng-click="cancel()">
+        <i class="fa fa-times-circle-o"></i>
+        {{'Back' | translate}}
+    </span>
+    <span class="btn btn-primary" ng-disabled="!simpleInput.$valid" ng-click="ok()">
+        <i class="fa fa-floppy-o"></i>
+        {{'Save' | translate}}
+    </span>
+</div>

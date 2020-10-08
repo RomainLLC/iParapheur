@@ -1,0 +1,13 @@
+{
+  "nom-dossier": {
+    "noDocument": "No document",
+    "deleting": "Deleting...",
+    "saving": "Saving...",
+    "replacing": "Replacing...",
+    "updatingVisual": "Updating visual...",
+    "errorFileTypeNotSupported": "Error : The selected file type isn't supported by the i-Parapheur.",
+    "errorVisualShouldBeAPdfFile": "Error : The visual must be a PDF file.",
+    "replaceVisual": "Replacing visual",
+    "file-filename-AlreadyExists": "The file -filename- already exists !"
+  }
+}

@@ -1,0 +1,77 @@
+<div class="modal-header">
+    <h3>{{'notificationModal.notify_and_add_consultation_credentials' | translate}}</h3>
+</div>
+<div class="modal-body row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-6">
+                <legend>{{'notificationModal.available_desks' | translate}}</legend>
+                <div class="col-md-12">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-search fa-fw"></i></span>
+                        <input type="text" class="unvalidate form-control" placeholder="Recherche de bureau disponible"
+                               ng-model="searchBureau">
+                    </div>
+                </div>
+                <ul class="col-md-12 nav nav-pills nav-stacked list-data overflow">
+                    <li class="pointer" ng-click="addToNotifications(b.id)"
+                        ng-repeat="b in (bureau.associes | filter:searchBureau | notSameIdInArray:dossier.notifications)">
+                        <a>
+                            {{b.name}} <span style="float:right;" class="label label-success"><i
+                                class="fa fa-plus-circle"></i> {{'notificationModal.notify' | translate}}</span>
+                            <br/>
+                            <blockquote>
+                                <small>{{b.proprietaires | array2string:', '}}</small>
+                            </blockquote>
+                        </a>
+                    </li>
+                </ul>
+                <span class="text-info" ng-if="(bureau.associes | notSameIdInArray:dossier.notifications).length === 0">
+                    <i class="fa fa-info-circle"></i> {{'notificationModal.no_desk' | translate}}
+                </span>
+            </div>
+            <div class="col-md-6">
+                <legend>{{'notificationModal.desks_to_notify' | translate}}</legend>
+                <ul class="nav nav-pills nav-stacked list-data overflow">
+                    <li ng-class="notif.mandatory ? '': 'pointer'"
+                        ng-click="!notif.mandatory ? removeFromNotifications(notif):'';"
+                        ng-if="(bureau.associes | findWithId:notif.id).id"
+                        ng-init="b = (bureau.associes | findWithId:notif.id)"
+                        ng-repeat="notif in (dossier.notifications)">
+                        <a ng-if="!notif.mandatory">
+                            {{b.name}} <span style="float:right;" class="label label-danger"><i
+                                class="fa fa-times-circle"></i> {{'notificationModal.remove' | translate}}</span>
+                            <br/>
+                            <blockquote>
+                                <small>{{b.proprietaires | array2string:', '}}</small>
+                            </blockquote>
+                        </a>
+
+                        <div style="padding:2px 15px !important;" ng-if="notif.mandatory">
+                            {{b.name}}
+                            <br/>
+                            <blockquote>
+                                <small>{{b.proprietaires | array2string:', '}}</small>
+                            </blockquote>
+                        </div>
+                    </li>
+                </ul>
+                <span class="text-info" ng-if="dossier.notifications.length === 0">
+                    <i class="fa fa-info-circle"></i> {{'notificationModal.no_desk' | translate}}
+                </span>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-warning" ng-click="cancel()">
+        <i class="fa fa-times-circle-o"></i>
+        {{'Back' | translate}}
+    </button>
+    <button class="btn btn-primary" ng-click="ok()">
+        <i class="fa fa-check"></i>
+        {{'Confirm' | translate}}
+    </button>
+</div>

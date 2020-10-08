@@ -1,0 +1,170 @@
+<div id="actions" style="margin-top: 15px;">
+    <a ng-if="currentBureau.isSecretaire" ng-show="inArray('SECRETARIAT', dossier.actions) && !dossier.locked"
+       id="action-button-secretary" tooltip="{{'actions.returnFolder' | translate}}"
+       ng-click="launchModalWithRedirect('SECRETARIAT')" class="actions fa fa-user fa-2x text-muted">
+    </a>
+    <a ng-show="(dossier.actionDemandee === 'MAILSEC' || dossier.actionDemandee === 'MAILSECPASTELL') && dossier.isSent && !dossier.locked"
+       tooltip="{{'actions.showSecureMailInformations' | translate}}" ng-click="launchModalWithRedirect('MAILSECINFOS')"
+       id="action-button-infosMailSec" class="actions fa fa-info-circle fa-2x text-muted">
+    </a>
+    <a ng-show="inArray('MAILSEC', dossier.actions) && !dossier.locked" ng-click="launchModalWithRedirect('MAILSEC')"
+       tooltip="{{'actions.sendBySecureMail' | translate}}" id="action-button-emailSec"
+       class="actions fa fa-envelope fa-2x text-muted">
+    </a>
+    <a ng-show="inArray('CACHET', dossier.actions) && !dossier.locked" ng-click="launchModalWithRedirect('CACHET')"
+       id="action-button-cachet" tooltip="{{'actions.seal' | translate}}"
+       class="actions fa ls-stamp fa-2x text-muted">
+    </a>
+    <a ng-show="inArray('REMORD', dossier.actions) && !((dossier.actionDemandee === 'MAILSEC' || dossier.actionDemandee === 'MAILSECPASTELL') && dossier.isSent) && !dossier.locked"
+       tooltip="{{'actions.applyRemorseRight' | translate}}" id="action-button-remorse"
+       ng-click="launchModalWithRedirect('REMORD')" class="actions fa fa-reply fa-2x text-muted">
+    </a>
+    <a ng-show="inArray('REJET', dossier.actions) && dossier.actionDemandee === 'SIGNATURE' && dossier.readingMandatory && !dossier.hasRead && !dossier.locked"
+       ng-click="launchModal('READ')" tooltip="{{'actions.readingRequired' | translate}}" id="action-button-read"
+       class="actions fa fa-key fa-2x text-muted">
+    </a>
+    <a ng-show="inArray('RAZ', dossier.actions) && !dossier.locked" ng-click="launchModalWithRefresh('RAZ')"
+       id="action-button-raz" tooltip="{{'actions.correctAndReissue' | translate}}"
+       class="actions fa fa-recycle fa-2x text-muted">
+    </a>
+    <a ng-show="inArray('EDITION', dossier.actions) && !dossier.locked" id="action-button-pencil"
+       class="actions fa fa-pencil fa-2x text-muted" ng-click="editDossier()" tooltip="{{'actions.edit' | translate}}"
+       href="#/nouveau">
+    </a>
+    <a ng-show="((inArray('VISA', dossier.actions) && dossier.actionDemandee === 'VISA') || (inArray('SIGNATURE', dossier.actions) && !dossier.isSignPapier && (!dossier.readingMandatory || (dossier.readingMandatory && dossier.hasRead)))) && !dossier.isSent && !dossier.locked"
+       tooltip="{{dossier.actionDemandee === 'VISA' ? 'Viser': 'Signer'}}" ng-click="checkReadAndLaunchModalWithRedirect('VALIDATION')"
+       id="action-button-sign" ng-class="dossier.actionDemandee === 'VISA' ? 'fa-check-square-o': 'ls-signature'"
+       class="actions fa fa-2x text-muted">
+    </a>
+    <a ng-show="inArray('TDT_HELIOS', dossier.actions) && !dossier.locked"
+       ng-click="launchModalWithRedirect('TDT_HELIOS')" tooltip="{{'actions.sendToHeliosTdt' | translate}}"
+       id="action-button-tdt-helios" class="actions fa fa-cloud-upload fa-2x text-muted">
+    </a>
+    <a ng-show="inArray('TDT_ACTES', dossier.actions) && !dossier.locked"
+       ng-click="launchModalWithRedirect('TDT_ACTES')" tooltip="{{'actions.sendToActesTdt' | translate}}"
+       id="action-button-tdt-actes" class="actions fa fa-cloud-upload fa-2x text-muted">
+    </a>
+    <a ng-show="inArray('SIGNATURE', dossier.actions) && !dossier.circuit.isDigitalSignatureMandatory && !dossier.isSignPapier && !dossier.locked"
+       ng-click="launchModal('PAPIER')" id="action-button-papier" tooltip="{{'actions.paperSignature' | translate}}"
+       class="actions fa fa-file-text-o fa-2x text-muted">
+    </a>
+    <a ng-show="inArray('SIGNATURE', dossier.actions) && dossier.isSignPapier && !dossier.locked"
+       ng-click="launchModalWithRedirect('PAPIERSIGN')" id="action-button-papier-sign"
+       tooltip="{{'actions.paperSignature' | translate}}" class="actions fa fa-file-text fa-2x text-muted">
+    </a>
+    <a ng-show="inArray('REJET', dossier.actions)  && !((dossier.actionDemandee === 'MAILSEC' || dossier.actionDemandee === 'MAILSECPASTELL') && dossier.isSent) && !dossier.locked"
+       tooltip="{{'actions.reject' | translate}}" ng-click="launchModalWithRedirect('REJET')" id="action-button-reject"
+       class="actions fa fa-times fa-2x text-muted">
+    </a>
+    <a ng-show="inArray('ARCHIVAGE', dossier.actions) && !dossier.locked" id="action-button-archive"
+       tooltip="{{'actions.archive' | translate}}" ng-click="launchModalWithRedirect('ARCHIVAGE')"
+       class="actions fa fa-inbox fa-2x text-muted">
+    </a>
+    <a ng-show="inArray('SUPPRESSION', dossier.actions) && !dossier.locked" id="action-button-delete"
+       tooltip="{{'actions.delete' | translate}}" ng-click="launchModalWithRedirect('SUPPRESSION')"
+       class="actions fa fa-trash-o fa-2x text-muted">
+    </a>
+    <a ng-show="oneOrMoreAttestError() && !dossier.locked" id="action-button-refresh-attest"
+       tooltip="{{'actions.refresh-attest' | translate}}" ng-click="launchAttest()"
+       class="actions fa fa-search fa-2x text-muted">
+    </a>
+
+    <div class="btn-group" dropdown>
+        <span class="btn btn-default dropdown-toggle" id="dropdownActions">
+            <i class="fa fa-cogs"></i>
+            Actions
+            <i class="fa fa-caret-down"></i>
+        </span>
+        <ul class="dropdown-menu pull-right pointer" role="menu" aria-labelledby="dropdownActions">
+            <li ng-if="!currentBureau.isSecretaire"
+                ng-show="inArray('SECRETARIAT', dossier.actions) && !dossier.locked">
+                <a ng-click="launchModalWithRedirect('SECRETARIAT')" id="action-button-secretary">
+                    <i class="fa fa-fw fa-user"></i>
+                    {{'actions.sendToSecretariat' | translate}}
+                </a>
+            </li>
+            <li ng-show="inArray('EMAIL', dossier.actions)">
+                <a ng-click="launchModal('PRINT')" id="action-button-print" class="icon-print icon-large">
+                    <i class="fa fa-fw fa-print"></i>
+                    {{'actions.print' | translate}}
+                </a>
+            </li>
+            <li ng-show="inArray('EMAIL', dossier.actions)">
+                <a ng-click="launchModal('EMAIL')" id="action-button-email">
+                    <i class="fa fa-fw fa-paper-plane-o"></i>
+                    {{'actions.sendByMail' | translate}}
+                </a>
+            </li>
+            <li ng-show="inArray('ENCHAINER_CIRCUIT', dossier.actions) && !dossier.locked">
+                <a ng-click="launchModalWithRefresh('CHAIN')" id="action-button-chain">
+                    <i class="fa fa-fw fa-road"></i>
+                    {{'actions.chainCircuit' | translate}}
+                </a>
+            </li>
+            <li ng-show="inArray('AVIS_COMPLEMENTAIRE', dossier.actions) && !dossier.locked">
+                <a id="action-button-notifs" ng-click="launchModal('NOTIFICATIONS')">
+                    <i class="fa fa-fw fa-desktop"></i>
+                    {{'actions.notifyAndAddConsultationCredentials' | translate}}
+                </a>
+            </li>
+            <li ng-show="inArray('TRANSFERT_ACTION', dossier.actions) && !dossier.locked && dossier.actionDemandee === 'SIGNATURE'">
+                <a ng-click="launchModalWithRedirect('TRANSFERT_SIGNATURE')" id="action-button-changeSign">
+                    <i class="fa fa-fw fa-share"></i>
+                    {{'actions.transferFolderToSign' | translate}}
+                </a>
+            </li>
+            <li ng-show="inArray('TRANSFERT_ACTION', dossier.actions) && !dossier.locked && dossier.actionDemandee === 'VISA'">
+                <a ng-click="launchModalWithRedirect('TRANSFERT_VISA')" id="action-button-changeVisa">
+                    <i class="fa fa-fw fa-share"></i>
+                    {{'actions.transferFolderToValid' | translate}}
+                </a>
+            </li>
+            <li ng-show="inArray('AVIS_COMPLEMENTAIRE', dossier.actions) && !dossier.locked">
+                <a ng-click="launchModalWithRedirect('AVIS_COMPLEMENTAIRE')" id="action-button-avisComp">
+                    <i class="fa fa-fw fa-retweet"></i>
+                    {{'actions.askingForAdditionalOpinion' | translate}}
+                </a>
+            </li>
+            <li ng-show="inArray('JOURNAL', dossier.actions)">
+                <a ng-click="launchModal('JOURNAL')" id="action-button-journal">
+                    <i class="fa fa-fw fa-list-alt"></i>
+                    {{'actions.eventLog' | translate}}
+                </a>
+            </li>
+            <li ng-show="inArray('EDITION', dossier.actions) && !dossier.locked && (dossier.circuit.sigFormat.indexOf('PKCS#7') !== -1 || dossier.circuit.sigFormat.indexOf('XAdES/detached') !== -1)"
+                style="height:26px;">
+                <a style="height:100%;">
+                    <form novalidate name="addSig"
+                          class="form-horizontal"
+                          fileupload="signature"
+                          one-file="true"
+                          submit-button=".launchUpload"
+                          wrong-type="apercu.signature.wrongTypeSig(ext)"
+                          fileinput="#addSignInput"
+                          file-added="apercu.signature.sigAdded(files)"
+                          upload-success="apercu.signature.sigUploaded(data, index)"
+                          action="{{context + '/base64encode'}}"
+                          method="POST"
+                          enctype="multipart/form-data">
+                        <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+                        <div class="fileupload-buttonbar">
+                            <!-- The fileinput-button span is used to style the file input field as button -->
+                            <span class="fileinput-button force-display pointer">
+                                <i class="fa fa-fw fa-certificate"></i>
+                                {{'actions.addSignatureToFolder' | translate}}
+                                <input id="addSignInput" type="file" name="file" ng-click="$event.stopPropagation()">
+                            </span>
+                        </div>
+                    </form>
+                </a>
+            </li>
+        </ul>
+
+    </div>
+    <div class="text text-danger" ng-if="apercu.signature.sigWrongType">
+        <i class="fa fa-times"></i> {{'actions.expectedExentions' | translate}} : .p7s / .sig
+    </div>
+    <div class="text text-success" ng-if="apercu.signature.isSigUploaded">
+        <i class="fa fa-check"></i> {{'actions.signatureSaved' | translate}}
+    </div>
+</div>

@@ -1,0 +1,10 @@
+{
+  "signPaperModal": {
+    "signature_paper_confirmation": "Paper signature confirmation",
+    "Transmit_after_printing_and_paper_signature": "Confirming printing and paper signature",
+    "public_annotation": "Public annotation",
+    "private_annotation": "Private annotation",
+    "folder_list": "Folder list",
+    "handled_folders": "Handled folder(s)"
+  }
+}

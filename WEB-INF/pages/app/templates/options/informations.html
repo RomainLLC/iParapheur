@@ -1,0 +1,70 @@
+<div>
+    <h2 class="underscore">{{"Options.Pass_Title" | translate}}</h2>
+    <form role="form" name='password' class="form-horizontal" ng-class="{launched: !respPass.error && !respPass.success && respPass.status.code != 401 && launched}" novalidate>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="control-label col-md-4" for="password">{{'Options.Pass_Current' | translate}}</label>
+                <div class="col-md-6">
+                    <input type="password" id="password" class="form-control" name="password"
+                           placeholder="{{'Options.Pass_Current' | translate}}" ng-model="newpass.old" required>
+                    <div class="input-help">
+                        <h4>{{'Options.Pass_Current_Alert' | translate}}</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-4" for="newpass">{{'Options.Pass_New' | translate}}</label>
+                <div class=" col-md-6">
+                    <input check-strength="{{properties['parapheur.ihm.password.strength']}}" type="password"
+                           id="newpass" class="form-control" name="newpass"
+                           placeholder="{{'Options.Pass_New' | translate}}" ng-model="newpass.newOne" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-4" for="confirmpass">{{'Options.Pass_Confirm' | translate}}</label>
+                <div class="col-md-6">
+                    <input type="password" class="form-control" confirm-with="newpass" id="confirmpass" name="confirm"
+                           placeholder="{{'Options.Pass_Confirm' | translate}}" ng-model="newpass.confirm" required>
+                    <div class="input-help">
+                        <h4>{{'Options.Pass_Confirm_Alert' | translate}}</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="alert alert-success col-md-4" ng-show="respPass.success">{{'Options.Pass_Success' |
+                    translate}}
+                </div>
+                <div class="alert alert-error col-md-4" ng-show="respPass.error">{{'Options.Pass_Error' | translate}}
+                </div>
+                <div class="alert alert-warning col-md-4" ng-show="respPass.status.code == 401">{{'Options.Pass_Invalid'
+                    | translate}}
+                </div>
+                <div class="alert alert-info col-md-4"
+                     ng-hide="respPass.error || respPass.success || respPass.status.code == 401 || !launched">
+                    <throbber></throbber>
+                    <span>{{'Options.Pass_Saving' | translate}}</span>
+                </div>
+                <div class="col-md-4" ng-show="!launched"></div>
+                <div class="controls col-md-4">
+                    <button type="submit" ng-init="launched = false;" ng-click="changePassword(); launched = true;"
+                            class="btn btn-primary">
+                        <i class="fa fa-floppy-o"></i>
+                        {{'Options.Pass_Save' | translate}}
+                    </button>
+                    <button class="btn btn-primary" disabled>
+                        <i class="fa fa-floppy-o"></i>
+                        {{'Options.Pass_Save' | translate}}</button>
+                </div>
+
+            </div>
+        </div>
+
+        <div strength-result="{{properties['parapheur.ihm.password.strength']}}" error="password.newpass.$error"
+             class="col-md-6" ng-if="password.newpass.$error._length != undefined"></div>
+
+    </form>
+
+</div>

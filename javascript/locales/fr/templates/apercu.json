@@ -1,0 +1,26 @@
+{
+  "apercu": {
+    "Show_with_PDF_reader": "Visualiser le PDF",
+    "Save_screen_layout": "Enregistrer l'agencement de cet écran",
+    "Show_with_Xemelios_viewer": "Visualiser dans la visionneuse Xemelios",
+    "View_folder_in_fullscreen_mode": "Visualiser le dossier en plein écran",
+    "Exit_fullscreen_mode": "Quitter le mode plein écran",
+    "Action_pending_Next_folder_selected": "Action en cours de traitement. Dossier suivant sélectionné.",
+    "No_visual_to_display": "Aucun visuel à afficher",
+    "Visual_generating": "Visuel en cours de génération...",
+    "Screen_layout_saved": "Agencement de l'écran sauvegardé.",
+    "Folder_refreshing_Please_wait": "Actualisation du dossier, merci de patienter...",
+    "Next_page": "Page suivante",
+    "Previous_page": "Page précédente",
+    "Loading_Xemelios_viewer___": "Chargement de la visionneuse xemelios en cours...",
+    "Cant_load_the_Xemelios_viewer": "Impossible de charger la visionneuse xemelios",
+    "Loading_folder_preview___": "Chargement de l'aperçu du dossier...",
+    "Moved_archived_or_deleted_folder": "Dossier déplacé, archivé ou supprimé.",
+    "position_signature": "Positionner la signature",
+    "position_cachet": "Positionner le cachet serveur",
+    "position_mode_active": "Vous êtes en mode positionnement de signature",
+    "position_cachet_mode_active": "Vous êtes en mode positionnement de cachet serveur",
+    "refresh_signature_attestations" : "Attestations de signature",
+    "refresh_signature_attestations_detail": "Récupérer les attestations de signature en erreur sur ce dossier ?"
+  }
+}

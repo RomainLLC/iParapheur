@@ -1,0 +1,124 @@
+<div>
+    <div style="top:100px;" class="nextDossierInfo" ng-if="!slowMailsec.isInit">
+            <span class="text text-info">
+                {{'Admin.Avance.getting_infos' | translate}}
+            </span>
+        <span style="position: relative; width: 0px; z-index: 2000000000; right: 140px; top: 100px;" us-spinner="{radius:20, width:8, length: 16}" ></span>
+    </div>
+    <div class="col-md-12" ng-if="slowMailsec.isInit">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>{{'Admin.Avance.Mailsec.title' | translate}}</h3>
+            </div>
+        </div>
+        <div class="row">
+            <form submit-button=".launchUploadMailsec" one-file="true" fileupload="certificat" file-added="slowMailsec.certAdded(files)" wrong-type="slowMailsec.wrongType(ext)" fileinput="#fileinput" upload-success="slowMailsec.fileEncoded(data)" action="{{context + '/base64encode'}}" method="POST" enctype="multipart/form-data" novalidate name="modalForm" class="form-horizontal">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-12">
+
+                            <div class="form-group">
+                                <label class="control-label col-sm-3" for="serveurMailsec">{{'Admin.Avance.Mailsec.server_name' | translate}}</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control unvalidate" type="text" id="serveurMailsec" name="serveurMailsec" ng-change="slowMailsec.infoChanged()" placeholder="{{slowMailsec.config.server}}" ng-model="slowMailsec.config.server" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-sm-3" for="portMailsec">{{'Admin.Avance.Mailsec.server_port' | translate}}</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control unvalidate" type="text" id="portMailsec" name="portMailsec" ng-change="slowMailsec.infoChanged()" placeholder="{{slowMailsec.config.port}}" ng-model="slowMailsec.config.port" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="display:inline-block;">
+                                <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+                                <div class="fileupload-buttonbar form-group" style="margin-bottom:0;">
+                                    <!-- The fileinput-button span is used to style the file input field as button -->
+                                    <div class="col-md-6">
+                                        <div class="col-md-12">
+                                            <span style="display:block !important;" class="btn btn-info fileinput-button">
+                                                <i class="icon-pencil icon-white"></i>
+                                                <span>{{'Admin.Avance.Mailsec.certificate' | translate}}</span>
+                                                <input id="fileinput" type="file" name="file">
+                                            </span>
+                                            <span ng-if="slowMailsec.typeError" class="text-danger"><i class="fa fa-times"></i> {{'Admin.Avance.Mailsec.certificate_error' | translate}}</span>
+                                        </div>
+                                        <div class="col-md-12" style="float:left;">
+                                            <span>{{'Admin.Avance.Mailsec.certificate_sel' | translate}} : {{slowMailsec.filename}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6" style="display:inline-block;">
+                                        <div>
+                                            <p>{{'Admin.Avance.Mailsec.certificate_actual' | translate}} : {{slowMailsec.config.name}}<br>
+                                                {{'Admin.Avance.Mailsec.certificate_expiration' | translate}} : {{slowMailsec.config.dateLimite}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-sm-3" for="passwordMailsec">{{'Admin.Avance.Mailsec.certificate_passwd' | translate}}</label>
+                                <div class="col-sm-9">
+                                    <input class="form-control unvalidate" type="text" id="passwordMailsec" name="passwordMailsec" ng-change="slowMailsec.infoChanged()" placeholder="{{slowMailsec.config.password}}" ng-model="slowMailsec.config.password" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-6 row">
+                                    <div class="col-md-12">
+                                    <span>{{'Admin.Avance.Mailsec.certificate_passwd' | translate}} :
+                                        <i class="fa fa-check fa-2x" style="color:green;" ng-show="slowMailsec.config.isPwdGoodForPkcs === 'ok'"></i>
+                                        <i class="fa fa-times fa-2x" style="color:red;" ng-show="slowMailsec.config.isPwdGoodForPkcs !== 'ok'"></i>
+                                    </span>
+                                    </div>
+                                    <div class="col-md-12">
+                                    <span ng-if="slowMailsec.config.listeLogins.length > 1">{{'Admin.Avance.Mailsec.connection_with_user' | translate}} :
+                                        <i class="fa fa-check fa-2x" style="color:green;" ng-show="slowMailsec.config.validLoginAndCertCnx === 'ok'"></i>
+                                        <i class="fa fa-times fa-2x" style="color:red;" ng-show="slowMailsec.config.validLoginAndCertCnx !== 'ok'"></i>
+                                    </span>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6" ng-if="slowMailsec.config.listeLogins.length > 1">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label" for="UserMailsec">{{'Admin.Avance.Mailsec.user' | translate}}</label>
+                                                <select ng-change="slowMailsec.infoChanged()" id="UserMailsec" name="UserMailsec" class="form-control" ng-model="slowMailsec.config.userlogin" ng-options="user for user in slowMailsec.config.listeLogins">
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label" for="passwordUserMailsec">{{'Admin.Avance.Mailsec.passwd' | translate}}</label>
+                                                <input ng-change="slowMailsec.infoChanged()" id="passwordUserMailsec" name="passwordUserMailsec" type="text" class="form-control" ng-model="slowMailsec.config.userpassword">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <span>{{'Admin.Avance.Mailsec.certificate_connection' | translate}} :
+                                        <i class="fa fa-check fa-2x" style="color:green;" ng-show="slowMailsec.config.validCertCnx === 'ok'"></i>
+                                        <i class="fa fa-times fa-2x" style="color:red;" ng-show="slowMailsec.config.validCertCnx !== 'ok'"></i>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <span ng-if="slowMailsec.config.validCertCnx !== 'ok' || slowMailsec.config.validLoginAndCertCnx !== 'ok' || slowMailsec.changed" class="text-danger">{{'Admin.Avance.Mailsec.must_save' | translate}}</span>
+                        </div>
+
+                        <div class="col-md-8">
+                            <input type="button" class="btn btn-default launchUploadMailsec" ng-click="slowMailsec.enableModeTest()" value="{{'Admin.Avance.Mailsec.test_config' | translate}}">
+                            <input type="button" ng-disabled="(slowMailsec.config.validCertCnx !== 'ok' || slowMailsec.config.validLoginAndCertCnx !== 'ok' || slowMailsec.changed)" ng-click="slowMailsec.enableModeSave()" class="btn btn-success launchUploadMailsec" value="{{'Admin.Avance.Mailsec.save_config' | translate}}">
+                            <span  ng-if="slowMailsec.hasTestConfig">
+                                <div class="text-info"><i class="fa fa-info-circle"></i> {{'Admin.Avance.Mailsec.test_updated' | translate}}</div>
+                            </span>
+                            <span class="text-success" ng-if="slowMailsec.hasSaveConfig"><i class="fa fa-check"></i> {{'Admin.Avance.Mailsec.saved' | translate}}</span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

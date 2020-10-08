@@ -1,0 +1,25 @@
+{
+  "Admin": {
+    "Groupes": {
+      "Gr_Title": "Gestion des groupes",
+      "Gr_Filter": "Rechercher des groupes",
+      "Gr_New": "Créer un groupe",
+      "Gr_Filter_Info": "Recherche sensible aux accents",
+      "Gr_Create": "Créer un groupe",
+      "Gr_Name": "Nom",
+      "Gr_Parent": "Groupe parent",
+      "Gr_New_Name": "Nouveau Groupe",
+      "Gr_Add_Member": "Ajouter un membre",
+      "Gr_Members": "Membres",
+      "Gr_Del_Info": "La suppression d'un groupe n'entraine pas la suppression de son/ses sous-groupe(s)",
+      "Gr_Saved": "Groupe enregistré",
+      "Gr_Exist": "Attention ! Un groupe du même nom existe déjà !",
+      "Gr_SpeChar": "Attention, les caractères suivants sont interdits : & \" £ * / < > ? % | + ; :",
+      "Gr_None_Result": "Aucun résultat",
+
+
+      "ModGr_Title": "Supprimer le groupe",
+      "ModGr_Msg": "Etes-vous sûr de vouloir supprimer le groupe"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "journalModal": {
+    "event_log": "Event log",
+    "date": "Date",
+    "name": "Name",
+    "annotation_observation": "Annotation / observation",
+    "state": "State"
+  }
+}

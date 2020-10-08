@@ -1,0 +1,15 @@
+{
+  "circuit": {
+    "validationCircuit": "Circuit de validation",
+    "download": "Télécharger",
+    "withCertificateOf": "Certificat de",
+    "issuedBy": "Émis par",
+    "signatureDate": "Signature le",
+    "certificateValidity": "Certificat valide",
+    "from-start-to-end-": "Du -start- au -end-",
+    "noCircuitDefinedForThisFolder": "Pas de circuit défini pour ce dossier",
+    "the-date-from-person-": "Le -date- par -person-",
+    "dateFormat": "dd/MM/yyyy à HH:mm",
+    "signature_information": "Informations sur la signature"
+  }
+}

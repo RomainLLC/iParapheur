@@ -1,0 +1,26 @@
+<ul class="well nav nav-list nav-pills nav-stacked abn-tree fixbottom">
+    <li ng-show="header" class="nav-header">{{ header }}</li>
+    <li ng-show="show"
+        ng-repeat="row in tree_rows | filter:{visible:true} | filter:filterType track by track(row.branch)"
+        ng-class="(row.branch.parent !== undefined ? 'subtype-row' : 'level-' + (row.branch.profondeur))  + (row.branch.selected ? ' active ':'')"
+        class="abn-tree-row abn-tree-animate">
+        <hr ng-if="row.branch.profondeur === 1 && $index > 0">
+        <a ng-click="user_clicks_branch(row.branch)" ng-init="row.branch.expanded = true">
+            <i class="fa fa-plus-square-o indented tree-icon" tooltip="Déplier" ng-if="!row.branch.expanded && row.branch.profondeur === 1" ng-click="row.branch.expanded = !row.branch.expanded"></i>
+            <i class="fa fa-minus-square-o indented tree-icon" tooltip="Replier" ng-if="row.branch.expanded && row.branch.profondeur === 1" ng-click="row.branch.expanded = !row.branch.expanded"></i>
+            <!--i ng-class="row.tree_icon" tooltip="{{row.icon_text}}" ng-init="row.branch.expanded = true" ng-click="row.branch.expanded = !row.branch.expanded" class="indented tree-icon fa"> </i-->
+            <span class="indented tree-label">{{row.branch.id}}</span>
+            <span style="float:right;">
+                <span style="margin:8px;" class="label label-success create-type" ng-click="user_create_branch(row.branch)" ng-if="row.branch.parent === undefined"">
+                    <i  class="fa fa-plus-circle"></i>
+                    Ajouter un sous-type
+                </span>
+                <i ng-click="user_delete_branch(row.branch)" ng-class="row.branch.selected ? 'text-inverse' : 'text-danger'" tooltip-placement="bottom" tooltip="{{'Delete' | translate}}" class="fa fa-trash-o"></i>
+            </span>
+
+            <p ng-if="row.branch.parent === undefined" ng-class="'level-' + (row.branch.profondeur)">
+                <span  class="indented" ng-class="row.branch.selected ? '':'text-warning'">{{row.branch.desc}}</span>
+            </p>
+        </a>
+    </li>
+</ul>

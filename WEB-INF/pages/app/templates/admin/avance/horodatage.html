@@ -1,0 +1,63 @@
+<div>
+    <div style="top:100px;" class="nextDossierInfo" ng-if="!horodate.isInit">
+                <span class="text text-info">
+                    {{'Admin.Avance.getting_infos' | translate}}
+                </span>
+        <span style="position: relative; width: 0px; z-index: 2000000000; right: 140px; top: 100px;" us-spinner="{radius:20, width:8, length: 16}" ></span>
+    </div>
+    <div class="col-md-12" ng-if="horodate.isInit">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>{{'Admin.Avance.Horodatage.title' | translate}}</h3>
+            </div>
+        </div>
+        <div class="row">
+            <form class="form-horizontal">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="nameHorodate">{{'Admin.Avance.Horodatage.name' | translate}}</label>
+                        <div class="col-sm-9">
+                            <select class="form-control unvalidate" id="nameHorodate" name="nameHorodate" ng-model="horodate.config.name">
+                                <option value="_off_">{{'Admin.Avance.Horodatage.disabled' | translate}}</option>
+                                <option value="adullact">{{'Admin.Avance.Horodatage.adullact_service' | translate}}</option>
+                                <option value="certeurope">{{'Admin.Avance.Horodatage.certeurope_service' | translate}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="serverHorodate">{{'Admin.Avance.Horodatage.server_name' | translate}}</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control unvalidate" id="serverHorodate" name="serverHorodate" ng-model="horodate.config.server">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="portHorodate">{{'Admin.Avance.Horodatage.server_port' | translate}}</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control unvalidate" id="portHorodate" name="portHorodate" ng-model="horodate.config.port">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="algoHorodate">{{'Admin.Avance.Horodatage.algo' | translate}}</label>
+                        <div class="col-sm-9">
+                            <select class="form-control unvalidate" id="algoHorodate" name="algoHorodate" ng-model="horodate.config.algorithme">
+                                <option value="SHA1">SHA1</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="identifiantHorodate">{{'Admin.Avance.Horodatage.app_id' | translate}}</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control unvalidate" id="identifiantHorodate" name="identifiantHorodate" ng-model="horodate.config.idclient">
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="col-md-12">
+                    <input type="button" ng-click="horodate.set()" class="btn btn-success force-display" value="{{'Admin.Avance.Horodatage.save_config' | translate}}">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

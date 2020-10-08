@@ -1,0 +1,64 @@
+{
+  "Admin": {
+    "Avance": {
+      "Calque": {
+        "title": "Gérer des calques",
+        "create": "Créer un calque",
+        "edit": "Modifier le calque",
+        "preview": "Prévisualiser",
+        "rank_info": "Rang : Rang de la signature",
+        "page_info": "Page : Numéro de page ('0': dernière page, '-1': toutes pages)",
+        "signatures": "Signatures",
+        "images": "Images",
+        "comments": "Commentaires",
+        "metadatas": "Métadonnées",
+        "sig_none": "Aucune signature ajoutée",
+        "rank": "Rang",
+        "x_coord": "Coordonnée X",
+        "y_coord": "Coordonnée Y",
+        "page": "Page",
+        "after_sig": "Ajouter après signature",
+        "action": "Action",
+        "img_none": "Aucune image ajoutée",
+        "image": "Image",
+        "img_file": "Fichier Image",
+        "txt": "Texte",
+        "font_size": "Taille de fonte",
+        "txt_color": "Couleur de texte",
+        "black": "Noir",
+        "red": "Rouge",
+        "comment_none": "Aucun commentaire ajouté",
+        "metadata": "Metadonnée",
+        "metadata_none": "Aucune métadonnée ajoutée",
+        "meta_title": "Titre du dossier",
+        "meta_type": "Type du dossier",
+        "meta_sub": "Sous-type du dossier",
+        "meta_tdt": "Date de la télétransmission",
+        "meta_name_sig": "Nom du signataire",
+        "meta_date_sig": "Date de la signature",
+        "meta_name_visa": "Nom du dernier validateur",
+        "meta_date_visa": "Date de la dernière validation",
+        "meta_bureau_visa": "Bureau du dernier validateur",
+        "meta_role_visa": "Rôle du dernier validateur",
+        "meta_sig_hash": "Empreinte SHA256 de la signature",
+        "meta_bureau": "Bureau du signataire",
+        "meta_role": "Rôle du signataire",
+        "meta_deleg": "Mention par délégation si délégation",
+
+        "mod_del_title": "Supprimer le calque",
+        "mod_del_confirm": "Etes-vous sûr de vouloir supprimer ce calque ?",
+
+        "mod_create_title": "Créer un calque",
+        "mod_create_msg": "Merci de renseigner le nom du calque nouvellement créé",
+
+        "mod_delel_title": "Supprimer l'élément",
+        "mod_delel_confirm": "Etes-vous sûr de vouloir supprimer cet élément ?",
+        "mod_elem_metadata": "métadonnée",
+        "mod_elem_commentaire": "commentaire",
+        "mod_elem_image": "image",
+        "mod_elem_signature": "signature",
+        "define_comment": "Saisir le commentaire"
+      }
+    }
+  }
+}

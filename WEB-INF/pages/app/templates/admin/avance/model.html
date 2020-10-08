@@ -1,0 +1,52 @@
+<div>
+    <div style="top:100px;" class="nextDossierInfo" ng-if="!modeles.isInit">
+                <span class="text text-info">
+                    {{'Admin.Avance.getting_infos' | translate}}
+                </span>
+        <span style="position: relative; width: 0px; z-index: 2000000000; right: 140px; top: 100px;" us-spinner="{radius:20, width:8, length: 16}" ></span>
+    </div>
+    <div class="col-md-12" ng-if="modeles.isInit">
+        <div class="row">
+            <div class="col-md-3">
+                <h3>{{'Admin.Avance.Model.title' | translate}} <i ng-click="modeles.reload()" tooltip-placement="right" tooltip="{{'Admin.Avance.Model.reload_all' | translate}}" class="fa fa-undo pointer"></i></h3>
+                <ul class="list-unstyled nav nav-pills nav-stacked adminContent list-data">
+                    <li ng-repeat="modele in modeles.list | filter:'bdx' | orderBy:'name':false" ng-class="modeles.current.id == modele.id ? 'active' : ''">
+                        <a ng-click="modeles.get(modele)">
+                            {{modele.name}}
+                            <i tooltip-placement="right" tooltip="{{'Admin.Avance.Model.reload' | translate}}" ng-click="modeles.reload(modele)" ng-class="modeles.current.id == modele.id ? 'text-inverse' : 'text-warning'" class="text-warning fa fa-undo icon-right pointer"></i>
+                        </a>
+                    </li>
+                </ul>
+                <ul class="list-unstyled nav nav-pills nav-stacked adminContent list-data">
+                    <li ng-repeat="modele in modeles.list | filter:'mail' | orderBy:'name':false" ng-class="modeles.current.id == modele.id ? 'active' : ''">
+                        <a ng-click="modeles.get(modele)">
+                            {{modele.name}}
+                            <i tooltip-placement="right" tooltip="{{'Admin.Avance.Model.reload' | translate}}" ng-click="modeles.reload(modele)" ng-class="modeles.current.id == modele.id ? 'text-inverse' : 'text-warning'" class="text-warning fa fa-undo icon-right pointer"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-9 editor">
+                <div style="height: 52px;">
+                    <span class="text-info" ng-if="modeles.hasReload === 2 && !modeles.hasSaved">{{'Admin.Avance.Model.reload_all_done' | translate}}</span>
+                    <span class="text-info" ng-if="modeles.hasReload === 1 && !modeles.hasSaved">{{('Admin.Avance.Model.reload_done' | translate).replace('__var__', modeles.reloadName)}}</span>
+                    <span class="text-info" ng-if="modeles.hasSaved">{{'Admin.Avance.Model.saved' | translate}}</span>
+                    <span ng-if="!!modeles.current.id" style="margin-top: 10px;" ng-click="modeles.set()" class="btn btn-primary float-right">
+                        <i class="fa fa-floppy-o"></i>
+                        {{'Admin.Avance.Model.save' | translate}}
+                    </span>
+                </div>
+                <div ng-if="!!modeles.current.id">
+                    <div ui-ace="{
+                          useWrapMode : true,
+                          showGutter: true,
+                          theme:'twilight',
+                          mode: 'ftl'
+                    }" class="editor" ng-style="{height:modeles.getHeight()}" ng-model="modeles.current.content"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

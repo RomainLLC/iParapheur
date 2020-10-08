@@ -1,0 +1,74 @@
+<div class="modal-header">
+    <h3>{{'tdtModal.sending_helios_folders' | translate}}</h3>
+</div>
+<div class="modal-body row">
+    <form novalidate name="modalForm" class="row form-horizontal">
+        <div class="col-md-6">
+            <label class="legendLabel col-xs-12">
+                {{'tdtModal.public_annotation' | translate}}
+                <hr>
+                <div>
+                    <textarea class="form-control annotation" ng-change="giveCommentToApplet()" ng-model="action.annotPub"></textarea>
+                    <i class="fa fa-3x fa-globe textarea-icon"></i>
+                </div>
+            </label>
+            <label class="legendLabel col-xs-12">
+                {{'tdtModal.private_annotation' | translate}}
+                <hr>
+                <div>
+                    <textarea class="form-control annotationprivee" ng-model="action.annotPriv"></textarea>
+                    <i class="fa fa-3x fa-user-secret textarea-icon"></i>
+                </div>
+            </label>
+        </div>
+
+        <div ng-if="actesInfo" class="col-md-6">
+            <div class="form-group col-md-12">
+                <label for="nature-acte">{{'tdtModal.acte_subject' | translate}}</label>
+                <select class="form-control" id="nature-acte" ng-model="actesInfo.nature" ng-change="dossier.sousType = ''" ng-options="nature.name as nature.name for nature in actesInfo.nature" required>
+                    <option value="">-- {{'tdtModal.type_selection' | translate}} --</option>
+                </select>
+                <div class="input-help">
+                    <h4>{{'tdtModal.required_input_help' | translate}}</h4>
+                </div>
+            </div>
+            <div class="form-group col-md-12 mandatory-group">
+                <label for="numero-acte">{{'tdtModal.acte_number' | translate}}</label>
+                <span class="fa fa-warning label label-danger"> {{'Mandatory' | translate}}</span>
+                <input type="text" ng-model="action.numeroActe" id="numero-acte" class="form-control" required/>
+            </div>
+            <div class="form-group col-md-12">
+                <label class="control-label" for="date-decision">{{'tdtModal.decision_date' | translate}}</label>
+                <span class="fa fa-warning label label-danger"> {{'Mandatory' | translate}}</span>
+                <inpu readonly="true"t ip-datepicker return-format="timestamp" type="text" id="date-decision" ng-model="action.dateDecision" class="form-control unvalidate" required>
+                <span ng-click="action.dateDecision = undefined" class="pointer input-group-addon">X</span>
+            </div>
+        </div>
+
+        <div ng-if="dossiers" class="col-md-6">
+            <div class="col-xs-12">
+                <span class="legend">{{'tdtModal.folder_list' | translate}}<hr></span>
+                <ul class="listeDossiers">
+                    <li ng-repeat="dossier in dossiers" class="btn btn-default col-md-12 force-display"><span class="label label-info">{{dossier.actionDemandee}}</span>{{dossier.title}}</li>
+                </ul>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="modal-footer">
+    <progressbar ng-if="dossiers" class="progress-striped active" value="progress" max="max" type="info">
+        <span style="color:black; white-space:nowrap;">{{'tdtModal.handled_folders' | translate}} : {{progress}} / {{max}}</span>
+    </progressbar>
+
+    <button ng-disabled="spin" class="btn btn-warning" ng-click="cancel()">
+        <i class="fa fa-times-circle-o"></i>
+        {{'Back' | translate}}
+    </button>
+    <button ng-disabled="spin" class="btn btn-primary" ng-click="ok()">
+        <i class="fa fa-check"></i>
+        {{'Confirm' | translate}}
+    </button>
+
+    </div>
+</div>

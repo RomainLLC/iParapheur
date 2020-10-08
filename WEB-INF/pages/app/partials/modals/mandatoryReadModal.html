@@ -1,0 +1,20 @@
+<div class="modal-header">
+    <h3>{{'mandatoryReadModal.folder_reading_is_required' | translate}}</h3>
+</div>
+<div class="modal-body row">
+    <p>{{'mandatoryReadModal.this_folder_have_to_be_read_before_signing' | translate}} {{'mandatoryReadModal.the_download_link_is_available_below' | translate}}</p>
+    <a ng-click="ok()" target="_blank" class="xemelios" ng-if="dossier.isXemEnabled && (dossier.documents[0].name | fileext) === 'xml'" href="{{context}}/proxy/alfresco/parapheur/dossiers/{{dossier.id}}/{{dossier.documents[0].id}}/xemelios">
+        <img ng-src="{{context}}/res/images/xemelios.png">
+        {{'mandatoryReadModal.xemelios_reader' | translate}}
+    </a>
+    <a ng-click="ok()" ng-if="!dossier.isXemEnabled || (dossier.documents[0].name | fileext) !== 'xml'" target="_blank" href="{{context}}/proxy/alfresco/api/node/workspace/SpacesStore/{{dossier.documents[0].id}}/content/{{dossier.documents[0].name}}">
+        <i class="fa fa-lg fa-fw" ng-class="getFileExtIcon(dossier.documents[0].name)"></i>{{'Download_action' | translate}}</a>
+    </a>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-warning" ng-click="cancel()">
+        <i class="fa fa-times-circle-o"></i>
+        {{'Back' | translate}}
+    </button>
+</div>

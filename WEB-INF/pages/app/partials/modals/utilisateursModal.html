@@ -1,0 +1,474 @@
+<div class="modal-header">
+    <h3>{{'Admin.Users.UserMod_Title' | translate}} {{originalUser.firstName}} {{originalUser.lastName}}</h3>
+</div>
+<div class="modal-body row">
+
+
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#general" bs-tab><i class="fa fa-user"></i> {{'Admin.Users.UserMod_General' | translate}}</a></li>
+            <li ng-if="!user.isFromLdap"><a href="#motdepasse" bs-tab><i class="fa fa-lock"></i> {{'Admin.Users.UserMod_Password' | translate}}</a></li>
+            <li><a href="#notifications" bs-tab><i class="fa fa-envelope-o"></i> {{'Admin.Users.UserMod_Notifs' | translate}}</a></li>
+            <li><a href="#certificat" bs-tab ng-click="setCertificat()"><i class="fa fa-certificate"></i> {{'Admin.Users.UserMod_Cert' | translate}}</a></li>
+            <li><a href="#signature" bs-tab ng-click="setSignature()"><i class="fa fa-picture-o"></i> {{'Admin.Users.UserMod_Sig' | translate}}</a></li>
+            <li ng-if="originalUser.username.split('@')[0] !== 'admin'"><a href="#droits" bs-tab><i class="fa fa-ban"></i> {{'Admin.Users.UserMod_Rights' | translate}}</a></li>
+            <li><a href="#bureaux" bs-tab ng-click="getBureaux()"><i class="fa fa-desktop"></i> {{'Admin.Users.UserMod_Bur' | translate}}</a></li>
+            <li><a href="#groups" bs-tab><i class="fa fa fa-group"></i> {{'Admin.Users.UserMod_Gr' | translate}}</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div class='tab-pane active' id='general'>
+                <form name="general">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="username">{{'Admin.Users.User_Name' | translate}}</label>
+                            <input class="form-control validation-control" ng-pattern='/^[^&"£*/<>?%|+;]*$/' type="text" id="username" name="username" placeholder="{{originalUser.username}}" ng-model="user.username" required disabled>
+                            <div class="input-help">
+                                <h4 ng-show="general.username.$error.pattern">{{'Admin.Users.User_SpecialChar' | translate}}</h4>
+                                <h4 ng-show="general.username.$error.required">{{'Admin.Users.UserMod_Required' | translate}}</h4>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="firstName">{{'Admin.Users.User_Firstname' | translate}}</label>
+                            <input class="form-control validation-control" type="text" id="firstName" name="firstName" placeholder="{{originalUser.firstName}}" ng-model="user.firstName" ng-required="!user.isFromLdap" ng-disabled="user.isFromLdap">
+                            <div class="input-help">
+                                <h4 ng-show="general.firstName.$error.required">{{'Admin.Users.UserMod_Required' | translate}}</h4>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="lastName">{{'Admin.Users.User_Lastname' | translate}}</label>
+                            <input class="form-control validation-control" type="text" id="lastName" name="lastName" placeholder="{{originalUser.lastName}}" ng-model="user.lastName" ng-required="!user.isFromLdap" ng-disabled="user.isFromLdap">
+                            <div class="input-help">
+                                <h4 ng-show="general.lastName.$error.required">{{'Admin.Users.UserMod_Required' | translate}}</h4>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="mailUser">{{'Admin.Users.User_Mail' | translate}}</label>
+                            <input class="form-control validation-control" type="email" id="mailUser" name="mailUser" placeholder="{{originalUser.email}}" ng-model="user.email" ng-disabled="user.isFromLdap">
+                            <div class="input-help">
+                                <h4 ng-show="general.email.$error.email">{{'Admin.Users.User_Mail_Error' | translate}}</h4>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="metas">{{'Admin.Users.UserMod_Comp' | translate}} <i class="fa fa-info-circle" tooltip="{{'Admin.Users.UserMod_CompInfo' | translate}}"></i></label>
+                            <input class="form-control validation-control" type="text" id="metas" name="metas" placeholder="{{originalUser.metadata}}" ng-model="user.metadata">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class='tab-pane' id='motdepasse'>
+                <form name="password">
+                    <div class="col-md-6">
+                        <div class="form-group" ng-if="originalUser.username === config.username">
+                            <label for="old">{{'Admin.Users.UserMod_Actual_Pass' | translate}}</label>
+                            <input class="form-control validation-control" ng-minlength="3" ng-maxlength="32" type="password" id="old" name="old" ng-model="newPass.oldOne">
+                            <div class="input-help">
+                                <span class="error" ng-show="password.password.$error.required">{{'Admin.Users.UserMod_Required' | translate}}</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">{{'Admin.Users.UserMod_New_Pass' | translate}}</label>
+                            <input check-strength="{{properties['parapheur.ihm.password.strength']}}"
+                                   class="form-control validation-control" type="password" id="password" name="password"
+                                   ng-model="newPass.newOne">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="confirm">{{'Admin.Users.UserMod_Confirm_Pass' | translate}}</label>
+                            <input class="form-control validation-control" type="password" id="confirm" name="confirm" ng-model="newPass.confirm" confirm-with="newPass">
+                            <div class="input-help">
+                                <span class="error" ng-show="password.confirm.$error.confirm">{{'Admin.Users.UserMod_Error_Confirm' | translate}}</span>
+                                <span class="error" ng-show="password.confirm.$error.required">{{'Admin.Users.UserMod_Required' | translate}}</span>
+                            </div>
+                        </div>
+                        <span class="btn btn-success force-display" ng-click="changePassword()"
+                              ng-disabled="!password.$valid || newPass.confirm === ''">
+                            <i class="fa fa-floppy-o"></i>
+                            {{'Admin.Users.UserMod_Save_Pass' | translate}}
+                        </span>
+                    </div>
+                    <div strength-result="{{properties['parapheur.ihm.password.strength']}}"
+                         error="password.password.$error" class="col-md-6"
+                         ng-if="password.password.$error._length != undefined">
+                    </div>
+                </form>
+
+                <div class="alert alert-success col-md-4" ng-show="respPass.success">{{'Admin.Users.UserMod_Saved_Pass' | translate}}</div>
+                <div class="alert alert-danger col-md-4" ng-show="respPass.error">{{'Admin.Users.UserMod_Error_Pass' | translate}}</div>
+                <div class="alert alert-danger col-md-4" ng-if="wrongPwd">{{'Admin.Users.UserMod_Invalid_Pass' | translate}}</div>
+            </div>
+
+            <div class='tab-pane' id='notifications'>
+                <form ng-class="{launched: !notifications.changed}">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="block">
+                                    {{'Notif_Mail' | translate}}
+                                    <i class="fa fa-info-circle"  tooltip-placement="bottom" tooltip="{{'Notif_Helper' | translate}}"></i>
+                                    <input type="text" class="form-control col-md-12" ng-model="notifications.mail" id="email" name="email" />
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h3 class="small"><strong>{{'Notif_Freq' | translate}}</strong></h3>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <div class="radio">
+                                        <label>
+                                            <input class="unvalidate" ng-change="notifications.cronDidChange()" type="radio" name="notif-radio" id="radio-never" value="never" ng-model="notifications.mode" />
+                                            {{'Notif_None' | translate}}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <div class="radio">
+                                        <label>
+                                            <input class="unvalidate" ng-change="notifications.cronDidChange()" type="radio" name="notif-radio" id="radio-always" value="always" ng-model="notifications.mode" />
+                                            {{'Notif_Unit' | translate}}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <div class="radio">
+                                        <label>
+                                            <input class="unvalidate" ng-change="notifications.cronDidChange()" type="radio" name="notif-abo-radio" value="hourly" ng-model="notifications.mode">
+                                            {{'Notif_Every' | translate}}
+                                        </label>
+                                        <div style="width:auto; display:inline-block;">
+                                            <select class="unvalidate form-control" ng-change="notifications.cronDidChange()" ng-model="notifications.cron.hourly">
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="6">6</option>
+                                                <option value="12">12</option>
+                                            </select>
+                                        </div>
+                                        {{'Notif_Hour' | translate}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <div class="radio">
+                                        <label>
+                                            <input class="unvalidate" ng-change="notifications.cronDidChange()" type="radio" name="notif-abo-radio" value="daily" ng-model="notifications.mode">
+                                            {{'Notif_daily' | translate}}
+                                        </label>
+                                        <div style="width:auto; display:inline-block;">
+                                            <select class="unvalidate form-control" ng-change="notifications.cronDidChange()" ng-model="notifications.cron.daily">
+                                                <option value="0">0h</option>
+                                                <option value="1">1h</option>
+                                                <option value="2">2h</option>
+                                                <option value="3">3h</option>
+                                                <option value="4">4h</option>
+                                                <option value="5">5h</option>
+                                                <option value="6">6h</option>
+                                                <option value="7">7h</option>
+                                                <option value="8">8h</option>
+                                                <option value="9">9h</option>
+                                                <option value="10">10h</option>
+                                                <option value="11">11h</option>
+                                                <option value="12">12h</option>
+                                                <option value="13">13h</option>
+                                                <option value="14">14h</option>
+                                                <option value="15">15h</option>
+                                                <option value="16">16h</option>
+                                                <option value="17">17h</option>
+                                                <option value="18">18h</option>
+                                                <option value="19">19h</option>
+                                                <option value="20">20h</option>
+                                                <option value="21">21h</option>
+                                                <option value="22">22h</option>
+                                                <option value="23">23h</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <div class="radio">
+                                        <label>
+                                            <input class="unvalidate" ng-change="notifications.cronDidChange()" type="radio" name="notif-abo-radio" value="weekly" ng-model="notifications.mode">
+                                            {{'Notif_weekly' | translate}}
+                                        </label>
+                                        <div style="width:auto; display:inline-block;">
+                                            <select class="unvalidate form-control" ng-change="notifications.cronDidChange()" ng-model="notifications.cron.weekly">
+                                                <option value="1">{{'Mon' | translate}}</option>
+                                                <option value="2">{{'Tue' | translate}}</option>
+                                                <option value="3">{{'Wed' | translate}}</option>
+                                                <option value="4">{{'Thu' | translate}}</option>
+                                                <option value="5">{{'Fri' | translate}}</option>
+                                                <option value="6">{{'Sat' | translate}}</option>
+                                                <option value="7">{{'Sun' | translate}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+
+
+            <div class='tab-pane' id='certificat'>
+                <form novalidate name="modalForm"
+                      class="form-horizontal"
+                      fileupload="{{fileUploadFormat}}"
+                      one-file="true"
+                      submit-button=".launchUpload"
+                      wrong-type="wrongType(ext)"
+                      fileinput="#fileinput"
+                      file-added="fileAdded(files)"
+                      upload-success="fileUploaded(data, index)"
+                      action="{{context + '/base64encode'}}"
+                      method="POST"
+                      enctype="multipart/form-data">
+                    <h2 class="underscore">{{'Admin.Users.UserMod_Cert_Choose' | translate}}</h2>
+
+                    <span ng-show="isEmptyOrNull(user.certificat)" class="text-info"><i class="fa fa-info-circle"></i> {{'Admin.Users.UserMod_Cert_None' | translate}}</span>
+
+
+                    <div ng-show="!isEmptyOrNull(user.certificat)">
+                        <div class="row">
+                            <span class="col-md-4"><strong>{{'Admin.Users.UserMod_Cert_Emit' | translate}}</strong></span>
+                            <span class="col-md-8">{{user.certificat.issuer_name}}</span>
+                        </div>
+                        <div class="row">
+                            <span class="col-md-4"><strong>{{'Admin.Users.UserMod_Cert_ID' | translate}}</strong></span>
+                            <span class="col-md-8">{{user.certificat.id}}</span>
+                        </div>
+                        <div class="row">
+                            <span class="col-md-4"><strong>{{'Admin.Users.UserMod_Cert_CN' | translate}}</strong></span>
+                            <span class="col-md-8">{{user.certificat.subject_name}}</span>
+                        </div>
+                        <div class="row">
+                            <span class="col-md-4"><strong>{{'Admin.Users.UserMod_Cert_O' | translate}}</strong></span>
+                            <span class="col-md-8">{{user.certificat.organization}}</span>
+                        </div>
+                        <div class="row">
+                            <span class="col-md-4"><strong>{{'Admin.Users.UserMod_Cert_Contact' | translate}}</strong></span>
+                            <span class="col-md-8">{{user.certificat.email}}</span>
+                        </div>
+                        <div class="row">
+                            <span class="col-md-4"><strong>{{'Admin.Users.UserMod_Cert_Serial' | translate}}</strong></span>
+                            <span class="col-md-8">{{user.certificat.title}}</span>
+                        </div>
+                        <div class="row">
+                            <span class="col-md-4"><strong>{{'Admin.Users.UserMod_Cert_Begin' | translate}}</strong></span>
+                            <span class="col-md-8">{{user.certificat.certificate_valid_from}}</span>
+                        </div>
+                        <div class="row">
+                            <span class="col-md-4"><strong>{{'Admin.Users.UserMod_Cert_End' | translate}}</strong></span>
+                            <span class="col-md-8">{{user.certificat.certificate_valid_to}}</span>
+                        </div>
+
+
+                        <a ng-if="!user.certificat.content
+                        " class="row btn btn-default" ng-href="{{context}}/proxy/alfresco/api/node/content%3bph%3acertificat/workspace/SpacesStore/{{user.id}}/{{user.certificat.subject_name}}.p12">
+                            <i class="fa fa-floppy-o"></i>
+                            {{'Admin.Users.UserMod_Cert_Download' | translate}}
+                        </a>
+                        <!--http://localhost/alfresco/d/d/workspace/SpacesStore/f1e32fd9-16ee-40d3-b872-781b439b7a87/f1e32fd9-16ee-40d3-b872-781b439b7a87?property=%7bhttp%3a%2f%2fwww.atolcd.com%2falfresco%2fmodel%2fparapheur%2f1.0%7dcertificat
+                            -->
+                    </div>
+
+                    <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+                    <div class="row fileupload-buttonbar">
+                        <!-- The fileinput-button span is used to style the file input field as button -->
+                        <span class="btn btn-default fileinput-button force-display">
+                            <i class="fa fa-folder-open-o"></i>
+                            <span>{{'Browse' | translate}}</span>
+                            <input id="certificateFileinput" type="file" name="file" />
+                        </span>
+                        <span class="btn btn-danger" ng-click="deleteCertificat()" ng-show="!isEmptyOrNull(user.certificat)" >
+                            <i class="fa fa-trash-o"></i>
+                            {{'Admin.Users.UserMod_Cert_Save' | translate}}
+                        </span>
+                    </div>
+                    <div ng-show="typeError" class="row alert alert-danger">{{'Admin.Users.UserMod_Cert_File' | translate}}</div>
+                    <div ng-show="certificateUsedBy !== undefined" class="row alert alert-warning">{{certificateUsedBy}}&nbsp;{{'Admin.Users.UserMod_Cert_Used' | translate}}</div>
+
+
+                </form>
+            </div>
+
+
+
+            <div class='tab-pane' id='signature'>
+
+                <form novalidate name="modalForm"
+                      class="form-horizontal"
+                      fileupload="{{fileUploadFormat}}"
+                      one-file="true"
+                      submit-button=".launchUpload"
+                      wrong-type="wrongType(ext)"
+                      fileinput="#fileinput"
+                      file-added="fileAdded(files)"
+                      upload-success="fileUploaded(data, index)"
+                      action="{{context + '/base64encode'}}"
+                      method="POST"
+                      enctype="multipart/form-data">
+
+                    <h2 class="underscore">{{'Admin.Users.UserMod_Sig_Choose' | translate}}</h2>
+                    <img ng-show="!isEmptyOrNull(user.signatureData)" class="signatureImg" ng-cloak ng-src="data:image/{{signatureFormat}};base64,{{user.signatureData}}" />
+                    <img ng-if="isEmptyOrNull(user.signatureData) && !isEmptyOrNull(user.signature)" class="signatureImg" ng-cloak ng-src="{{context}}/proxy/alfresco/api/node/workspace/SpacesStore/{{user.signature}}/content?v={{date}}" />
+                    <span ng-show="isEmptyOrNull(user.signatureData) && isEmptyOrNull(user.signature)" class="text-info"><i class="fa fa-info-circle"></i> {{'Admin.Users.UserMod_Sig_NoScan' | translate}}</span>
+
+                    <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+                    <div class="fileupload-buttonbar">
+                        <!-- The fileinput-button span is used to style the file input field as button -->
+                        <span class="btn btn-default fileinput-button force-display">
+                            <i class="fa fa-folder-open-o"></i>
+                            <span>{{'Browse' | translate}}</span>
+                            <input id="fileinput" type="file" name="file" />
+                        </span>
+                    </div>
+                    <span class="btn btn-danger" ng-click="deleteSignature()" ng-show="(user.signature !== undefined && user.signature !== '') || (user.signatureData !== undefined)" >
+                        <i class="fa fa-trash-o"></i>
+                        {{'Admin.Users.UserMod_Sig_Delete' | translate}}
+                    </span>
+                    <div ng-show="typeError" class="alert alert-danger">{{'Admin.Users.UserMod_Sig_Err2' | translate}}</div>
+
+                </form>
+            </div>
+
+
+
+            <div class='tab-pane' id='droits'>
+                <div class="col-md-12">
+                    <div class="radio-inline">
+                        <label>
+                            <input type="radio" ng-model="user.admin" value="admin" class="unvalidate"/>
+                            {{'Admin.Users.UserMod_Rights_Admin' | translate}}
+                        </label>
+                    </div>
+                    <div class="radio-inline">
+                        <label>
+                            <input type="radio" ng-model="user.admin" value="adminFonctionnel" class="unvalidate"/>
+                            {{'Admin.Users.UserMod_Rights_Fonc' | translate}}
+                        </label>
+                    </div>
+                    <div class="radio-inline">
+                        <label>
+                            <input type="radio" ng-model="user.admin" value="aucun" class="unvalidate"/>
+                            {{'Admin.Users.UserMod_Rights_None' | translate}}
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div ng-show="user.admin=='adminFonctionnel'" >
+                        <span class="text-info">
+                            <i class="fa fa-info-circle"></i>
+                            Les droits d'administration fonctionnelle sont attribués par bureau
+                        </span>
+                        <div class="well row">
+                            <div class="col-md-6">
+                                <div>
+                                    <h3>
+                                        Bureaux disponibles
+                                    </h3>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-search fa-fw"></i></span>
+                                        <input placeholder="{{'Search' | translate}}" ng-model="searchBureauSuperieur" ng-change="listHandler.search(searchBureauSuperieur)" class="form-control unvalidate" type="text">
+                                    </div>
+                                    <div style="height:15px;" ng-if="listHandler.total > 0 && listHandler.maxSize < listHandler.total">
+                                        <span class="text-warning float-right">
+                                            {{listHandler.page*listHandler.maxSize +1}}-{{(listHandler.page+1)*listHandler.maxSize < listHandler.total ? (listHandler.page+1)*listHandler.maxSize : listHandler.total}} {{'On' | translate}} {{listHandler.total}}
+                                            <span class="btn btn-default fa fa-chevron-left force-display" ng-disabled="listHandler.page === 0" ng-click="listHandler.pagine(-1)"></span>
+                                            <span class="btn btn-default fa fa-chevron-right force-display" ng-disabled="listHandler.page+1 >= (listHandler.total/listHandler.maxSize)" ng-click="listHandler.pagine(1)"></span>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <span class="text-info" ng-if="listHandler.total === 0"><i class="fa fa-info-circle"></i> {{'Admin.Users.User_None' | translate}}</span>
+                                <ul class="list-unstyled nav nav-pills nav-stacked adminContent list-data">
+                                    <li ng-repeat="bureau in listHandler.subListAdminFonctionnel" ng-switch on="user.bureauxAdministres.indexOf(bureau.id)">
+                                        <a ng-click="listHandler.selectForAdminFonctionnel(bureau)" ng-switch-when="-1">
+                                            <i class="fa fa-plus-circle text-success"></i> {{bureau.name}}
+                                        </a>
+                                        <a class="disabled" ng-switch-default>
+                                            {{bureau.name}}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h3>{{'Admin.Users.UserMod_Right_Selected' | translate}}</h3>
+                                <span ng-if="user.bureauxAdministres.length === 0" class="text-info"><i class="fa fa-info-circle"></i> Aucun bureau</span>
+                                <ul class="list-unstyled pointer">
+                                    <li class="hover-li" ng-click="listHandler.unselectForAdminFonctionnel(bureau.id)" ng-repeat="bureau in (bureaux | sameId:user.bureauxAdministres)"><i class="text-danger fa fa-times-circle"></i> {{bureau.name}}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="orderedBureaux.length === 0 && user.admin=='adminFonctionnel'">
+                        <p class="text-info"><i class="fa fa-warning"></i> {{'Admin.Users.UserMod_Right_Selected_None' | translate}}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class='tab-pane' id='bureaux'>
+                <div class="row">
+                    <table ng-show="user.bureaux.length > 0" ng-table="tableParams" class="table table-striped">
+                        <tr ng-repeat="bureau in $data">
+                            <td data-title="'Admin.Users.UserMod_Bur_Title' | translate" sortable="'title'">
+                                {{bureau.title}}
+                            </td>
+                            <td class="text-success" data-title="'Admin.Users.UserMod_Bur_Prop' | translate" sortable="'isProprietaire'">
+                                <span ng-if="bureau.isProprietaire" class="text-success fa fa-check fa-2x"></span>
+                            </td>
+                            <td class="text-info" data-title="'Admin.Users.UserMod_Bur_Sec' | translate" sortable="'isSecretaire'">
+                                <span ng-if="bureau.isSecretaire" class="text-warning fa fa-check fa-2x"></span>
+                            </td>
+                            <td data-title="'Admin.Users.UserMod_Bur_Actions' | translate">
+                                <button class="btn btn-danger helper-inline-block" type="button" ng-click="removeFromBureau(bureau)">
+                                    <i class="fa fa-unlink"></i>
+                                    {{'Admin.Users.UserMod_Bur_Remove' | translate}}
+                                </button>
+                                <div ng-show="bureauSuppressError" class="alert alert-error">{{'Admin.Users.UserMod_Bur_Error' | translate}}</div>
+                            </td>
+                        </tr>
+                    </table>
+                    <div ng-if="!user.bureaux.length" class="text-info"><i class="fa fa-info-circle"></i> {{'Admin.Users.UserMod_Bur_None' | translate}}</div>
+                    <span ng-if="user.bureaux.length" class="text-info"><i class="fa fa-warning"></i> {{'Admin.Users.UserMod_Bur_Warning' | translate}}</span>
+                </div>
+            </div>
+
+            <div class='tab-pane' id='groups'>
+                <div class="row">
+                    <p ng-if="user.groups.length > 0" class="text-info">
+                        <i class="fa fa-info-circle"></i> {{'Admin.Users.UserMod_Gr_Actual' | translate}} :
+                    </p>
+                    <ul>
+                        <li ng-repeat="group in user.groups">
+                            <i ng-if="!(user.username.split('@')[0] === 'admin' && group === 'ALFRESCO_ADMINISTRATORS')" ng-click="removeFromGroup(group)" class="fa fa-unlink text-danger pointer" tooltip-trigger="mouseenter" tooltip="{{'Admin.Users.UserMod_Gr_Remove' | translate}}"></i>
+                            {{group}}
+                        </li>
+                    </ul>
+                    <div ng-if="!user.groups.length" class="text-info"><i class="fa fa-info-circle"></i> {{'Admin.Users.UserMod_Gr_None' | translate}}</div>
+                </div>
+            </div>
+        </div>
+
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-warning" ng-click="cancel()">
+        <i class="fa fa-times-circle-o"></i>
+        {{'Back' | translate}}
+    </button>
+    <button class="btn btn-primary" ng-click="ok()" ng-disabled="general.$invalid">
+        <i class="fa fa-floppy-o"></i>
+        {{'Save' | translate}}
+    </button>
+</div>

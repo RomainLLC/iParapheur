@@ -1,0 +1,238 @@
+<div>
+    <div style="top:100px;" class="nextDossierInfo" ng-if="!cachet.isInit">
+        <span class="text text-info">
+            {{'Admin.Avance.getting_infos' | translate}}
+        </span>
+        <span style="position: relative; width: 0px; z-index: 2000000000; right: 140px; top: 100px;"
+              us-spinner="{radius:20, width:8, length: 16}"></span>
+    </div>
+    <div class="col-md-12" ng-if="cachet.isInit">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>{{'Admin.Avance.Cachet.title' | translate}}</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="mailForWarn">{{'Mail(s) de notification' | translate}}</label>
+                    <div class="input-group">
+                        <input id="mailForWarn" type="text" class="form-control unvalidate"
+                               ng-model="cachet.mailForWarn" ng-change="cachet.mailForWarnStatus = 0" name="mailForWarn">
+                        <span class="input-group-btn">
+                            <span class="btn btn-default disabled" ng-if="cachet.mailForWarnStatus == 1">
+                                En cours...
+                            </span>
+                            <span class="btn btn-success disabled" ng-if="cachet.mailForWarnStatus == 2">
+                                Sauvegardé
+                            </span>
+                            <a ng-if="cachet.mailForWarnStatus == 0" ng-click="cachet.saveMailForWarn()" class="btn btn-primary">
+                                <i class="fa fa-save"></i>
+                                Enregistrer
+                            </a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+
+                <hr/>
+                <span ng-click="cachet.create()" class="btn btn-success"><i class="fa fa-plus-circle"></i> {{'Admin.Avance.Cachet.create' | translate}}</span>
+                <ul class="list-unstyled nav nav-pills nav-stacked adminContent list-data">
+                    <li ng-repeat="cert in cachet.list" ng-class="cachet.current.id == cert.id ? 'active' : ''">
+                        <a ng-click="cachet.select(cert)">
+                            {{cert.title}}
+                            <br>
+                            <span class="text right"
+                                  ng-class="cachet.current.id == cert.id ? 'text-inverse' : 'text-warning'">
+                                Expiration :
+                                <span ng-class="cachet.current.id == cert.id ? 'text-inverse' : cert.description.notAfter < cachet.timestamp ? 'text-danger ' : 'text-success'">
+                                    {{cert.description.notAfter | date}}
+                                </span>
+                                <span ng-class="cachet.current.id == cert.id ? 'text-inverse' : 'text-danger'" ng-if="cert.description.notAfter < cachet.timestamp">
+                                    <br/>
+                                    <i class="fa fa-warning"></i>
+                                    EXPIRÉ
+                                    <i class="fa fa-warning"></i>
+                                </span>
+                            </span>
+                            <i ng-click="cachet.remove(cert)"
+                               ng-class="cachet.current.id == cert.id ? 'text-inverse' : 'text-danger'"
+                               tooltip="Supprimer"
+                               class="fa fa-trash-o icon-right pointer"></i>
+                        </a>
+                    </li>
+                </ul>
+                <span ng-if="cachet.list.length == 0" class="text text-info">
+                    <i class="fa fa-info-circle"></i>
+                    Aucun certificat présent
+                </span>
+            </div>
+            <div class="col-md-9">
+                <div class="col-md-12" ng-if="cachet.current">
+                    <form one-file="true" fileupload="certificat"
+                          file-added="cachet.fileAdded(files)"
+                          fileinput="#fileinput"
+                          novalidate="novalidate" name="certificate" class="form-horizontal"
+                          >
+                        <div class="col-md-6">
+                            <h4 ng-if="cachet.current.isNew">Ajout d'un nouveau certificat</h4>
+                            <h4 ng-if="!cachet.current.isNew">Modification du certificat</h4>
+
+
+                            <div class="form-group mandatory-group">
+                                <label for="titleCert">{{'Name' | translate}}</label>
+                                <span ng-if="cachet.current.isNew" class="label label-danger"><i class="fa fa-warning"></i> {{'Mandatory' | translate}}</span>
+                                <span ng-if="cachet.current.isNew" class="label label-info"><i class="fa fa-info-circle"></i> Min : 2</span>
+                                <input id="titleCert" type="text" class="form-control unvalidate" ng-minlength="2"
+                                       ng-model="cachet.current.title" name="titleCert"
+                                       required ng-disabled="!cachet.current.isNew">
+                            </div>
+                            <div class="mandatory-group form-group">
+                                <label for="certFile" style="margin-right:0;">{{'Certificat (format p12)' | translate}}</label>
+                                <span ng-if="cachet.current.editing" class="label label-danger"><i class="fa fa-warning"></i> {{'Mandatory' | translate}}</span>
+                                <div class="fileinput-button" style="float: none;">
+                                    <div class="input-group">
+                                        <span class="input-group-btn">
+                                            <span class="btn btn-default force-display" ng-disabled="!cachet.current.editing">
+                                                <i class="fa fa-folder-open-o"></i>
+                                                {{'Browse' | translate}}
+                                            </span>
+                                        </span>
+                                        <input type="text" name="certFile" id="certFile" class="form-control"
+                                               ng-model="cachet.current.originalName"
+                                               placeholder="Sélectionner le certificat" readonly
+                                               ng-style="cachet.current.editing ? {'background-color': '#fff'} : {}" >
+                                    </div>
+
+                                    <input id="fileinput" type="file" name="file" accept=".p12"
+                                           title="&nbsp;"
+                                           required="required"  ng-disabled="!cachet.current.editing">
+                                </div>
+                                <span ng-if="cachet.wrongExt" class="label label-danger"><i class="fa fa-warning"></i> {{'Type de fichier attentu: p12' | translate}}</span>
+                            </div>
+                            <div class="form-group mandatory-group">
+                                <label for="passCert">{{'Options.Password' | translate}}</label>
+                                <span ng-if="cachet.current.editing" class="label label-danger"><i class="fa fa-warning"></i> {{'Mandatory' | translate}}</span>
+                                <input id="passCert" type="password" class="form-control unvalidate"
+                                       ng-model="cachet.current.password" name="passCert"
+                                       ng-change="cachet.stopTyping($event)"
+                                       required ng-disabled="!cachet.current.editing" placeholder="{{cachet.current.isNew ? '' : '**********'}}">
+                            </div>
+                            <div class="mandatory-group form-group">
+                                <label for="imageFile">{{'Image' | translate}}</label>
+                                <div class="fileinput-button" style="float: none;">
+                                    <div class="input-group">
+                                        <span class="input-group-btn">
+                                            <span class="btn btn-default force-display" ng-disabled="!cachet.current.editing">
+                                                <i class="fa fa-folder-open-o"></i>
+                                                {{'Browse' | translate}}
+                                            </span>
+                                        </span>
+                                        <input type="text" name="imageFile" id="imageFile" class="form-control"
+                                               ng-model="cachet.current.imageName" placeholder="Sélectionner l'image"
+                                               readonly ng-style="cachet.current.editing ? {'background-color': '#fff'} : {}">
+                                        <span class="input-group-btn" title="Supprimer l'image actuelle" style="z-index:1;">
+                                            <span  class="btn btn-danger force-display" ng-disabled="!cachet.current.editing"
+                                                  ng-if="cachet.current.image && cachet.current.editing"
+                                                  ng-click="cachet.current.image = ''; cachet.current.imageName = '';">
+                                                <i class="fa fa-trash"></i>
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <input id="imageFileinput" type="file" name="file" accept="image/*"
+                                           title="&nbsp;"
+                                           onchange="angular.element(this).scope().cachet.fileNameChanged(this)"
+                                           required="required" ng-disabled="!cachet.current.editing">
+                                </div>
+                                <span ng-if="cachet.wrongExt" class="label label-danger"><i class="fa fa-warning"></i> {{'Type de fichier attentu: p12' | translate}}</span>
+                            </div>
+                            <div class="col-md-12">
+                                <button ng-if="cachet.current.editing && !cachet.current.isNew" class="btn btn-warning force-display"
+                                        ng-click="cachet.cancel()">
+                                    <i class="fa fa-times-circle-o"></i>
+                                    {{'Back' | translate}}
+                                </button>
+                                <button ng-if="cachet.current.editing" class="btn btn-primary force-display" ng-disabled="!cachet.current.description"
+                                        ng-click="cachet.save()">
+                                    <i class="fa fa-save"></i>
+                                    Enregistrer
+                                </button>
+                                <button ng-if="!cachet.current.editing" class="btn btn-info force-display"
+                                        ng-click="cachet.modify()">
+                                    <i class="fa fa-pencil"></i>
+                                    Modifier le certificat
+                                </button>
+                            </div>
+
+                        </div>
+                    </form>
+                    <div class="col-md-6">
+                        <h4>Informations supplémentaires</h4>
+                        <div ng-if="cachet.current.loadChange">
+                            <span style="position: relative; width: 0px; z-index: 2000000000; right: -50%; top: 100px;"
+                                  us-spinner="{radius:20, width:8, length: 16}"></span>
+                        </div>
+                        <div ng-if="!cachet.current.loadChange && !cachet.errorCode">
+                            <div ng-if="cachet.current.description">
+                                <ul class="list-unstyled">
+                                    <li>
+                                        <b>Alias : </b>{{cachet.current.description.alias}}
+                                    </li>
+                                    <li>
+                                        <b>Date d'expiration : </b>{{cachet.current.description.notAfter | date}}
+                                    </li>
+                                    <li>
+                                        <b>Autorité : </b>
+                                        <ul>
+                                            <li ng-repeat="info in cachet.current.description.issuerDN.split(',')">
+                                                {{info}}
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <b>Sujet : </b>
+                                        <ul>
+                                            <li ng-repeat="info in cachet.current.description.subjectDN.split(',')">
+                                                {{info}}
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div ng-if="!cachet.current.description" class="text text-info">
+                                <i class="fa fa-info-circle"></i>
+                                Merci de définir un certificat ainsi que son mot de passe.
+                            </div>
+                        </div>
+                        <div ng-if="cachet.errorCode" ng-switch="cachet.errorCode">
+                            <div ng-switch-when="403" class="text text-danger">
+                                <i class="fa fa-warning"></i>
+                                Le mot de passe du certificate est invalide !
+                            </div>
+                            <div ng-switch-when="400" class="text text-danger">
+                                <i class="fa fa-warning"></i>
+                                Le format du certificat est invalide !
+                            </div>
+                            <div ng-switch-when="409" class="text text-danger">
+                                <i class="fa fa-warning"></i>
+                                Un certificat du même nom existe déjà !
+                            </div>
+                        </div>
+
+                        <div style="position: relative;">
+                            <img ng-if="cachet.current.image"
+                                 style="width:100%; max-width:200px;"
+                                 ng-src="data:image/png;base64,{{cachet.current.image}}"/>
+                            <span ng-if="!cachet.current.image" class="text text-info">
+                                    <i class="fa fa-info-circle"></i>
+                                    Aucune image sélectionnée
+                                </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

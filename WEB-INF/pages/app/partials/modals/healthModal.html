@@ -1,0 +1,213 @@
+<div class="modal-header">
+    <h3>{{'Admin.Informations.Info_Health' | translate}}</h3>
+</div>
+<div class="modal-body row">
+
+    <div class="col-md-12" ng-if="!health">
+        <div style="width: 100px; margin: 0 auto;">
+            <div style="width:100%;height:100px;" class="css-loader"></div>
+        </div>
+
+    </div>
+    <div class="col-md-12" ng-if="health">
+        <div class="col-md-6">
+            <div class="col-md-12"  ng-if="!isTenant">
+                <div class="col-md-12">
+                    <p><strong>{{'Admin.Informations.Info_Mem' | translate}} :</strong><br/><span class="bash"
+                                                                                                  ng-bind-html="health.memory | bash"></span>
+                    </p>
+
+                    <p><strong>{{'Admin.Informations.Info_HDD' | translate}} :</strong><br/><span class="bash"
+                                                                                                  ng-bind-html="health.disk | bash"></span>
+                    </p>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4 class="legend">{{'Admin.Informations.Info_Launch_Date' | translate}}</h4>
+                    </div>
+                    <div class="col-md-6">
+                        <h4 class="legend">{{'Admin.Informations.Info_Nodes_Count' | translate}}</h4>
+                    </div>
+                </div>
+                <div class="col-md-6">
+
+                    <p ng-if="health.nginx"><strong>NginX :</strong><br/>
+                        <span ng-if="+health.nginx >= 86400" class="text-danger">
+                        <b>
+                            <i class="fa fa-warning"></i>
+                            Redémarrage requis
+                        </b>
+                    </span>
+                        <span ng-if="+health.nginx < 86400" class="text-success">
+                        <b>
+                            <i class="fa fa-check"></i>
+                            OK
+                        </b>
+                    </span>
+                    </p>
+
+                    <p ng-if="health.xemelios"><strong>Xemelios :</strong><br/>
+                        <span ng-if="+health.xemelios >= 86400" class="text-danger">
+                        <b>
+                            <i class="fa fa-warning"></i>
+                            Redémarrage requis
+                        </b>
+                    </span>
+                        <span ng-if="+health.xemelios < 86400" class="text-success">
+                        <b>
+                            <i class="fa fa-check"></i>
+                            OK
+                        </b>
+                    </span>
+                    </p>
+
+                    <p ng-if="health.office"><strong>Office :</strong><br/>
+                        <span ng-if="+health.office >= 86400" class="text-danger">
+                            <b>
+                                <i class="fa fa-warning"></i>
+                                Redémarrage requis
+                            </b>
+                        </span>
+                        <span ng-if="+health.office < 86400" class="text-success">
+                            <b>
+                                <i class="fa fa-check"></i>
+                                OK
+                            </b>
+                        </span>
+                    </p>
+                    <p><strong>Redis :</strong><br/>
+                        <span ng-if="!health.redis" class="text-danger">
+                            <b>
+                                <i class="fa fa-warning"></i>
+                                Erreur
+                            </b>
+                        </span>
+                        <span ng-if="health.redis" class="text-success">
+                            <b>
+                                <i class="fa fa-check"></i>
+                                OK
+                            </b>
+                        </span>
+                    </p>
+                    <p><strong>Connecteur Pastell :</strong><br/>
+                        <span ng-if="!health.pastellconnector" class="text-danger">
+                            <b>
+                                <i class="fa fa-warning"></i>
+                                Erreur
+                            </b>
+                        </span>
+                        <span ng-if="health.pastellconnector" class="text-success">
+                            <b>
+                                <i class="fa fa-check"></i>
+                                OK
+                            </b>
+                        </span>
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>{{'Admin.Informations.Info_Folders' | translate}} :</strong><br/>
+                        <b ng-if="+health.dossiers >= 1000" class="text-danger">
+                            <i class="fa fa-warning"  tooltip="{{'Admin.Informations.Purge_Advised' | translate}}"></i>
+                            {{health.dossiers}}
+                        </b>
+                        <span ng-if="+health.dossiers < 1000">
+                        {{health.dossiers}}
+                    </span>
+                    </p>
+
+                    <p><strong>{{'Admin.Informations.Info_Archives' | translate}} :</strong><br/>
+                        <b ng-if="+health.archives >= 1000" class="text-danger">
+                            <i class="fa fa-warning" ></i>
+                            {{health.archives}}
+                        </b>
+                        <span ng-if="+health.archives < 1000">
+                        {{health.archives}}
+                    </span>
+                    </p>
+
+                    <p><strong>{{'Admin.Informations.Orphan_Nodes' | translate}} :</strong><br/>
+                        <span ng-if="health.orphans == '0'" class="text-success">
+                        <b>
+                            <i class="fa fa-check"></i>
+                            OK
+                        </b>
+                    </span>
+                        <span ng-if="health.orphans != '0'" class="text-danger">
+                        <b>
+                            <i class="fa fa-warning"></i>
+                            {{'Admin.Informations.Orphans_Found' | translate}}
+                        </b>
+                    </span>
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <h4 class="legend">{{'Admin.Informations.Info_Maintenance' | translate}}</h4>
+                <a ng-click="regenerateCount()" ng-disabled="reload.launchCount" class="btn btn-default">
+                    <i  ng-class="{'fa-spin': reload.launchCount}" class="fa fa-refresh"></i>
+                    {{'Admin.Informations.Regenerate_Count' | translate}}
+                </a><br/>
+                <span class="text-danger" ng-if="messages.error">
+                    {{'Admin.Informations.Regenerate_Error' | translate}}
+                </span>
+                <span class="text-success" ng-if="messages.success">
+                    {{'Admin.Informations.Regenerate_Success' | translate}}
+                </span>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <h4 class="legend">{{'Admin.Informations.Info_Certs' | translate}}</h4>
+            <div class="row">
+                <a class="col-md-4 btn btn-success" tooltip="{{'Admin.Informations.Cacert_Tooltip' | translate}}" href="data:application/x-pem-file;base64,{{health.certs.cacert}}" download="cacert.cer">
+                    <i class="fa fa-save"></i>
+                    Cacert
+                </a>
+                <a class="col-md-4 btn btn-info" tooltip="{{'Admin.Informations.Trust_Tooltip' | translate}}" href="data:application/x-pem-file;base64,{{health.certs.trust}}" download="trust.cer">
+                    <i class="fa fa-save"></i>
+                    Trust
+                </a>
+                <a class="col-md-4 btn btn-warning" tooltip="{{'Admin.Informations.Store_Tooltip' | translate}}" href="data:application/octet-stream;base64,{{health.certs.truststore}}" download="truststore.jks">
+                    <i class="fa fa-save"></i>
+                    TrustStore
+                </a>
+            </div>
+            <div class="panel-group" id="accordion" role="tablist">
+                <div class="panel panel-default" ng-repeat="cert in health.certs.chain">
+                    <div class="panel-heading" role="tab" id="head{{cert.CN}}">
+                        <h4 class="panel-title">
+                            {{cert.CN}}
+                        </h4>
+                    </div>
+                    <div id="cert.CN" class="panel-collapse collpase in" role="tabpanel">
+                        <div class="panel-body">
+                            <ul>
+                                <li><strong>{{'Admin.Informations.Cert_CN' | translate}} :</strong> {{cert.CN}}</li>
+                                <li><strong>{{'Admin.Informations.Cert_O' | translate}} :</strong> {{cert.O}}</li>
+                                <li><strong>{{'Admin.Informations.Cert_OU' | translate}} :</strong> {{cert.OU}}</li>
+                                <li><strong>{{'Admin.Informations.Cert_L' | translate}} :</strong> {{cert.L}}</li>
+                                <li><strong>{{'Admin.Informations.Cert_ST' | translate}} :</strong> {{cert.ST}}</li>
+                                <li><strong>{{'Admin.Informations.Cert_C' | translate}} :</strong> {{cert.C}}</li>
+                                <li><strong>{{'Admin.Informations.Cert_EMAILADDRESS' | translate}} :</strong>
+                                    {{cert.EMAILADDRESS}}
+                                </li>
+                                <li><strong>{{'Admin.Informations.Cert_Expire' | translate}} :</strong> {{cert.notAfter
+                                    | date}}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()">
+        <i class="fa fa-times"></i>
+        {{'Close' | translate}}
+    </button>
+</div>

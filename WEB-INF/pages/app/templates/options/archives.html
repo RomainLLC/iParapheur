@@ -1,0 +1,45 @@
+<div>
+    <h2 class="underscore">{{'Options.Arch_Title' | translate}}</h2>
+    <form name='dashboard' class="form-horizontal" ng-class="{launched: !archiveChanged}" novalidate>
+        <div class="form-group">
+            <label class="control-label col-md-4" for="pagesizeArchives">{{'Options.Dash_Page' | translate}} :</label>
+            <div class="controls col-md-6">
+                <input type="text" class="form-control" ng-change="archiveChanged=true" ng-model="prefs.pagesizeArchives" ng-value="prefs.pagesizeArchives" id="pagesizeArchives" min="5" max="100" name="pagesizeArchives" integer required>
+                <div class="input-help">
+                    <h4>{{'Options.Dash_Page_Helper' | translate}} 100</h4>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-4">{{'Options.Dash_Col_Order' | translate}} :</label>
+            <div class="controls col-md-6">
+                <div class="col-md-6">
+                    <label>{{'Options.Dash_Col_Show' | translate}}</label>
+                    <ul class="enabledColumns countainer-fluid" ng-mousedown="archiveChanged=true" ui-sortable="{connectWith:'.disabledColumns', cancel:'.ui-disabled'}" ng-model="archiveColumns.enabled">
+                        <li title="{{item.i18n | translate}}" ng-repeat="item in archiveColumns.enabled" ng-class="{true:'ui-disabled disabled', false:''}[item.disabled]" class="col-md-12 btn btn-default force-display">{{item.i18n | translate}}</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <label>{{'Options.Dash_Col_Hide' | translate}}</label>
+                    <ul class="disabledColumns countainer-fluid" ng-mousedown="archiveChanged=true" ui-sortable="{connectWith:'.enabledColumns'}" ng-model="archiveColumns.disabled">
+                        <li title="{{item.i18n | translate}}" ng-repeat="item in archiveColumns.disabled" class="col-md-12 btn btn-default force-display">{{item.i18n | translate}}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="alert alert-success col-md-4" ng-show="!archiveChanged && archiveSaved">{{'Options.Dash_Success' | translate}}</div>
+            <div class="col-md-4" ng-show="!(!archiveChanged && archiveSaved)"></div>
+            <div class="controls col-md-4">
+                <button type="submit" ng-init="archiveChanged = false; archiveSaved = false;" ng-click="saveArchivePrefs(); archiveChanged = false; archiveSaved = true;" class="btn btn-primary">
+                    <i class="fa fa-floppy-o"></i>
+                    {{'Options.Dash_Save' | translate}}
+                </button>
+                <button class="btn btn-primary" disabled>
+                    <i class="fa fa-floppy-o"></i>
+                    {{'Options.Dash_Save' | translate}}
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

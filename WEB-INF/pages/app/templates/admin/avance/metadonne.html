@@ -1,0 +1,123 @@
+<div>
+    <div style="top:100px;" class="nextDossierInfo" ng-if="!meta.isInit">
+                <span class="text text-info">
+                    {{'Admin.Avance.getting_infos' | translate}}
+                </span>
+        <span style="position: relative; width: 0px; z-index: 2000000000; right: 140px; top: 100px;" us-spinner="{radius:20, width:8, length: 16}" ></span>
+    </div>
+    <div class="col-md-12" ng-if="meta.isInit">
+        <div class="row">
+            <div class="col-md-3">
+                <h3>{{'Admin.Avance.Metadata.title' | translate}}</h3>
+                <span ng-click="meta.create()" class="btn btn-success"><i class="fa fa-plus"></i> {{'Admin.Avance.Metadata.create' | translate}}</span>
+                <ul class="list-unstyled nav nav-pills nav-stacked adminContent list-data">
+                    <li ng-repeat="m in meta.list | orderBy:'name':false" ng-class="meta.current.id == m.id ? 'active' : ''">
+                        <a ng-click="meta.select(m)">
+                            {{m.name}}
+                            <i ng-if="m.deletable" ng-click="meta.remove(m)" tooltip="Supprimer" ng-class="meta.current.id == m.id ? 'text-inverse' : 'text-danger'" class="fa fa-trash-o icon-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-9">
+                <div ng-if="!empty(meta.current)" class="row">
+                    <div class="col-md-12">
+                        <h4 ng-if="meta.current.isNew">{{'Admin.Avance.Metadata.creating' | translate}}</h4>
+                        <h4 ng-if="!meta.current.isNew">{{'Admin.Avance.Metadata.edit' | translate}} {{meta.current.name}}</h4>
+                        <form class="form-horizontal" name="metadata">
+                            <div class="col-md-12">
+
+                                <div class="form-group">
+                                    <label class="control-label col-sm-3" for="name">{{'Admin.Avance.Metadata.id' | translate}}</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" ng-pattern="/^[a-zA-Z]([\w])*$/"
+                                               id="name" name="name" ng-model="meta.current.id"
+                                               ng-disabled="!meta.current.isNew" placeholder="{{meta.current.id}}" required="required">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-sm-3" for="long">{{'Admin.Avance.Metadata.name' | translate}}</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control unvalidate" id="long" name="long" ng-model="meta.current.name" required="required">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-sm-3" for="nature">{{'Admin.Avance.Metadata.type' | translate}}</label>
+                                    <div class="col-sm-9">
+                                        <select class="form-control" ng-model="meta.current.type" name="nature"
+                                                id="nature" ng-disabled="!meta.current.isNew" required="required"
+                                                ng-options="type.value as (type.key | translate) for type in meta.nature">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="checkbox"
+                                         ng-if="!!meta.current.type && meta.current.type !== 'BOOLEAN'">
+                                        <label>
+                                            <input class="unvalidate" ng-model="meta.current.hasValues"
+                                                   type="checkbox"/> {{'Admin.Avance.Metadata.restrict_values' |
+                                            translate}}
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" ng-if="!!meta.current.type && meta.current.type !== 'BOOLEAN'">
+                                    <div class="checkbox" ng-if="meta.current.hasValues">
+                                        <label>
+                                            <input class="unvalidate" ng-model="meta.current.isAlphaOrdered"
+                                                   type="checkbox"/> {{'Admin.Avance.Metadata.alpha_ordered' |
+                                            translate}}
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12"
+                                     ng-if="meta.current.hasValues && !!meta.current.type && meta.current.type !== 'BOOLEAN'">
+                                    <h4>
+                                        {{'Admin.Avance.Metadata.autorized_values' | translate}}
+                                        <i class="fa fa-plus-circle text-success pointer" tooltip="{{'Admin.Avance.Metadata.add_value' | translate}}" ng-click="meta.addValue()"></i>
+                                    </h4>
+                                    <div class="form-group" ng-if="meta.current.hasValues" ng-repeat="value in meta.current.values">
+                                        <div class="row">
+                                            <div class="col-sm-9" ng-switch on="meta.current.type">
+                                                <div ng-switch-when="DATE" class="input-group col-md-12" style="padding: 0;">
+                                                    <input name="{{'date' + $index}}" id="{{'date' + $index}}" ng-cloak="" ip-id="'date' + $index" return-format="yy-mm-dd" readonly="true" ip-datepicker type="text" ng-model="value.value" class="form-control unvalidate" ng-disabled="!value.deletable">
+                                                    <span ng-if="!!value.value" ng-click="value.value = ''" class="pointer input-group-addon">
+                                                        <i class="fa fa-times"></i>
+                                                    </span>
+                                                    <label ng-if="!value.value" for="{{'date' + $index}}" class="pointer input-group-addon">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </label>
+                                                </div>
+                                                <input ng-switch-when="STRING" type="text" class="form-control unvalidate" ng-model="value.value" ng-disabled="!value.deletable">
+                                                <input ng-switch-when="URL" type="text" class="form-control unvalidate" ng-model="value.value" ng-disabled="!value.deletable">
+                                                <input type="text" ng-switch-when="INTEGER" integer ng-model="value.value" class="form-control" ng-disabled="!value.deletable">
+                                                <input type="text"  ng-switch-when="DOUBLE" decimal ng-model="value.value" class="form-control" ng-disabled="!value.deletable">
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <span class="btn btn-danger force-display" ng-if="value.deletable"
+                                                      ng-click="meta.deleteValue($index)">
+                                                    <i class="fa fa-trash"></i>
+                                                    {{'Delete' | translate}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <span ng-click="meta.save()" class="btn btn-primary force-display" ng-disabled="!metadata.$valid || (meta.current.isNew && meta.idExists())">
+                                    <i class="fa fa-save"></i>
+                                    {{'Admin.Avance.Metadata.save' | translate}}
+                                </span>
+                                <span class="text-success" ng-if="meta.hasSaved"><i class="fa fa-check"></i> {{'Admin.Avance.Metadata.saved' | translate}}</span>
+                                <span class="text-danger" ng-if="meta.errorMessage"><i class="fa fa-warning"></i> {{meta.errorMessage}}</span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

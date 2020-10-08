@@ -1,0 +1,13 @@
+{
+  "mailsecInfoModal": {
+    "folder_state_on_the_secured_mail_platform": "Folder state on the Secured Mail platform",
+    "refresh": "Refresh",
+    "send_date": "Date of dispatch",
+    "state": "State",
+    "mail": "Mail",
+    "modification_date": "Confirmation date",
+    "go_to_next_step_confirmed": "Go to next state confirmed.",
+    "use_my_remorse_right": "Use my remorse right",
+    "ignore_unconfirmed_mails": "Ignore unconfirmed mail"
+  }
+}

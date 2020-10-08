@@ -1,0 +1,16 @@
+{
+  "delegation": {
+    "Retrieving_current_delegation": "Récupération de la délégation actuelle...",
+    "Delegation": "Délégation",
+    "Activate_the_delegation": "Activer la délégation",
+    "Upcoming": "À venir",
+    "Past": "Passé",
+    "End_date": "Date de fin",
+    "Start_date": "Date de début",
+    "At_least_one_date_is_required": "Au moins une des deux dates est requise",
+    "Target_desk": "Bureau cible",
+    "Current_folders": "Dossiers en cours",
+    "Warning_delegation_cycle": "Attention : Délégation en boucle ! Cette configuration ne sera pas enregistrée.",
+    "Delegation_saved": "Délégation enregistrée"
+  }
+}

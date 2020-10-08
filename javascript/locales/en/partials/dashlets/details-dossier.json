@@ -1,0 +1,18 @@
+{
+  "details-dossier": {
+    "folderDetails": "Folder details",
+    "type": "Type",
+    "subtype": "Subtype",
+    "undefined": "Undefined",
+    "visibility": "Visibility",
+    "readFolder": "Read folder",
+    "unread folder": "Unread folder",
+    "tdtStatus": "TdT status",
+    "required": "Required",
+    "true": "True",
+    "false": "False",
+    "savedMetadatas": "Metadata saved",
+    "saveMetadatas": "Save metadata",
+    "addFile": "Add file"
+  }
+}

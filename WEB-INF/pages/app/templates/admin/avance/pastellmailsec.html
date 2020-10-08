@@ -1,0 +1,151 @@
+<div>
+    <div style="top:100px;" class="nextDossierInfo" ng-if="!pastellMailsec.isInit">
+        <span class="text text-info">
+            {{'Admin.Avance.getting_infos' | translate}}
+        </span>
+        <span style="position: relative; width: 0px; z-index: 2000000000; right: 140px; top: 100px;"
+              us-spinner="{radius:20, width:8, length: 16}"></span>
+    </div>
+    <div class="col-md-12" ng-if="pastellMailsec.isInit">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>{{'Admin.Avance.PastellMailsec.title' | translate}}</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <hr/>
+                <span ng-click="pastellMailsec.create()" class="btn btn-success"><i class="fa fa-plus-circle"></i> {{'Admin.Avance.PastellMailsec.create' | translate}}</span>
+                <ul class="list-unstyled nav nav-pills nav-stacked adminContent list-data">
+                    <li ng-repeat="conn in pastellMailsec.list"
+                        ng-class="pastellMailsec.selected.id == conn.id ? 'active' : ''">
+                        <a ng-click="pastellMailsec.select(conn)">
+                            {{conn.title}}
+                            <i ng-click="pastellMailsec.remove(conn)"
+                               ng-class="pastellMailsec.selected.id == conn.id ? 'text-inverse' : 'text-danger'"
+                               tooltip="Supprimer"
+                               class="fa fa-trash-o icon-right pointer"></i>
+                        </a>
+                    </li>
+                </ul>
+                <span ng-if="pastellMailsec.list.length == 0" class="text text-info">
+                    <i class="fa fa-info-circle"></i>
+                    Aucun connecteur présent
+                </span>
+            </div>
+            <div class="col-md-9">
+                <div class="col-md-12" ng-if="pastellMailsec.current">
+                    <form novalidate="novalidate" name="pastellmailsec" class="form-horizontal">
+                        <div class="col-md-6 col-md-offset-3">
+                            <h4 ng-if="pastellMailsec.current.isNew">Nouveau connecteur</h4>
+                            <h4 ng-if="!pastellMailsec.current.isNew">Modification du connecteur</h4>
+
+
+                            <div class="form-group mandatory-group">
+                                <label for="titleConnector">{{'Name' | translate}}</label>
+                                <span class="label label-warning"><i
+                                        class="fa fa-warning"></i> Unique</span>
+                                <span class="label label-danger"><i
+                                        class="fa fa-warning"></i> {{'Mandatory' | translate}}</span>
+                                <span class="label label-info"><i
+                                        class="fa fa-info-circle"></i> Min : 2</span>
+                                <input id="titleConnector" type="text" class="form-control unvalidate" ng-minlength="2"
+                                       required ng-change="pastellMailsec.exists = false"
+                                       ng-model="pastellMailsec.current.title" name="titleCert">
+                            </div>
+
+                            <div class="form-group mandatory-group">
+                                <label for="urlConnector">{{'Url' | translate}}</label>
+                                <span class="label label-danger"><i
+                                        class="fa fa-warning"></i> {{'Mandatory' | translate}}</span>
+                                <input id="urlConnector" type="text" class="form-control unvalidate" ng-minlength="2"
+                                       ng-model="pastellMailsec.current.url" name="urlConnector" required
+                                       ng-disabled="pastellMailsec.current.connected">
+                            </div>
+
+                            <div class="form-group mandatory-group">
+                                <label for="usernameConnector">Nom d'utilisateur</label>
+                                <span class="label label-danger"><i
+                                        class="fa fa-warning"></i> {{'Mandatory' | translate}}</span>
+                                <input id="usernameConnector" type="text" class="form-control unvalidate"
+                                       ng-minlength="2"
+                                       ng-model="pastellMailsec.current.login" name="usernameConnector" required
+                                       ng-disabled="pastellMailsec.current.connected">
+                                <span class="text text-info">
+                                    <i class="fa fa-info-circle">
+                                    </i>
+                                    L'utilisateur Pastell doit avoir les droits "mailsec" en édition et lecture
+                                </span>
+                            </div>
+
+                            <div class="form-group mandatory-group">
+                                <label for="passCert">{{'Options.Password' | translate}}</label>
+                                <span class="label label-danger"><i
+                                        class="fa fa-warning"></i> {{'Mandatory' | translate}}</span>
+                                <input id="passCert" type="password" class="form-control unvalidate"
+                                       ng-model="pastellMailsec.current.password" name="passCert"
+                                       required ng-disabled="pastellMailsec.current.connected">
+                            </div>
+                            <div class="row">
+                                <button ng-if="!pastellMailsec.current.connected"
+                                        class="btn btn-info force-display"
+                                        ng-click="pastellMailsec.plug()" ng-disabled="pastellMailsec.plugloading">
+                                    <i class="fa fa-plug"></i>
+                                    Connecter
+                                </button>
+
+                                <button ng-if="pastellMailsec.current.connected" class="btn btn-warning force-display"
+                                        ng-click="pastellMailsec.unplug()">
+                                    <i class="fa fa-plug"></i>
+                                    Déconnecter
+                                </button>
+
+                                <span ng-if="pastellMailsec.plugloading">
+                                    <i class="fa fa-spin fa-refresh"></i>
+                                </span>
+                                <span class="text-success" ng-if="pastellMailsec.current.connected">
+                                    <i class="fa fa-check"></i> Connecté
+                                </span>
+                                <span class="text-danger" ng-if="pastellMailsec.errorCode == 503">
+                                    <i class="fa fa-times"></i>
+                                    Connecteur Pastell indisponible, veuillez contacter votre administrateur
+                                </span>
+                                <span class="text-danger" ng-if="pastellMailsec.errorCode == 410">
+                                    <i class="fa fa-times"></i>
+                                    Impossible d'atteindre le serveur Pastell
+                                </span>
+                                <span class="text-danger" ng-if="pastellMailsec.errorCode == 401">
+                                    <i class="fa fa-times"></i>
+                                    Utilisateur ou mot de passe invalide
+                                </span>
+                            </div>
+                            <hr/>
+                            <div class="form-group mandatory-group">
+                                <label for="entity">Entité :</label>
+                                <span class="label label-danger"><i
+                                        class="fa fa-warning"></i> {{'Mandatory' | translate}}</span>
+                                <select ng-options="ent.id as ent.denomination for ent in pastellMailsec.entities"
+                                        ng-change="pastellMailsec.entitychanged()"
+                                        id="entity" class="form-control unvalidate"
+                                        ng-model="pastellMailsec.current.entity" name="entity" required
+                                        ng-disabled="!pastellMailsec.current.connected">
+                                </select>
+                            </div>
+                            <div class="row">
+                                <button class="btn btn-primary force-display"
+                                        ng-click="pastellMailsec.save()" ng-disabled="!pastellMailsec.current.entity">
+                                    <i class="fa fa-floppy-o"></i>
+                                    Enregistrer
+                                </button>
+                                <span ng-if="pastellMailsec.exists" class="text text-danger">
+                                    <i class="fa fa-warning"></i>
+                                    Un connecteur nommé {{pastellMailsec.current.title}} existe déjà !
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,38 @@
+<div class="modal-header">
+    <h3>{{'printModal.printing' | translate}}</h3>
+</div>
+<div class="modal-body row">
+    {{textModal}}
+    <div class="col-xs-12">
+        <span class="legend">{{'printModal.concerned_folder' | translate}}<hr></span>
+        <ul class="listeDossiers">
+            <li ng-repeat="dossier in dossiers"><span class="label label-info">{{dossier.actionDemandee}}</span>{{dossier.title}}</li>
+        </ul>
+    </div>
+    <div class="col-xs-12">
+        <label for="includeFirstPage">
+            <input ng-model="includeFirstPage" class="unvalidate" type="checkbox" id="includeFirstPage">
+            {{'printModal.print_with_signature_slip' | translate}}
+        </label>
+    </div>
+    <div class="col-xs-12" ng-if="dossiers[0].annexes.length > 0">
+        <span class="legend">{{'printModal.annexes' | translate}}<hr></span>
+        <div ng-repeat="annexe in dossiers[0].annexes">
+            <label for="annexe_{{$index}}">
+                <input ng-init="checkboxAnnexes[$index] = dossiers[0].includeAnnexes" ng-model="checkboxAnnexes[$index]" class="unvalidate" type="checkbox" id="annexe_{{$index}}">
+                {{annexe.name}}
+            </label>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-warning" ng-click="cancel()">
+        <i class="fa fa-times-circle-o"></i>
+        {{'Back' | translate}}
+    </button>
+    <a class="btn btn-primary" target="_blank" href="{{context}}/proxy/alfresco/parapheur/dossiers/{{dossiers[0].id}}/print?includeFirstPage={{includeFirstPage}}&attachments={{annexesToInclude | encodeURIComponent}}" ng-click="ok()">
+        <i class="fa fa-print"></i>
+        {{'Print' | translate}}
+    </a>
+</div>

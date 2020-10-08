@@ -1,0 +1,78 @@
+<div>
+    <div style="top:100px;" class="nextDossierInfo" ng-if="!attestation.isInit">
+                <span class="text text-info">
+                    {{'Admin.Avance.getting_infos' | translate}}
+                </span>
+        <span style="position: relative; width: 0px; z-index: 2000000000; right: 140px; top: 100px;" us-spinner="{radius:20, width:8, length: 16}" ></span>
+    </div>
+    <div class="col-md-12" ng-if="attestation.isInit">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>{{'Admin.Avance.Attestation.title' | translate}}</h3>
+            </div>
+        </div>
+        <div class="row">
+            <form class="form-horizontal">
+                <div class="col-md-12">
+
+                    <div class="row">
+                        <div class="form-group col-md-4">
+                            <div>
+                                <div class="radio">
+                                    <label for="connecteurActivAttest">
+                                        <input class="unvalidate" id="connecteurActivAttest"
+                                               ng-model="attestation.config.enabled" type="radio" value="true"
+                                               name="connecteurStateAttest">{{'Admin.Avance.Archiland.enable' |
+                                        translate}}
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label for="connecteurDesactivAttest">
+                                        <input class="unvalidate" id="connecteurDesactivAttest"
+                                               ng-model="attestation.config.enabled" type="radio" value="false"
+                                               name="connecteurStateAttest">{{'Admin.Avance.Archiland.disable' |
+                                        translate}}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="serverAttestation">{{'Admin.Avance.Attestation.server_name' | translate}}</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control unvalidate" id="serverAttestation" name="serverAttestation" ng-model="attestation.config.host">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="portAttestation">{{'Admin.Avance.Attestation.server_port' | translate}}</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control unvalidate" id="portAttestation" name="portAttestation" ng-model="attestation.config.port">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="userAttestation">{{'Admin.Avance.Attestation.username' | translate}}</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control unvalidate" id="userAttestation" name="userAttestation" ng-model="attestation.config.username">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3" for="passAttestation">{{'Admin.Avance.Attestation.password' | translate}}</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control unvalidate" id="passAttestation" name="passAttestation" ng-model="attestation.config.password">
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="col-md-12">
+                    <input type="button" ng-click="attestation.set()" class="btn btn-success force-display" value="{{'Admin.Avance.Attestation.save_config' | translate}}">
+                    <span ng-if="attestation.isSaved" class="text text-success"><i class="fa fa-check"></i>{{'Admin.Avance.Attestation.saved' | translate}}</span>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

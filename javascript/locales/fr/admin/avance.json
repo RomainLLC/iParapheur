@@ -1,0 +1,25 @@
+{
+  "Admin": {
+    "Avance": {
+      "title": "Administration avancée",
+      "mailsec_pastell": "Pastell MAIL-SECURISÉ",
+      "config_tdt": "Connecteurs",
+      "actes": "S²LOW ACTES",
+      "helios": "S²LOW HELIOS",
+      "mailsec": "S²LOW MAIL-SECURISÉ",
+      "fast": "FAST HELIOS",
+      "srci": "SRCI HELIOS",
+      "advanced_config": "Configuration avancée",
+      "other_config": "Autres connecteurs",
+      "models": "Modèles (e-mails et bordereau)",
+      "attestation": "Service d'attestation de signature",
+      "horodate": "Serveur d'horodatage",
+      "mail_service": "Configuration mail-service",
+      "archiland": "Configuration Archiland",
+      "metadata": "Dictionnaire personnalisé des méta-données",
+      "calque": "Calques d'impression de dossiers",
+      "cachet": "Certificats de cachet serveur",
+      "getting_infos": "Récupération de la configuration actuelle..."
+    }
+  }
+}

@@ -1,0 +1,62 @@
+<div class="modal-header">
+    <h3>{{'mailModal.sending_mail' | translate}}</h3>
+</div>
+<div class="modal-body row">
+    <form novalidate name="modalForm" class="row form-horizontal">
+        <div class="col-md-6">
+            <label class="col-xs-12">
+                {{'mailModal.to' | translate}} : <input type="text" class="form-control" ng-pattern="/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5}){1,25}(;[ ]{0,1}([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5}){1,25})*$/" ng-model="action.destinataires">
+            </label>
+            <label class="col-xs-12">
+                {{'mailModal.object' | translate}} : <input type="text" class="form-control" ng-model="action.objet">
+            </label>
+            <label class="col-xs-12">
+                {{'mailModal.message' | translate}} :
+                <div>
+                    <textarea class="form-control mailCore" ng-model="action.message"></textarea>
+                    <i class="fa fa-4x fa-envelope-o textarea-icon"></i>
+                </div>
+            </label>
+        </div>
+        <div class="col-md-6">
+            <div class="col-xs-12">
+                <span class="legend">{{'mailModal.folder_list' | translate}}<hr></span>
+                <ul class="listeDossiers">
+                    <li ng-repeat="dossier in dossiers" class="btn btn-default col-md-12 force-display"><span class="label label-info">{{dossier.actionDemandee === "ARCHIVAGE" ? "À EXTRAIRE" : dossier.actionDemandee}}</span>{{dossier.title}}</li>
+                </ul>
+            </div>
+            <div class="col-xs-12">
+                <label for="includeFirstPage">
+                    <input ng-model="action.includeFirstPage" class="unvalidate" type="checkbox" id="includeFirstPage">
+                    {{'mailModal.send_signature_slip' | translate}}
+                </label>
+            </div>
+            <div class="col-xs-12" ng-show="hasAnnexes">
+                <span class="legend">{{'mailModal.annexes_to_add' | translate}}<hr></span>
+                <label ng-show="dossiers.length > 1">
+                    <input type="checkbox" class="checkbox-inline unvalidate" ng-model="action.annexesIncluded">
+                    {{'mailModal.send_annexes' | translate}}
+                </label>
+                <ul ng-show="dossiers.length === 1">
+                    <li ng-repeat="annexe in action.attachments">
+                        <label>
+                            <input type="checkbox" name="selectedAnnexes[]" class="checkbox-inline unvalidate" ng-model="annexe.selected">
+                            {{annexe.name}}
+                        </label>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="modal-footer">
+    <button ng-disabled="spin" class="btn btn-warning" ng-click="cancel()">
+        <i class="fa fa-times-circle-o"></i>
+        {{'Back' | translate}}
+    </button>
+    <button ng-disabled="spin" class="btn btn-primary" ng-click="ok()">
+        <i class="fa fa-paper-plane-o"></i>
+        {{'Send' | translate}}
+    </button>
+</div>

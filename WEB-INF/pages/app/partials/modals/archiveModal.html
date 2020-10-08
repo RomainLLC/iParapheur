@@ -1,0 +1,47 @@
+<div class="modal-header">
+    <h3>{{'archiveModal.archiving' | translate}}</h3>
+</div>
+<div class="modal-body row">
+    {{textModal}}
+    <table class="table table-bordered table-archive">
+        <thead>
+            <tr>
+                <th>{{'archiveModal.folder_name' | translate}}</th>
+                <th>{{'archiveModal.archive_name' | translate}}<br>{{'archiveModal.archive_name_default' | translate}}</th>
+                <th><label for="selectAllPJ"><input ng-model="masterCheckbox" ng-click="setAllCheck(!masterCheckbox)" id="selectAllPJ" type="checkbox" class="checkbox-inline unvalidate"> {{'archiveModal.add_annexes' | translate}}</label></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="dossier in dossiers">
+                <td><label for="name_{{$index}}"><i class="fa fa-file"></i>&nbsp;{{dossier.title}}</label></td>
+                <td><input type="text" ng-model="archivesNames[$index]" class="form-control unvalidate" id="name_{{$index}}" placeholder="{{dossier.title}}.pdf"></td>
+                <td ng-if="dossiers.length === 1 && dossiers[0].annexes.length === 0"><i class="fa fa-warning"></i>&nbsp;Aucune annexe</td>
+                <td ng-if="dossiers.length === 1 && dossiers[0].annexes.length > 0">
+                    <label for="annexe_{{$index}}" ng-repeat="annexe in dossiers[0].annexes">
+                        <input ng-init="checkboxAnnexes[$index] = dossiers[0].includeAnnexes" ng-model="checkboxAnnexes[$index]" class="unvalidate" type="checkbox" id="annexe_{{$index}}">
+                        {{annexe.name}}
+                    </label>
+                </td>
+                <td ng-if="dossiers.length > 1">
+                    <div class="checkbox" style="text-align: center;">
+                        <input style="float:none;" ng-init="checkboxAnnexes[$index] = dossiers[0].includeAnnexes" class="unvalidate" ng-model="checkboxAnnexes[$index]" type="checkbox">
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="modal-footer">
+    <progressbar class="progress-striped active progress-modal" value="progress" max="max" type="info">
+        <span style="color:black; white-space:nowrap;">{{'archiveModal.handled_folders' | translate}} : {{progress}} / {{max}}</span>
+    </progressbar>
+    <button class="btn btn-warning" ng-click="cancel()">
+        <i class="fa fa-times-circle-o"></i>
+        {{'Back' | translate}}
+    </button>
+    <button class="btn btn-primary" ng-click="ok()">
+        <i class="fa fa-check"></i>
+        Valider
+    </button>
+</div>

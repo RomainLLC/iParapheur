@@ -1,0 +1,30 @@
+<div class="modal-header">
+    <h3>{{'journalModal.event_log' | translate}}</h3>
+</div>
+<div class="modal-body row">
+    <table class="table table-bordered table-striped" style="table-layout: fixed;">
+        <thead>
+            <tr>
+                <th>{{'journalModal.date' | translate}}</th>
+                <th>{{'journalModal.name' | translate}}</th>
+                <th>{{'journalModal.annotation_observation' | translate}}</th>
+                <th>{{'journalModal.state' | translate}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="event in dossiers[0].events">
+                <td>{{event.date}}</td>
+                <td>{{event.nom}}</td>
+                <td style="word-wrap: break-word;" ng-bind-html="event.annotation"></td>
+                <td>{{event.status}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()">
+        <i class="fa fa-times"></i>
+        {{'Close' | translate}}
+    </button>
+</div>

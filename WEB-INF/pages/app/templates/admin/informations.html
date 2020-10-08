@@ -1,0 +1,88 @@
+<script type="text/ng-template"  id="popover_users">
+    <ul class="list-unstyled">
+        <li ng-repeat="user in infos.users">{{user}}</li>
+    </ul>
+</script>
+
+<div class="row-fluid">
+    <div class="menuAdmin col-md-3 label label-info headertop" removeonsize="992" classes-list="label label-info" ng-include src="'partials/adminNavbar.html'"></div>
+    <div ng-cloak class="col-md-11 col-md-offset-1">
+        <h2>{{'Admin.Informations.Info_Title' | translate}}</h2>
+        <div class="row">
+            <div class="col-md-3">
+                <div>
+                    <span class="btn btn-info" ng-if="!isTenant" ng-click="reloadInfos()"><i class="fa fa-refresh"></i> {{'Admin.Informations.Info_Reload' | translate}}</span>
+                    <span class="btn btn-success" ng-click="launchHealthStatus()"><i
+                            class="fa fa-medkit"></i> {{'Admin.Informations.Info_Health' | translate}}</span>
+
+                    <div ng-show="reload.all" class="text-info">{{'Admin.Informations.Info_Reloaded' | translate}} <i
+                            class="fa fa-check"></i></div>
+                </div>
+                <div ng-if="!isTenant">
+                    <p><br><strong>{{'Admin.Informations.Users_Connected' | translate}} :</strong>
+                        {{infos.users.length}}
+                        <i ng-if="infos.users.length <= +properties['parapheur.ihm.admin.users.connected.threshold']" title="Utilisateurs connectés" class="fa fa-question-circle pointer" bs-popover="'popover_users'" data-trigger="hover"></i>
+                    </p>
+                </div>
+                <div>
+                    <h3>{{'Admin.Informations.Info_Check' | translate}}</h3>
+
+                    <div>
+                        <i tooltip="{{'Admin.Informations.Info_Relaunch' | translate}}"
+                           ng-if="infos.office.available && !isTenant" ng-click="restartOffice()"
+                           class="fa fa-refresh pointer"></i>
+                        <strong>{{infos.office.available && infos.office.ooName ? infos.office.ooName + " " +
+                            infos.office.ooSetupVersion : "OpenOffice"}} : </strong>
+                        <i class="fa-2x"
+                           ng-class="infos.office.available ? 'text-success fa fa-check' : 'text-danger fa fa-times'"></i>
+                        <span class="text-success" ng-if="reload.office">
+                            {{'Admin.Informations.Info_Office_Success' | translate}}
+                        </span>
+                        <span class="text-danger" ng-if="reload.errorOffice">
+                            {{'Admin.Informations.Info_Office_Error' | translate}}
+                        </span>
+                    </div>
+                    <div>
+                        <i tooltip="{{'Admin.Informations.Info_Relaunch' | translate}}"
+                           ng-if="!isTenant && !reload.xemelios" ng-click="restartXemelios()"
+                           class="fa fa-refresh pointer"></i>
+                        <strong>Xemelios : </strong>
+                        <i ng-if="!reload.xemelios" class="fa-2x"
+                           ng-class="infos.isXemEnabled ? 'text-success fa fa-check' : 'text-danger fa fa-times'"></i>
+
+                        <div class="inline" ng-class="reload.xemelios ? 'css-loader' : ''"></div>
+                        <span ng-if="reload.xemelios" class="text text-info">{{'Admin.Informations.Info_Wait' | translate}}</span>
+                    </div>
+                    <div ng-if="!infos.isGSEnabled"><strong>GhostScript : </strong><i class="fa-2x"
+                                                                                      ng-class="infos.isGSEnabled ? 'text-success fa fa-check' : 'text-danger fa fa-times'"></i>
+                    </div>
+                    <div ng-if="!isTenant">
+                        <i tooltip="{{'Admin.Informations.Info_Reload' | translate}}" ng-click="reloadProperties()" ng-if="!isTenant" class="fa fa-refresh pointer"></i>
+                        <strong>{{'Admin.Informations.Info_Prop' | translate}} : </strong>
+                        <i class="fa-2x" ng-class="infos.isPropertiesFound ? 'text-success fa fa-check' : 'text-danger fa fa-times'"></i>
+                        <span class="text-success" ng-if="reload.properties">
+                            {{'Admin.Informations.Info_Prop_Reload' | translate}}
+                        </span>
+                        <span class="text-danger" ng-if="reload.errorProperties">
+                            {{'Admin.Informations.Info_Prop_Error' | translate}} <i class="fa fa-warning"></i>
+                        </span>
+                    </div>
+                    <div ng-if="infos.isASEnabled"><strong>LiberValid : </strong><i class="fa-2x"
+                                                                                    ng-class="infos.isASEnabled ? 'text-success fa fa-check' : 'text-danger fa fa-times'"></i>
+                    </div>
+                </div>
+                <div ng-if="!isTenant">
+                    <h3>{{'Admin.Informations.Info_CPU' | translate}}</h3>
+                    <p><strong>{{'Admin.Informations.Info_Core' | translate}} :</strong> {{infos.cores}}</p>
+                </div>
+            </div>
+            <div class="col-md-4" ng-if="!isTenant">
+                <div id="memChart" style="height: 300px;" pie-chart pie-title="'Admin.Informations.Info_Mem' | translate" pie-tooltip="'{name}: {y} Mo'" dataset="memChartData"></div>
+            </div>
+            <div class="col-md-4" ng-if="!isTenant">
+                <div id="diskChart" style="height: 300px;" pie-chart pie-title="'Admin.Informations.Info_HDD' | translate" pie-tooltip="'{name}: {y} Go'" dataset="diskChartData"></div>
+            </div>
+        </div>
+
+    </div>
+</div>

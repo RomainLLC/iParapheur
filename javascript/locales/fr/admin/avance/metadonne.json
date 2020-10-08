@@ -1,0 +1,34 @@
+{
+  "Admin": {
+    "Avance": {
+      "Metadata": {
+        "title": "Gérer les métadonnées",
+        "reload": "Recharger les métadonnées par défaut",
+        "create": "Créer une métadonnée",
+        "creating": "Créer une metadonnée",
+        "edit": "Modifier la métadonnée",
+        "id": "Nom court (identifiant)",
+        "name": "Nom long (Libellé affiché)",
+        "type": "Nature",
+        "type_select": "-- Sélection du type --",
+        "text": "Texte",
+        "date": "Date",
+        "integer": "Nombre entier",
+        "double": "Nombre décimal",
+        "boolean": "Booléen",
+        "url": "URL",
+        "restrict_values": "Restreindre les valeurs autorisées",
+        "alpha_ordered": "Tri par ordre alphabétique lors de l'affichage",
+        "autorized_values": "Valeurs autorisées",
+        "add_value": "Ajouter une valeur",
+        "save": "Enregistrer",
+        "saved": "Métadonnée sauvegardée.",
+        "save_error": "Erreur à la sauvegarde ",
+        "same_name_error" : "Une métadonnée ayant le même nom existe déjà !",
+
+        "mod_del_title": "Suppression de la métadonnée",
+        "mod_del_confirm": "Etes-vous sûr de vouloir supprimer cette métadonnée ?"
+      }
+    }
+  }
+}

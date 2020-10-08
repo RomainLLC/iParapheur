@@ -1,0 +1,10 @@
+{
+  "signPaperModal": {
+    "signature_paper_confirmation": "Confimer la signature papier",
+    "Transmit_after_printing_and_paper_signature": "Transmettre après impression et signature papier",
+    "public_annotation": "Annotation publique",
+    "private_annotation": "Annotation privée",
+    "folder_list": "Liste des dossiers",
+    "handled_folders": "Dossier(s) traité(s)"
+  }
+}

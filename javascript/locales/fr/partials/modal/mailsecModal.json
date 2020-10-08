@@ -1,0 +1,15 @@
+{
+  "mailsecModal": {
+    "send_by_secure_mail": "Envoyer par Mail Sécurisé",
+    "to": "Á",
+    "cc": "Copie à",
+    "cci": "Copie cachée à",
+    "object": "Objet",
+    "message": "Message",
+    "password": "Mot de passe",
+    "sending_password_uncrypted": "Envoyer le mot de passe en clair ?",
+    "annexes_to_add": "Annexes à joindre",
+    "folder_list": "Liste des dossiers",
+    "include_bord": "Joindre le bordereau de signature"
+  }
+}

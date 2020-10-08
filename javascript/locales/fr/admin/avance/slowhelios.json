@@ -1,0 +1,40 @@
+{
+  "Admin": {
+    "Avance": {
+      "Helios": {
+        "title": "Configurer le connecteur S²LOW HELIOS",
+        "enable": "Activer le connecteur",
+        "disable": "Désactiver le connecteur",
+        "connect_to_server": "Connexion au serveur S²LOW HELIOS",
+        "xades_profile": "Profil de signature XAdES",
+        "server_name": "Nom du serveur",
+        "server_port": "Port",
+        "certificate": "Certificat de connexion",
+        "certificate_error": "Le fichier n'est pas du type attendu (.p12).",
+        "certificate_sel": "Certificat sélectionné",
+        "certificate_actual": "Certificat Actuel",
+        "certificate_expiration": "Date d'expiration",
+        "certificate_passwd": "Mot de passe du certificat",
+        "certificate_expired": "Certificat expiré",
+        "connection_with_user": "Connexion avec l'utilisateur",
+        "user": "Compte utilisateur",
+        "passwd": "Mot de passe",
+        "certificate_connection": "Connexion avec le certificat",
+        "must_save": "La connexion doit être validée pour Enregistrer la configuration",
+        "test_config": "Tester la configuration",
+        "save_config": "Enregistrer la configuration",
+        "test_updated": "Tests mis à jour.",
+        "warn_disabled": "Attention, le connecteur est désactivé.",
+        "saved": "Configuration sauvegardée.",
+        "policy_identifier": "PES : Policy Identifier par défaut",
+        "policy_identifier_description": "PES : Policy Description par défaut",
+        "policy_digest": "PES : Policy Digest par défaut",
+        "spuri": "PES : SPURI par défaut",
+        "claimed_role": "PES: Claimed role",
+        "postal_code": "Code postal",
+        "city": "Ville",
+        "country": "Pays"
+      }
+    }
+  }
+}

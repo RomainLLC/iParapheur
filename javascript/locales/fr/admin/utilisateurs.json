@@ -1,0 +1,108 @@
+{
+  "Admin": {
+    "Users": {
+      "User_Title": "Gestion des utilisateurs",
+      "User_Create": "Ajouter un utilisateur",
+      "User_Search": "Rechercher des utilisateurs",
+      "User_Searching": "Recherche d'utilisateurs...",
+      "User_Lastname": "Nom",
+      "User_Firstname": "Prénom",
+      "User_Name": "Nom d'utilisateur",
+      "User_Exist": "Cet utilisateur existe déjà.",
+      "User_MultiT": "Impossible de créer un utilisateur comportant un @ lorsque le mode multi-collectivités est activé.",
+      "User_SpecialChar": "Attention, les caractères suivants sont interdits : & \" £ * / < > ? % | + ; :",
+      "User_Mail": "Courriel",
+      "User_Mail_Error": "Attention, ce champ doit être un courriel valide",
+      "User_Info": "Informations",
+      "User_HasCert": "Cet utilisateur est associé à un certificat de connexion",
+      "User_IsAdmin": "Cet utilisateur est administrateur",
+      "User_IsFonc": "Cet utilisateur est administrateur fonctionnel",
+      "User_LDAP": "Cet utilisateur provient d'une synchronisation LDAP",
+      "User_Actions": "Actions",
+      "User_None": "Aucun résultat",
+      "User_HasToSearch": "Lancez une recherche afin de voir les utilisateurs",
+
+
+
+      "_comment" : "--- MODALE ---",
+
+      "UserMod_New_Title": "Définir le mot de passe de l'utilisateur",
+      "UserMod_New_Msg": "Afin de finaliser la création de l'utilisateur, merci de lui définir un mot de passe",
+
+      "UserMod_Remove" : "Supprimer l'utilisateur",
+      "UserMod_Remove_LDAP": "L'utilisateur provient d'une synchronisation LDAP, il sera recréé lors de la prochaine synchronisation. ",
+      "UserMod_Remove_Prop": "L'utilisateur est propriétaire ou secrétaire de bureau(x). ",
+      "UserMod_Remove_Confirm": "Confirmer la suppression ?",
+
+      "UserMod_Title": "Modifier l'utilisateur",
+      "UserMod_Required": "Requis",
+      "UserMod_General": "Général",
+      "UserMod_Comp": "Informations complémentaires",
+      "UserMod_CompInfo": "CSV clé=\"valeur\", par exemple TITRE=\"Directeur des achats\"",
+
+      "UserMod_Password": "Mot de Passe",
+      "UserMod_Actual_Pass": "Mot de passe actuel",
+      "UserMod_New_Pass": "Nouveau mot de passe",
+      "UserMod_Min_Pass": "Le mot de passe doit contenir plus de 3 caractères",
+      "UserMod_Max_Pass": "Le mot de passe doit contenir moins de 32 caractères",
+      "UserMod_Confirm_Pass": "Confirmer le mot de passe",
+      "UserMod_Save_Pass": "Enregistrer la modification",
+      "UserMod_Error_Confirm": "Les deux champs ne sont pas égaux.",
+      "UserMod_Saved_Pass": "Mot de passe sauvegardé avec succès",
+      "UserMod_Error_Pass": "Erreur lors de la modification du mot de passe",
+      "UserMod_Invalid_Pass": "Mot de passe actuel invalide",
+
+      "UserMod_Notifs": "Notifications",
+      "_comment": "Les autres traductions sont dans le general.json",
+
+      "UserMod_Cert": "Certificat",
+      "UserMod_Cert_Choose": "Certificat de connexion",
+      "UserMod_Cert_Save": "Supprimer le certificat",
+      "UserMod_Cert_None": "Pas de certificat de connexion pour cet utilisateur",
+      "UserMod_Cert_File": "Le fichier sélectionné n'est pas un certificat X509 au format .pem .cer ou .crt.",
+      "UserMod_Cert_Emit": "Émetteur",
+      "UserMod_Cert_ID": "ID du certificat",
+      "UserMod_Cert_CN": "Titulaire (CN)",
+      "UserMod_Cert_O": "Organisation (O)",
+      "UserMod_Cert_Contact": "Contact",
+      "UserMod_Cert_Serial": "Numéro de série",
+      "UserMod_Cert_Begin": "Début de validité",
+      "UserMod_Cert_End": "Fin de validité",
+      "UserMod_Cert_Download": "Télécharger le certificat",
+      "UserMod_Cert_Used": "possède déjà ce certificat, sauvegarder le désassociera de cet utilisateur.",
+
+
+      "UserMod_Sig": "Signature",
+      "UserMod_Sig_Choose": "Image de signature",
+      "UserMod_Sig_Delete": "Supprimer la signature",
+      "UserMod_Sig_NoScan": "Pas d'image de signature pour cet utilisateur",
+      "UserMod_Sig_Err1": "Erreur : Le fichier séléctionné n'est pas une image.",
+      "UserMod_Sig_Err2": "Votre fichier doit être de type JPG, PNG ou GIF.",
+
+
+      "UserMod_Rights": "Droits",
+      "UserMod_Rights_Admin": "Administrateur",
+      "UserMod_Rights_Fonc": "Administrateur fonctionnel",
+      "UserMod_Rights_None": "Aucun droit d'administration",
+      "UserMod_Right_Selected": "Bureaux sélectionnés",
+      "UserMod_Right_Selected_None": "Aucun bureau",
+
+
+      "UserMod_Bur": "Bureaux",
+      "UserMod_Bur_None": "Cet utilisateur n'est associé à aucun bureau.",
+      "UserMod_Bur_Title": "Titre",
+      "UserMod_Bur_Prop": "Propriétaire",
+      "UserMod_Bur_Sec": "Secrétaire",
+      "UserMod_Bur_Actions": "Action",
+      "UserMod_Bur_Remove": "Dissocier du bureau",
+      "UserMod_Bur_Error": "Erreur lors de la dissociation de l'utilisateur du bureau.",
+      "UserMod_Bur_Warning": "Attention, dissocier un bureau est instantané.",
+
+
+      "UserMod_Gr": "Groupes",
+      "UserMod_Gr_Actual": "L'utilisateur actuel appartient aux groupes suivants",
+      "UserMod_Gr_Remove": "Dissocier l'utilisateur du groupe",
+      "UserMod_Gr_None": "Cet utilisateur n'appartient à aucun groupe."
+    }
+  }
+}

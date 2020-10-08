@@ -1,0 +1,134 @@
+<div id="details-dossier" class="well dashlet">
+    <h3 ng-click="element.show = !element.show" class="pointer text-info">{{'details-dossier.folderDetails' | translate}}</h3>
+    <div class="dashlet-content" bn-slide-show="element.show">
+        <ul>
+            <li>{{'details-dossier.type' | translate}} : {{dossier.type}}<span ng-if="!dossier.type" class="text-info"><i class="fa fa-info-circle"></i> {{'details-dossier.undefined' | translate}}</span></li>
+            <li>{{'details-dossier.subtype' | translate}} : {{dossier.sousType}}<span ng-if="!dossier.sousType" class="text-info"><i class="fa fa-info-circle"></i> {{'details-dossier.undefined' | translate}}</span></li>
+            <li>{{'details-dossier.visibility' | translate}} : {{dossier.visibility === "group" ? "groupe" : dossier.visibility}}</li>
+            <li><span ng-if="dossier.isRead">{{'details-dossier.readFolder' | translate}}</span><span ng-if="!dossier.isRead">{{'details-dossier.unreadFolder' | translate}}</span></li>
+            <li ng-if="dossier.actionDemandee === 'TDT' && dossier.isSent">{{'details-dossier.tdtStatus' | translate}} : {{dossier.status}} <i class="pointer fa fa-refresh" ng-click="refreshStatus()"></i></li>
+            <li ng-repeat="(metaName, metaInfo) in dossier.metadatas" ng-if="metaInfo.editable === 'false'">
+                {{metaInfo.realName}} :
+                <span ng-switch on="metaInfo.type">
+                    <span ng-switch-when="DOUBLE">
+                        {{metaInfo.value | number:2}}
+                    </span>
+                    <span ng-switch-when="DATE">
+                         {{metaInfo.value | date:'dd/MM/yyyy'}}
+                    </span>
+                    <span ng-switch-when="BOOLEAN">
+                         {{metaInfo.value === 'true' ? 'Oui' : 'Non'}}
+                    </span>
+                    <span ng-switch-when="URL">
+                        <a target="_blank" ng-href="{{metaInfo.value}}">{{metaInfo.value}}</a>
+                    </span>
+                    <span ng-switch-default>
+                         {{metaInfo.value}}
+                    </span>
+                </span>
+            </li>
+        </ul>
+        <form name='metasForm' ng-init="setFormScope(this)" ng-show="!empty(dossier.metadatas)" class="container-fluid" novalidate>
+            <div ng-switch on="metaInfo.type" ng-if="metaInfo.editable === 'true'" class="control-group" ng-repeat="(metaName, metaInfo) in dossier.metadatas">
+                <div class="form-group col-md-12" ng-class="{true:'mandatory-group', false:''}[metaInfo.mandatory === 'true']" ng-switch-when="DATE" ng-hide="metaInfo.values">
+                    <label class="control-label" for="{{metaName}}">{{metaInfo.realName}}</label>
+                    <span class="fa fa-warning label label-danger" ng-show="{{metaInfo.mandatory === 'true'}}"> {{'details-dossier.required' | translate}}</span>
+                    <div class="input-group">
+                        <input ng-change="metaChanged()" ng-cloak="" ip-id="metaName" return-format="timestamp" readonly="true" ip-datepicker type="text" ng-class="{true:'', false:'unvalidate'}[metaInfo.mandatory === 'true']" ng-model="dossier.metadatas[metaName].value" class="form-control" ng-required="metaInfo.mandatory === 'true' && !metaInfo.values">
+                        <span ng-click="dossier.metadatas[metaName].value = ''" class="pointer input-group-addon">X</span>
+                    </div>
+                </div>
+                <div class="form-group col-md-12"  ng-class="{true:'mandatory-group', false:''}[metaInfo.mandatory === 'true']" ng-switch-when="STRING" ng-hide="metaInfo.values">
+                    <label class="control-label" for="{{metaName}}">{{metaInfo.realName}}</label>
+                    <span class="fa fa-warning label label-danger" ng-show="{{metaInfo.mandatory === 'true'}}"> {{'details-dossier.required' | translate}}</span>
+                    <input ng-cloak type="text" ng-change="metaChanged()" id="{{metaName}}" ng-model="dossier.metadatas[metaName].value" ng-class="{true:'', false:'unvalidate'}[metaInfo.mandatory === 'true']" class="form-control" ng-required="metaInfo.mandatory === 'true'  && !metaInfo.values">
+                </div>
+                <div class="form-group col-md-12"
+                     ng-class="{true:'mandatory-group', false:''}[metaInfo.mandatory === 'true']" ng-switch-when="URL"
+                     ng-hide="metaInfo.values">
+                    <label class="control-label" for="{{metaName}}">{{metaInfo.realName}}</label>
+                    <span class="fa fa-warning label label-danger" ng-show="{{metaInfo.mandatory === 'true'}}"> {{'details-dossier.required' | translate}}</span>
+                    <input ng-cloak type="text" ng-change="metaChanged()" id="{{metaName}}"
+                           ng-model="dossier.metadatas[metaName].value"
+                           ng-class="{true:'', false:'unvalidate'}[metaInfo.mandatory === 'true']" class="form-control"
+                           ng-required="metaInfo.mandatory === 'true'  && !metaInfo.values">
+                </div>
+                <div class="form-group col-md-12"  ng-class="{true:'mandatory-group', false:''}[metaInfo.mandatory === 'true']" ng-switch-when="INTEGER" ng-hide="metaInfo.values">
+                    <label class="control-label" for="{{metaName}}">{{metaInfo.realName}}</label>
+                    <span class="fa fa-warning label label-danger" ng-show="{{metaInfo.mandatory === 'true'}}"> {{'details-dossier.required' | translate}}</span>
+                    <input type="text" integer ng-change="metaChanged()" id="{{metaName}}" ng-model="dossier.metadatas[metaName].value" ng-class="{true:'', false:'unvalidate'}[metaInfo.mandatory === 'true']" class="form-control" ng-required="metaInfo.mandatory === 'true'  && !metaInfo.values">
+                </div>
+                <div class="form-group col-md-12"  ng-class="{true:'mandatory-group', false:''}[metaInfo.mandatory === 'true']" ng-switch-when="DOUBLE" ng-hide="metaInfo.values">
+                    <label class="control-label" for="{{metaName}}">{{metaInfo.realName}}</label>
+                    <span class="fa fa-warning label label-danger" ng-show="{{metaInfo.mandatory === 'true'}}"> {{'details-dossier.required' | translate}}</span>
+                    <input type="text" decimal ng-change="metaChanged()" id="{{metaName}}" ng-model="dossier.metadatas[metaName].value" ng-class="{true:'', false:'unvalidate'}[metaInfo.mandatory === 'true']" class="form-control" ng-required="metaInfo.mandatory === 'true'  && !metaInfo.values">
+                </div>
+                <div class="form-group col-md-12"  ng-class="{true:'mandatory-group', false:''}[metaInfo.mandatory === 'true']" ng-switch-when="BOOLEAN">
+                    <label class="control-label" for="{{metaName}}">{{metaInfo.realName}}</label>
+                    <span class="fa fa-warning label label-danger" ng-show="{{metaInfo.mandatory === 'true'}}"> {{'details-dossier.required' | translate}}</span>
+                    <select id="{{metaName}}"
+                            ng-options="el.value as el.text for el in apercu.options.getOptionsFromMeta(metaInfo)"
+                            ng-change="metaChanged()" ng-model="dossier.metadatas[metaName].value"
+                            ng-class="{true:'', false:'unvalidate'}[metaInfo.mandatory === 'true']" class="form-control"
+                            ng-required="metaInfo.mandatory === 'true'">
+
+                    </select>
+                </div>
+                <div class="form-group col-md-12" ng-show="metaInfo.values" ng-class="{true:'mandatory-group', false:''}[metaInfo.mandatory === 'true']">
+                    <label class="control-label" for="{{metaName}}">{{metaInfo.realName}}</label>
+                    <span class="fa fa-warning label label-warning float-right" ng-show="{{metaInfo.mandatory === 'true'}}"> {{'details-dossier.required' | translate}}</span>
+                    <select id="{{metaName}}"
+                            ng-options="el.value as el.text for el in apercu.options.getOptionsFromMeta(metaInfo)"
+                            ng-change="metaChanged()" ng-change="valuesMetaUndefined(metaName)"
+                            ng-model="dossier.metadatas[metaName].value"
+                            ng-class="{true:'', false:'unvalidate'}[metaInfo.mandatory === 'true']" class="form-control"
+                            ng-required="metaInfo.mandatory === 'true'  && metaInfo.values">
+                    </select>
+                </div>
+            </div>
+        </form>
+        <span ng-if="metaSaved" class="text text-success"><i class="fa fa-check"></i> {{'details-dossier.savedMetadatas' | translate}}</span>
+        <span ng-if="metaSavedError" class="text text-danger"><i class="fa fa-warning"></i> {{metaSavedErrorMsg | translate}}</span>
+        <span ng-if="metasForm.$invalid" class="text text-danger"><i class="fa fa-warning"></i> Valeur de métadonnée invalide</span>
+        <span style="width:100%; word-wrap: break-word;white-space: normal;" ng-if="hasEditableMeta && !dossier.locked" ng-click="saveMetadatas()" type="button" class="btn btn-default force-display" ng-disabled="metasForm.$invalid"><i class="fa fa-save"></i> {{'details-dossier.saveMetadatas' | translate}}</span>
+
+        <form ng-if="!dossier.locked && dossier.documents.length > 0 && dossier.canAdd"
+              fileupload="document"
+              wrong-type="wrongType(ext, isValid, isAuthorized)"
+              fileinput="#docinput"
+              signature-format="getCurrentSignatureFormat()"
+              protocol="getCurrentProtocol()"
+              check-if-exist="isDocumentNameAlreadyExist(name)"
+              dropzone="body"
+              file-added="addDocument(files)"
+              upload-success="documentAdded(data, index)"
+              upload-finish="uploadFinished(data, index)"
+              upload-error="uploadError(data, index)"
+              action="{{addDocumentUrl}}"
+              method="POST"
+              enctype="multipart/form-data">
+            <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+            <div class="fileupload-buttonbar lg">
+                <!-- The fileinput-button span is used to style the file input field as button -->
+                    <span class="btn btn-default fileinput-button force-display col-md-12">
+                        <i class="icon-plus icon-white"></i>
+                        <span><i class="fa fa-paperclip"></i> {{'details-dossier.addFile' | translate}}</span>
+                        <input ui-multiple="dossier.documents.length > 0" id="docinput" type="file" name="file">
+                    </span>
+                <input type="hidden" name="reloadMainDocument" value="false">
+                <input type="hidden" name="isMainDocument" value="false">
+                <input type="hidden" name="browser" value="notIe">
+                <input type="hidden" name="dossier" value="{{dossier.id}}">
+            </div>
+        </form>
+    </div>
+</div>
+<div ng-show="typeError" class="alert alert-danger">
+    {{'details-dossier.Error_The_file_type_isnt_handled_by_the_iParapheur' | translate}}
+</div>
+<div ng-show="formatError" class="alert alert-danger">
+    {{'details-dossier.Error_The_file_type_does_not_match_the_selected_type' | translate}}
+</div>
+<div ng-show="!!uploadErrorMessage" class="alert alert-danger">
+    {{uploadErrorMessage}}
+</div>

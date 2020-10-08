@@ -1,0 +1,100 @@
+<alfresco-config>
+
+    <config evaluator="string-compare" condition="WebFramework">
+
+        <web-framework>
+
+            <!-- Define additional formats -->
+            <!--
+                <format>
+                <id>iphone</id>
+                <name>iPhone</name>
+                <description>iPhone Format</description>
+                </format>
+            -->
+
+            <!-- Configure Surf Defaults -->
+            <defaults>
+
+                <!-- Default Persister Override -->
+                <!--
+                <persister>webframework.objects.webinf.persister</persister>
+                -->
+
+                <!-- User Factory -->
+                <!--
+                <user-factory>webframework.factory.user.default</user-factory>
+                <user-factory>webframework.factory.user.alfresco</user-factory>
+                <user-factory>webframework.factory.user.alfresco32</user-factory>
+                -->
+
+                <!-- Setting Overrides -->
+                <!--
+                <format>default</format>
+                <theme>default</theme>
+                <site-configuration>default.site.configuration</site-configuration>
+                <region-chrome>default-region-chrome</region-chrome>
+                <component-chrome>default-component-chrome</component-chrome>
+                -->
+                <!-- Set up our sample login and logout pages -->
+                <page-type>
+                    <id>login</id>
+                    <page-instance-id>login</page-instance-id>
+                </page-type>
+                <page-type>
+                    <id>logout</id>
+                    <page-instance-id>logout</page-instance-id>
+                </page-type>
+                <!-- User factory for Alfresco 3.3 -->
+                <user-factory>webframework.factory.user.parapheur</user-factory>
+
+
+            </defaults>
+
+            <!-- Autowire Runtime Settings -->
+            <autowire>
+
+                <!-- Pick the runtime: classpath, webapp, local, alfresco -->
+                <!-- <runtime>classpath</runtime> -->
+                <runtime>webapp</runtime>
+                <!-- <runtime>local</runtime> -->
+                <!-- <runtime>alfresco</runtime> -->
+
+                <!-- Pick the mode: development, production -->
+                <!--mode>development</mode-->
+                <mode>production</mode>
+
+            </autowire>
+
+        </web-framework>
+
+    </config>
+
+    <config evaluator="string-compare" condition="Remote">
+        <remote>
+            <endpoint>
+                <id>alfresco-noauth</id>
+                <name>Alfresco - unauthenticated access</name>
+                <description>Access to Alfresco Repository WebScripts that do not require authentication</description>
+                <connector-id>alfresco</connector-id>
+                <endpoint-url>http://127.0.0.1:8080/alfresco/wcs</endpoint-url>
+                <identity>none</identity>
+            </endpoint>
+            <endpoint>
+                <id>alfresco</id>
+                <name>Alfresco - user access</name>
+                <description>Access to Alfresco Repository WebScripts that require user authentication</description>
+                <connector-id>alfresco</connector-id>
+                <endpoint-url>http://127.0.0.1:8080/alfresco/wcs</endpoint-url>
+                <identity>user</identity>
+            </endpoint>
+            <endpoint>
+                <id>pastell-connector</id>
+                <name>Connector to Pastell</name>
+                <connector-id>alfresco</connector-id>
+                <endpoint-url>http://127.0.0.1:8002</endpoint-url>
+            </endpoint>
+        </remote>
+    </config>
+
+</alfresco-config>

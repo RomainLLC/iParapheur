@@ -1,0 +1,16 @@
+{
+  "adminNavbar": {
+    "Administration": "Administration",
+    "Server_information": "Informations du serveur",
+    "Users": "Utilisateurs",
+    "Groups": "Groupes",
+    "Desks": "Bureaux",
+    "Circuits": "Circuits",
+    "Folders_typology": "Typologie des dossiers",
+    "Folders": "Dossiers",
+    "Statistics": "Statistiques",
+    "Advanced": "Avancé",
+    "Collectivities": "Collectivités",
+    "Script_execution": "Exécution de script"
+  }
+}

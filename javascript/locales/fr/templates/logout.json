@@ -1,0 +1,8 @@
+{
+  "logout": {
+    "Logout": "Déconnexion",
+    "To_ensure_this_disconnection_you_need_to_close_your_browser": "Afin de bien prendre en compte cette déconnexion, merci de fermer votre navigateur.",
+    "You_are_disconnected_from_iParapheur": "Vous êtes déconnecté du i-Parapheur.",
+    "Reconnect": "Reconnexion"
+  }
+}

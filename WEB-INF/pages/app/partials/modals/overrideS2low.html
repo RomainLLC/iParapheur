@@ -1,0 +1,326 @@
+<div class="modal-header" ng-if="ready">
+    <h3 ng-show="selectedType.sigFormat | contains:'PAdES'">{{'overrideS2low.pades_signature_profile' | translate}}</h3>
+    <h3 ng-show="(selectedType.tdtProtocole == 'aucun' || selectedType.tdtNom !=='S²LOW') && !(selectedType.sigFormat | contains:'PAdES')">{{'overrideS2low.xades_signature_profile_override' | translate}}</h3>
+    <h3 ng-hide="selectedType.tdtProtocole === 'aucun' || selectedType.tdtNom !=='S²LOW'">{{titleModal}}</h3>
+</div>
+<div class="modal-body row" ng-if="ready">
+<div ng-show="typeError && !files[0].name" class="col-sm-8 alert alert-danger alert-top-modal">{{'Error' | translate}} : {{'overrideS2low.the_selected_file_type_is_incorrect' | translate}} <br>{{'overrideS2low.your_file_should_be_png_jpg_or_gif' | translate}}</div>
+    <form submit-button=".launchUpload" one-file="true" fileupload="certificat" file-added="certAdded(files)" wrong-type="wrongType(ext)" fileinput="#fileinput" upload-success="fileEncoded(data, index)" action="{{context + '/base64encode'}}" method="POST" enctype="multipart/form-data" novalidate name="modalForm" class="form-horizontal">
+        <div class="col-md-12">
+            <div class="row" ng-show="(selectedType.tdtNom ==='S²LOW' && selectedType.tdtProtocole !== 'aucun') || selectedType.sigFormat | contains:'AUTO'">
+                <div class="form-group col-md-4" ng-show="selectedType.tdtNom ==='S²LOW' && selectedType.tdtProtocole !== 'aucun'">
+                    <div>
+                        <div class="radio">
+                            <label for="connecteurActiv">
+                                <input class="unvalidate" id="connecteurActiv" ng-model="selectedType.overridedTdt.active" type="radio" value="true" name="connecteurState">{{'overrideS2low.activate_connector' | translate}}
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label for="connecteurDesactiv">
+                                <input class="unvalidate" id="connecteurDesactiv" ng-model="selectedType.overridedTdt.active" type="radio" value="false" name="connecteurState">{{'overrideS2low.deactivate_connector' | translate}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <ul ng-if="(selectedType.sigFormat | contains:'AUTO') || ((selectedType.tdtProtocole ==='HELIOS' || (selectedType.sigFormat | contains:'PAdES')) && selectedType.tdtNom ==='S²LOW')" class="nav nav-tabs">
+                    <li ng-if="!(selectedType.sigFormat | contains:'AUTO')" class="active"><a href="#connecteur" bs-tab><i class="fa fa-info-circle"></i> {{'overrideS2low.s2low_server_connection' | translate}}</a></li>
+                    <li ng-if="!(selectedType.sigFormat | contains:'PAdES') || (selectedType.sigFormat | contains:'AUTO')"><a href="#signature" bs-tab><i class="fa fa-road"></i> {{'overrideS2low.xades_signature_profile' | translate}}</a></li>
+                    <li ng-if="(selectedType.sigFormat | contains:'PAdES') || (selectedType.sigFormat | contains:'AUTO')"><a href="#pades" bs-tab><i class="fa fa-hand-o-up"></i> {{'overrideS2low.pades_signature_profile' | translate}}</a></li>
+                </ul>
+            </div>
+
+            <div class="tab-content">
+                <div class='tab-pane' ng-class="selectedType.tdtProtocole !=='aucun' && selectedType.tdtNom ==='S²LOW' ? 'active' : ''" id='connecteur'>
+                    <div class="col-md-12">
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-3" for="serveur">{{'overrideS2low.server_name' | translate}}</label>
+                            <div class="col-sm-9">
+                                <input class="form-control unvalidate" type="text" id="serveur" name="serveur" ng-change="infoChanged()" placeholder="{{selectedType.overridedTdt.server}}" ng-model="selectedType.overridedTdt.server" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-3" for="port">Port</label>
+                            <div class="col-sm-9">
+                                <input class="form-control unvalidate" type="text" id="port" name="port" ng-change="infoChanged()" placeholder="{{selectedType.overridedTdt.port}}" ng-model="selectedType.overridedTdt.port" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="display:inline-block;">
+                            <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+                            <div class="fileupload-buttonbar form-group" style="margin-bottom:0;">
+                                <!-- The fileinput-button span is used to style the file input field as button -->
+                                <div class="col-md-6">
+                                    <div class="col-md-12">
+                                        <span style="display:block !important;" class="btn btn-default fileinput-button">
+                                            <i class="fa fa-folder-open-o"></i>
+                                            <span>{{'Browse' | translate}}</span>
+                                            <input id="fileinput" type="file" name="file">
+                                        </span>
+                                    </div>
+                                    <div class="col-md-12" style="float:left;">
+                                        <span>{{'overrideS2low.selected_certificate' | translate}} : {{filename}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" style="display:inline-block;">
+                                    <div>
+                                        <p>{{'overrideS2low.current_certificate' | translate}} : {{selectedType.overridedTdt.name}}<br>
+                                            {{'overrideS2low.expiration_date' | translate}} : {{selectedType.overridedTdt.dateLimite}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-3" for="password">{{'overrideS2low.certificate_password' | translate}}</label>
+                            <div class="col-sm-9">
+                                <input class="form-control unvalidate" type="text" id="password" name="password" ng-change="infoChanged()" placeholder="{{selectedType.overridedTdt.password}}" ng-model="selectedType.overridedTdt.password" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-6 row">
+                                <div class="col-md-12">
+                                    <span>{{'overrideS2low.certificate_password' | translate}} :
+                                        <i class="fa fa-check fa-2x" style="color:green;" ng-show="selectedType.overridedTdt.isPwdGoodForPkcs === 'ok'"></i>
+                                        <i class="fa fa-times fa-2x" style="color:red;" ng-show="selectedType.overridedTdt.isPwdGoodForPkcs !== 'ok'"></i>
+                                    </span>
+                                </div>
+                                <div class="col-md-12">
+                                    <span ng-if="selectedType.overridedTdt.listeLogins.length > 0">{{'overrideS2low.connection_with_user' | translate}} :
+                                        <i class="fa fa-check fa-2x" style="color:green;" ng-show="selectedType.overridedTdt.validLoginAndCertCnx === 'ok'"></i>
+                                        <i class="fa fa-times fa-2x" style="color:red;" ng-show="selectedType.overridedTdt.validLoginAndCertCnx !== 'ok'"></i>
+                                    </span>
+                                </div>
+
+                            </div>
+                            <div class="col-md-6" ng-if="selectedType.overridedTdt.listeLogins.length > 0">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label" for="password">{{'overrideS2low.user_account' | translate}}</label>
+                                            <select ng-change="infoChanged()" class="form-control" ng-model="selectedType.overridedTdt.userlogin" ng-options="user for user in selectedType.overridedTdt.listeLogins">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label" for="password">{{'overrideS2low.password' | translate}}</label>
+                                            <input ng-change="infoChanged()" type="text" class="form-control" ng-model="selectedType.overridedTdt.userpassword">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <span>{{'overrideS2low.connection_with_certificate' | translate}} :
+                                    <i class="fa fa-check fa-2x" style="color:green;" ng-show="selectedType.overridedTdt.validCertCnx === 'ok'"></i>
+                                    <i class="fa fa-times fa-2x" style="color:red;" ng-show="selectedType.overridedTdt.validCertCnx !== 'ok'"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div ng-if="selectedType.tdtProtocole ==='ACTES'" class="form-group">
+                            <label class="control-label col-sm-3" for="archivage">{{'overrideS2low.base_url_for_archiving' | translate}}</label>
+                            <div class="col-sm-9">
+                                <input class="form-control" type="text" id="archivage" name="archivage" placeholder="{{selectedType.overridedTdt.baseUrlArchivage}}" ng-model="selectedType.overridedTdt.baseUrlArchivage" required>
+                            </div>
+                        </div>
+
+                        <div ng-if="selectedType.tdtProtocole ==='HELIOS'  && selectedType.tdtNom ==='S²LOW'" class="form-group">
+                            <label class="control-label col-sm-3" for="collectivite">{{'overrideS2low.collectivity_id' | translate}}</label>
+                            <div class="col-sm-9">
+                                <input class="form-control" type="text" id="collectivite" name="collectivite" placeholder="{{selectedType.overridedTdt.collectivite}}" ng-model="selectedType.overridedTdt.collectivite" required>
+                            </div>
+                        </div>
+
+                        <span ng-if="selectedType.overridedTdt.validCertCnx !== 'ok' || selectedType.overridedTdt.validLoginAndCertCnx !== 'ok' || changed" class="text-danger">{{'overrideS2low.the_connection_have_to_be_validated_to_save_configuration' | translate}}</span>
+                    </div>
+                </div>
+                <div class='tab-pane' ng-class="(selectedType.tdtProtocole ==='aucun' || selectedType.tdtNom !=='S²LOW') && !(selectedType.sigFormat | contains:'PAdES') ? 'active' : ''" id='signature'>
+                    <div class="col-md-12">
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-3" for="pPolicyIdentifierID">{{'overrideS2low.pes_policy_identifier_default' | translate}}</label>
+                            <div class="col-sm-9">
+                                <input class="form-control" type="text" id="pPolicyIdentifierID" name="pPolicyIdentifierID" ng-model="selectedType.overridedTdt.pPolicyIdentifierID" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-3" for="pPolicyIdentifierDescription">{{'overrideS2low.pes_policy_description_default' | translate}}</label>
+                            <div class="col-sm-9">
+                                <input class="form-control" type="text" id="pPolicyIdentifierDescription" name="pPolicyIdentifierDescription" ng-model="selectedType.overridedTdt.pPolicyIdentifierDescription" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-3" for="pPolicyDigest">{{'overrideS2low.pes_digest_default' | translate}}</label>
+                            <div class="col-sm-9">
+                                <input class="form-control" type="text" id="pPolicyDigest" name="pPolicyDigest" ng-model="selectedType.overridedTdt.pPolicyDigest" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-3" for="pSPURI">{{'overrideS2low.pes_spuri_default' | translate}}</label>
+                            <div class="col-sm-9">
+                                <input class="form-control" type="text" id="pSPURI" name="pSPURI" ng-model="selectedType.overridedTdt.pSPURI" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-show="selectedType.tdtNom ==='FAST'">
+                            <label class="control-label col-sm-3" for="pClaimedRole">{{'overrideS2low.pes_claimed_role' | translate}}</label>
+                            <div class="col-sm-9">
+                                <input class="form-control" type="text" id="pClaimedRole" name="pClaimedRole" ng-model="selectedType.overridedTdt.pClaimedRole" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-sm-3" for="pPostalCode">{{'overrideS2low.zip_code' | translate}}</label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control" type="text" id="pPostalCode" name="pPostalCode" ng-model="selectedType.overridedTdt.pPostalCode" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-sm-3" for="pCity">{{'overrideS2low.city' | translate}}</label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control" type="text" id="pCity" name="pPostalCode" ng-model="selectedType.overridedTdt.pCity" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-3" for="pCountryName">{{'overrideS2low.country' | translate}}</label>
+                            <div class="col-sm-9">
+                                <input class="form-control" type="text" id="pCountryName" name="pCountryName" ng-model="selectedType.overridedTdt.pCountryName" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class='tab-pane' ng-class="(selectedType.sigFormat | contains:'PAdES') && ((selectedType.tdtProtocole === 'aucun') || (selectedType.tdtNom !== 'S²LOW') || (selectedType.tdtOverride === 'false')) ? 'active' : ''" id='pades'>
+                    <div class="col-md-12">
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-3" for="pCityPades">{{'overrideS2low.city' | translate}}</label>
+                            <div class="col-sm-9">
+                                <input class="form-control" type="text" id="pCityPades" name="pCityPades" ng-model="selectedType.overridedTdt.pCity" required>
+                            </div>
+                        </div>
+
+                        <div class="well row">
+                            <div class="col-md-8">
+                                <h3>{{'overrideS2low.signature_stamp' | translate}}</h3>
+
+                                <div class="form-group">
+                                    <div>
+                                        <div class="radio">
+                                            <label for="showStamp">
+                                                <input class="unvalidate" id="showStamp" ng-model="selectedType.overridedTdt.showStamp" type="radio" value="true" name="showStamp">{{'overrideS2low.show_the_signature_stamp' | translate}}
+                                            </label>
+                                        </div>
+                                        <div class="radio">
+                                            <label for="donotShowStamp">
+                                                <input class="unvalidate" id="donotShowStamp" ng-model="selectedType.overridedTdt.showStamp" type="radio" value="false" name="donotShowStamp">{{'overrideS2low.dont_show_the_signature_stamp' | translate}}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-sm-3" for="stampPage">{{'overrideS2low.page' | translate}}</label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control" type="text" id="stampPage" name="stampPage" ng-model="selectedType.overridedTdt.stampPage" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-sm-3" for="stampFontSize">{{'overrideS2low.text_size' | translate}}</label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control" type="text" id="stampFontSize" name="stampPage" ng-model="selectedType.overridedTdt.stampFontSize" required>
+                                        <span class="text-info">{{'overrideS2low.text_size_info' | translate}}</span>
+                                    </div>
+
+
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-sm-3" for="coordX">{{'overrideS2low.x_coordinate' | translate}}</label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control" type="text" id="coordX" name="coordX" ng-model="selectedType.overridedTdt.stampCoordX" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-sm-3" for="coordY">{{'overrideS2low.y_coordinate' | translate}}</label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control" type="text" id="coordY" name="coordY" ng-model="selectedType.overridedTdt.stampCoordY" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-sm-3" for="stampWidth">{{'overrideS2low.width' | translate}}</label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control" type="text" id="stampWidth" name="stampWidth" ng-model="selectedType.overridedTdt.stampWidth" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-sm-3" for="stampHeight">{{'overrideS2low.height' | translate}}</label>
+                                    <div class="col-sm-9">
+                                        <input class="form-control" type="text" id="stampHeight" name="stampHeight" max="840" ng-model="selectedType.overridedTdt.stampHeight" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <h3>{{'overrideS2low.position' | translate}}</h3>
+                                <div style="background-color: white; width:210px; height:297px; outline: 1px groove cornsilk; overflow: hidden;">
+                                    <div style="z-index:50; width:210px; height:297px; position: absolute;" ng-click="movePosition($event)">
+
+                                    </div>
+                                    <div style="border: 1px groove #0055aa; position:relative; z-index:49; max-height: 297px; max-width:210px;"
+                                         ng-style="handlePosition()">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="modal-body" ng-if="!ready">
+    <div style="height:500px;">
+        <span style="position: relative; width: 0px; z-index: 2000000000; top:50%; left:50%;" us-spinner="{radius:20, width:8, length: 16}" ></span>
+    </div>
+</div>
+
+<div class="modal-footer" style="text-align: left;" ng-if="ready">
+    <div class="col-md-4">
+        <button type="button" ng-if="selectedType.tdtProtocole !=='aucun' && selectedType.tdtNom ==='S²LOW'" class="btn btn-default launchUpload" ng-click="enableModeTest()">
+            <i class="fa fa-check"></i>
+            {{'overrideS2low.test_configuration' | translate}}
+        </button>
+        <div>
+            <span ng-if="hasTest" class="text-info"><i class="fa fa-info-circle"></i> {{'overrideS2low.tests_updated' | translate}}</span>
+        </div>
+    </div>
+    <div class="col-md-8" style="text-align: right;">
+        <button class="btn btn-warning" ng-click="ok()">
+            <i class="fa fa-times-circle-o"></i>
+            {{'Back' | translate}}
+        </button>
+        <button type="button" ng-disabled="(selectedType.overridedTdt.validCertCnx !== 'ok' || selectedType.overridedTdt.validLoginAndCertCnx !== 'ok' || changed) && selectedType.tdtProtocole !=='aucun' && selectedType.tdtNom !== 'pas de TdT'" ng-click="enableModeSave()" class="btn btn-primary launchUpload">
+            <i class="fa fa-floppy-o"></i>
+            {{'overrideS2low.save_configuration' | translate}}
+        </button>
+    </div>
+</div>

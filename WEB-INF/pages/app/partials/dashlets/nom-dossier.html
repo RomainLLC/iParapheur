@@ -1,0 +1,160 @@
+<div id="nom-dossier" class="well dashlet">
+    <h3 ng-click="element.show = !element.show" class="wrap pointer text-info">{{dossier.title}}</h3>
+    <div bn-slide-show="element.show" class="dashlet-content">
+        <span ng-if="dossier.documents.length === 0" class="text-danger">
+            <i class="fa fa-warning"></i>  {{'nom-dossier.noDocument' | translate}}
+        </span>
+        <ul class="list-unstyled list-documents">
+            <li class="pointer" ng-init="dossier.documents[$index].state = ''" bn-slide-show="true"
+                ng-repeat="document in dossier.documents" ng-class="getDocumentListItemClass($index)">
+                <hr ng-if="isFirstAnnex($index)">
+                <div ng-style="dossier.isXemEnabled ? {display:'inline-block'} : {}">
+                    <a target="_blank" class="xemelios" ng-click="readDossier(0)"
+                       ng-if="$index === 0 && dossier.isXemEnabled && (document.name | fileext) === 'xml'"
+                       ng-href="{{context}}/proxy/alfresco/parapheur/dossiers/{{dossier.id}}/{{document.id}}/xemelios">
+                        <img ng-src="{{context}}/res/images/xemelios.png">
+                    </a>
+
+                    <form ng-if="document.canDelete && $index == 0"
+                          signature-format="getSignatureFormat()"
+                          protocol="getProtocol()"
+                          wrong-type="wrongType(ext, isValid, isAuthorized)"
+                          file-added="beginReplace(files)"
+                          upload-success="documentAdded(data, index)"
+                          fileupload="document"
+                          main-document="true"
+                          fileinput="#replaceMain"
+                          action="{{addDocumentUrl}}" method="POST" enctype="multipart/form-data">
+                        <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+                        <div class="fileupload-buttonbar inline">
+                            <!-- The fileinput-button span is used to style the file input field as button -->
+                            <i class="fa fa-exchange fileinput-button force-display" tooltip="Remplacer">
+                                <input id="replaceMain" type="file" name="file">
+                            </i>
+                            <input type="hidden" name="isMainDocument" value="true">
+                            <input type="hidden" name="reloadMainDocument" value="true">
+                            <input type="hidden" name="browser" value="notIe">
+                            <input type="hidden" name="dossier" value="{{dossier.id}}">
+                        </div>
+                    </form>
+                </div>
+                <div ng-style="dossier.isXemEnabled ? {display:'inline-block'} : {}">
+                    <span>
+                        <i ng-if="document.isLocked" class="fa fa-info-circle text-info"
+                           tooltip="{{'nom-dossier.visual_generating' | translate}}"></i>
+                        <i ng-if="document.canDelete && $index > 0"
+                           ng-click="dossier.documents[$index].state = 'delete'; removeDocument($index)"
+                           class="fa fa-trash deleteDocument"></i>
+                        <a tooltip="{{'nom-dossier.download_pdf' | translate}}"
+                           ng-if="(!isPdf($index)) && (document.visuelPdf) && (!dossier.isXemEnabled)"
+                           ng-href="{{context}}/proxy/alfresco/api/node/content%3bph%3avisuel-pdf/workspace/SpacesStore/{{document.id}}/{{document.name}}.pdf"
+                           download="{{document.name}}.pdf">
+                            <i class="fa fa-fw fa-lg fa-file-pdf-o"></i>
+                        </a>
+
+                        <!-- Main PDF document -->
+                        <span tooltip="{{'nom-dossier.attest_error' | translate}}" style="font-size:1.5em;"
+                              ng-if="isCurrentMainDocument($index) && document.attestState == -1"
+                              class="fa fa-times-circle-o text-danger"></span>
+                        <span tooltip="{{'nom-dossier.attest_generating' | translate}}" style="font-size:1.5em;"
+                              ng-if="isCurrentMainDocument($index) && document.attestState == 1"
+                              class="fa fa-clock-o text-warning"></span>
+                        <a tooltip="{{'nom-dossier.download_attest' | translate}}"
+                           ng-if="isCurrentMainDocument($index) && document.attestState == 2"
+                           ng-href="{{context}}/proxy/alfresco/api/node/content%3bph%3aattest-content/workspace/SpacesStore/{{document.id}}/attest.pdf"
+                           download="{{document.name}}-attest.pdf">
+                            <span class="fa fa-check-circle-o text-success" style="font-size:1.5em;"></span>
+                        </a>
+                        <a tooltip="{{'nom-dossier.download_pdf' | translate}}"
+                           ng-if="isPdf($index) && isCurrentMainDocument($index)"
+                           ng-href="{{context}}/proxy/alfresco/api/node/workspace/SpacesStore/{{document.id}}/content/{{document.name}}"
+                           download="{{document.name}}">
+                            <i class="fa fa-fw fa-lg fa-file-pdf-o"></i>
+                        </a>
+                        <a ng-if="isPdf($index) && isCurrentMainDocument($index)" style="word-wrap: break-word;"
+                           ng-click="selectDocument($index)" tooltip="{{'nom-dossier.visualize' | translate}}">
+                            {{document.name}}</a>
+
+                        <!-- Main non-PDF document -->
+                        <span ng-if="!isPdf($index) && isCurrentMainDocument($index)">
+                            <a tooltip="{{'nom-dossier.download' | translate}}"
+                               class="fa fa-lg fa-fw"
+                               ng-class="getFileExtIcon(document.name)"
+                               ng-href="{{context}}/proxy/alfresco/api/node/workspace/SpacesStore/{{document.id}}/content/{{document.name}}"
+                               download="{{document.name}}"></a>
+                            <a tooltip="{{'nom-dossier.visualize' | translate}}" class="wrap"
+                               ng-click="document.visuelPdf ? selectDocument($index) : showDossier($index)">
+                                {{document.name}}</a>
+                        </span>
+
+
+                        <!-- Annexes -->
+                        <a tooltip="{{'nom-dossier.download' | translate}}" ng-if="!isCurrentMainDocument($index)"
+                           class="wrap"
+                           ng-href="{{context}}/proxy/alfresco/api/node/workspace/SpacesStore/{{document.id}}/content/{{document.name}}"
+                           download="{{document.name}}">
+                            <i class="fa fa-lg fa-fw" ng-class="getFileExtIcon(document.name)"></i>
+                            {{document.name}}</a>
+                    </span>
+                </div>
+                <form ng-if="$index === 0 && extension(document.name) === 'xml' && inArray('EDITION', dossier.actions)"
+                      fileupload="pdf" wrong-type="wrongPDF(ext)" fileinput="#visuinput" file-added="updateVisu(files)"
+                      upload-success="updateVisuEnd(data, index)" ng-action="{{addVisuelUrl}}" method="POST"
+                      enctype="multipart/form-data">
+                    <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+                    <div class="fileupload-buttonbar">
+                        <!-- The fileinput-button span is used to style the file input field as button -->
+                        <span class="fileinput-button force-display pointer">
+                            <i class="fa fa-eye"></i>
+                            {{'nom-dossier.replaceVisual' | translate}}
+                            <input id="visuinput" type="file" name="file">
+                        </span>
+                        <input type="hidden" name="dossier" value="{{dossier.id}}">
+                        <input type="hidden" name="browser" value="notIe">
+                        <input type="hidden" name="document" value="{{document.id}}">
+                    </div>
+                </form>
+
+                <div bn-slide-show="dossier.documents[$index].state === 'delete'"
+                     class="progress progress-striped active">
+                    <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="45"
+                         aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                        {{'nom-dossier.deleting' | translate}}
+                    </div>
+                </div>
+
+                <div bn-slide-show="dossier.documents[$index].state === 'saving'"
+                     class="progress progress-striped active">
+                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="45" aria-valuemin="0"
+                         aria-valuemax="100" style="width: 100%">
+                        {{'nom-dossier.saving' | translate}}
+                    </div>
+                </div>
+
+                <div bn-slide-show="dossier.documents[$index].state === 'replace'"
+                     class="progress progress-striped active">
+                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="45"
+                         aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                        {{'nom-dossier.replacing' | translate}}
+                    </div>
+                </div>
+                <div bn-slide-show="dossier.documents[$index].state === 'visuel'"
+                     class="progress progress-striped active">
+                    <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="45"
+                         aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                        {{'nom-dossier.updatingVisual' | translate}}
+                    </div>
+                </div>
+
+                <div class="alert alert-error" ng-if="existLog">
+                    {{('nom-dossier.file-filename-AlreadyExists' | translate).replace("-filename-", existDoc)}}
+                </div>
+                <div class="alert alert-error" ng-if="result">
+                    {{result.data.reponse | i18n}}
+                </div>
+            </li>
+        </ul>
+
+
+    </div>
+</div>

@@ -1,0 +1,12 @@
+{
+  "Admin": {
+    "Avance": {
+      "Cachet": {
+        "title": "Configurer les certificats cachet serveur",
+        "create": "Ajouter un certificat",
+        "mod_del_title": "Supprimer le certificat",
+        "mod_del_confirm" : "Etes-vous sûr de vouloir supprimer ce certificat ?"
+      }
+    }
+  }
+}

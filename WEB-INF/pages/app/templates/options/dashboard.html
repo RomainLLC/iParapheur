@@ -1,0 +1,92 @@
+<div>
+    <h2 class="underscore">{{'Options.Dash_Title' | translate}}</h2>
+    <form name='dashboard' class="form-horizontal" ng-class="{launched: !dashChanged}" novalidate>
+        <div class="form-group">
+            <div class="col-md-offset-4 col-md-6">
+                <div class="checkbox">
+                    <label for="delegation">{{'Options.Dash_Deleg' | translate}}
+                        <input type="checkbox" ng-change="dashChanged = true" id="delegation" ng-model="prefs.displayDelegation" name="delegation">
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-4" for="pagesize">{{'Options.Dash_Page' | translate}} :</label>
+            <div class="controls col-md-6">
+                <input type="text" class="form-control" ng-change="dashChanged=true" ng-model="prefs.pagesize" ng-value="prefs.pagesize" id="pagesize" min="1" max="{{properties['parapheur.ihm.dashboard.lignes.max'] < 0 ? 30 : properties['parapheur.ihm.dashboard.lignes.max'] === 0 ? Number.MAX_VALUE : properties['parapheur.ihm.dashboard.lignes.max']}}" name="pagesize" integer required>
+                <div class="input-help">
+                    <h4>{{'Options.Dash_Page_Helper' | translate}} {{properties['parapheur.ihm.dashboard.lignes.max'] < 0 ? 30 : properties['parapheur.ihm.dashboard.lignes.max'] === 0 ? Number.MAX_VALUE : properties['parapheur.ihm.dashboard.lignes.max']}}</h4>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-4" for="propSort">{{'Options.Dash_Sort' | translate}}</label>
+            <div class="controls col-md-6">
+                <select class="form-control" ng-change="dashChanged=true" ng-model="prefs.propSort" id="propSort" name="propSort" ng-options="col.key as (col.i18n | translate) for col in sort" required>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-4 col-md-6">
+                <div class="checkbox">
+                    <label for="ascSort">{{'Options.Dash_Asc' | translate}}
+                        <input type="checkbox" ng-change="dashChanged = true" id="ascSort" ng-model="prefs.asc" name="ascSort">
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-4" for="filterDefault">{{'Options.Dash_Default_Filter' | translate}}</label>
+            <div class="controls col-md-6">
+                <select class="form-control" ng-change="dashChanged=true" ng-model="prefs.filterDefault" id="filterDefault" name="propSort" ng-options="name as name for (name, filter) in prefs.savedFilters">
+                    <option value="">--- {{'Options.Dash_Filter_None' | translate}} ---</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-4">{{'Options.Dash_Col_Order' | translate}} :</label>
+            <div class="controls col-md-6">
+                <div class="col-md-6">
+                    <label>{{'Options.Dash_Col_Show' | translate}}</label>
+                    <ul class="enabledColumns container-fluid" ng-mousedown="dashChanged=true" ui-sortable="{connectWith:'.disabledColumns', cancel:'.ui-disabled'}" ng-model="columns.enabled">
+                        <li title="{{item.i18n | translate}}" ng-repeat="item in columns.enabled" ng-class="{true:'ui-disabled disabled', false:''}[item.disabled]" class="col-md-12 btn btn-default force-display">
+                            {{item.i18n | translate}}
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <label>{{'Options.Dash_Col_Hide' | translate}}</label>
+                    <ul class="disabledColumns container-fluid" ng-mousedown="dashChanged=true" ui-sortable="{connectWith:'.enabledColumns'}" ng-model="columns.disabled">
+                        <li title="{{item.i18n | translate}}" ng-repeat="item in columns.disabled" class="col-md-12 btn btn-default force-display">{{item.i18n | translate}}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" ng-if="false">
+            <label class="control-label col-md-4">Coloration</label>
+            <ul class="col-md-offset-4" ui-sortable ng-model="colorations" ng-mousedown="dashChanged=true">
+                <li ng-repeat="color in colorations"  class="colorations">
+                    <span style="background-color: {{color.backgroundColor}}; color:{{color.textColor}};">{{color.property.i18n | translate}}
+                        <span ng-repeat="test in color.test"> {{test.comparator}} {{test.value}}</span>
+                        <span class="fa fa-trash-o" ng-click="deleteColoration($index)"></span>
+                    </span>
+                </li>
+            </ul>
+            <div class="controls col-md-offset-4 col-md-6">
+                <div class="btn btn-success force-display" ng-mousedown="dashChanged=true" ng-click="addColoration()">Ajouter une coloration</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="alert alert-success col-md-4" ng-show="!dashChanged && dashSaved">{{'Options.Dash_Success' | translate}}</div>
+            <div class="col-md-4" ng-show="!(!dashChanged && dashSaved)"></div>
+            <div class="controls col-md-4">
+                <button type="submit" ng-init="dashChanged = false; dashSaved = false;" ng-click="saveDashboardPrefs(); dashChanged = false; dashSaved = true;" class="btn btn-primary">
+                    <i class="fa fa-floppy-o"></i>
+                    {{'Options.Dash_Save' | translate}}</button>
+                <button class="btn btn-primary" disabled>
+                    <i class="fa fa-floppy-o"></i>
+                    {{'Options.Dash_Save' | translate}}</button>
+            </div>
+        </div>
+    </form>
+</div>

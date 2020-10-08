@@ -1,0 +1,374 @@
+<div class="modal-header">
+    <h3>{{titleModal | translate}} {{selectedBureau.name}}</h3>
+</div>
+<div class="modal-body row">
+    <form novalidate name="modalForm" class="form-horizontal">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#general" bs-tab><i class="fa fa-desktop"></i> {{'Admin.Bureaux.BuMod_General' | translate}}</a></li>
+            <li><a href="#acteurs" bs-tab><i class="fa fa-user"></i> {{'Admin.Bureaux.BuMod_Actors' | translate}}</a></li>
+            <li><a href="#habilitation" bs-tab><i class="fa fa-ban"></i> {{'Admin.Bureaux.BuMod_Habil' | translate}}</a></li>
+            <li><a href="#metadata" bs-tab><i class="fa fa-code"></i> {{'Admin.Bureaux.BuMod_Meta' | translate}}</a></li>
+            <li><a href="#restriction" bs-tab><i class="fa fa-link"></i> {{'Admin.Bureaux.BuMod_Assoc' | translate}}</a></li>
+            <li><a href="#delegation" bs-tab><i class="fa fa-share"></i> {{'Admin.Bureaux.BuMod_Deleg' | translate}}</a></li>
+        </ul>
+
+        <div class="span7 tab-content">
+            <div class='tab-pane active' id='general'>
+                <div class="col-md-6">
+                    <div class="form-group mandatory-group">
+                        <label for="name">{{'Admin.Bureaux.Bu_Shortname' | translate}}</label>
+                        <span class="label label-danger"><i
+                                class="fa fa-warning"></i> {{'Mandatory' | translate}}</span>
+                        <input class="form-control" ph-negative-pattern='.*(?:\.+|[&"£*\/<>?%|+;]+.*)$' type="text"
+                               id="name" name="name" placeholder="{{selectedBureau.name}}" ng-model="editedBureau.name"
+                               diff-array="bureauxExceptCurrent" attr="name" required>
+                        <div class="input-help">
+                            <h4 ng-show="modalForm.name.$error.isdiff">{{'Admin.Bureaux.BuMod_Isdiff' | translate}}</h4>
+                            <h4 ng-show="modalForm.name.$error.pattern">{{'Admin.Bureaux.BuMod_Pattern' | translate}}</h4>
+                        </div>
+                    </div>
+                    <div class="form-group mandatory-group">
+                        <label for="title">{{'Admin.Bureaux.Bu_Name' | translate}}</label>
+                        <span class="label label-danger"><i
+                                class="fa fa-warning"></i> {{'Mandatory' | translate}}</span>
+                        <input class="form-control" type="text" id="title" name="title"
+                               placeholder="{{selectedBureau.title}}" ng-model="editedBureau.title" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="description">{{'Admin.Bureaux.Bu_Desc' | translate}}</label>
+                        <input class="form-control unvalidate" type="text" id="description" name="description"
+                               placeholder="{{selectedBureau.description}}" ng-model="editedBureau.description">
+                    </div>
+                    <div class="checkbox">
+                        <label for="avenir">
+                            <input type="checkbox" class="unvalidate" id="avenir" name="avenir" ng-model="editedBureau['show-a-venir']">
+                            {{'Admin.Bureaux.BuMod_Show_Next' | translate}}
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="well">
+                        <h3>{{'Admin.Bureaux.BuMod_Sup' | translate}}</h3>
+                        <p style="font-size: 16px;"><b>{{'Admin.Bureaux.BuMod_Actual' | translate}} :</b>
+                            <span ng-if="!!editedBureau.hierarchie">
+                                {{(bureaux | filter:{id:editedBureau.hierarchie})[0].name}} <i class="fa fa-times-circle text-danger pointer" ng-click="listHandler.selectSuperieur(bureau)"></i>
+                            </span>
+                            <span ng-if="!editedBureau.hierarchie">
+                                -- {{'None' | translate}} --
+                            </span>
+                        </p>
+                        <div>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-search fa-fw"></i></span>
+                                <input placeholder="Rechercher" ng-model="searchBureauSuperieur" ng-change="listHandler.search(searchBureauSuperieur)" class="form-control unvalidate" type="text">
+                            </div>
+
+                            <div style="height:15px;" ng-if="listHandler.total > 0 && listHandler.maxSize < listHandler.total">
+                                <span class="text-warning float-right">
+                                    {{listHandler.page*listHandler.maxSize +1}}-{{(listHandler.page+1)*listHandler.maxSize < listHandler.total ? (listHandler.page+1)*listHandler.maxSize : listHandler.total}} sur {{listHandler.total}}
+                                    <span class="btn btn-default fa fa-chevron-left force-display" ng-disabled="listHandler.page === 0" ng-click="listHandler.pagine(-1)"></span>
+                                    <span class="btn btn-default fa fa-chevron-right force-display" ng-disabled="listHandler.page+1 >= (listHandler.total/listHandler.maxSize)" ng-click="listHandler.pagine(1)"></span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <span class="text-info" ng-if="listHandler.subList.length === 0"><i class="fa fa-info-circle"></i> {{'Admin.Bureaux.BuMod_Result_None' | translate}}</span>
+                        <ul class="list-unstyled nav nav-pills nav-stacked adminContent list-data">
+                            <li ng-repeat="bureau in listHandler.subList">
+                                <a ng-click="listHandler.selectSuperieur(editedBureau.hierarchie === bureau.id ? null : bureau)">
+                                    <i ng-class="editedBureau.hierarchie === bureau.id ? 'fa fa-arrow-right text-success' : ''"></i><i ng-if="editedBureau.hierarchie !== bureau.id" style="width: 13px;display:inline-block;"></i> {{bureau.name}}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class='tab-pane' id='acteurs'>
+                <h4>Attribuer des rôles à des utilisateurs</h4>
+                <div class="col-md-12" style="height:50px">
+                    <form>
+                        <div class="col-md-5">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-search fa-fw"></i></span>
+                                <input placeholder="Rechercher un utilisateur" ng-model="searchUser" ng-change="listUsersHandler.search(searchUser)" class="form-control unvalidate" type="text">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-4 margin-none">
+                    <div>
+                        <div>
+                            <legend style="margin-bottom:5px;">
+                                {{'Admin.Bureaux.BuMod_Result' | translate}}
+                            </legend>
+                            <div style="height:30px;" ng-if="listUsersHandler.maxSize < listUsersHandler.total">
+                                <span class="text-warning float-right">
+                                    {{listUsersHandler.page*listUsersHandler.maxSize +1}}-{{(listUsersHandler.page+1)*listUsersHandler.maxSize < listUsersHandler.total ? (listUsersHandler.page+1)*listUsersHandler.maxSize : listUsersHandler.total}} sur {{listUsersHandler.total}}
+                                    <span class="btn btn-default fa fa-chevron-left force-display" ng-disabled="listUsersHandler.page === 0" ng-click="listUsersHandler.pagine(-1)"></span>
+                                    <span class="btn btn-default fa fa-chevron-right force-display" ng-disabled="listUsersHandler.page+1 >= (listUsersHandler.total/listUsersHandler.maxSize)" ng-click="listUsersHandler.pagine(1)"></span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <span class="text-info" ng-if="listUsersHandler.total == 0 || (listUsersHandler.subList.length === 0 && editedBureau.proprietaires.length === 0 && editedBureau.secretaires.length === 0)"><i class="fa fa-info-circle"></i> {{'Admin.Bureaux.BuMod_Result_None' | translate}}</span>
+                        <ul class="list-unstyled nav nav-pills nav-stacked adminContent list-data" style="margin-top:5px;">
+                            <li ng-repeat="user in listUsersHandler.subList" ng-switch on="userSelected(user)">
+                                <a ng-switch-when="false">
+                                    <i tooltip-placement="right" tooltip="Ajouter aux propriétaires" class="fa fa-plus-circle pointer text-success" ng-click="editedBureau.proprietaires.push(user)"></i>
+                                    <i tooltip-placement="right" tooltip="Ajouter aux secrétaires" class="fa fa-plus-circle pointer text-warning" ng-click="editedBureau.secretaires.push(user)"></i>
+                                    {{user.firstName}} {{user.lastName}} ({{user.username}})
+                                </a>
+                                <a class=disabled ng-switch-default>
+                                    {{user.firstName}} {{user.lastName}} ({{user.username}})
+                                </a>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <legend class="text-success">
+                        {{'Admin.Bureaux.Bu_Prop' | translate}}
+                    </legend>
+
+                    <span ng-if="editedBureau.proprietaires.length === 0" class="text-success">
+                        <i class="fa fa-info-circle"></i> {{'Admin.Bureaux.BuMod_None_Prop' | translate}}
+                    </span>
+                    <ul>
+                        <li ng-repeat="user in editedBureau.proprietaires" class="text-success hover-li pointer" ng-click="editedBureau.proprietaires.splice($index, 1); listUsersHandler.getNewList();">
+                            <i class="fa fa-times-circle text-danger"></i>
+                            {{user.firstName}} {{user.lastName}} ({{user.username}})
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <legend class="text-warning">
+                        {{'Admin.Bureaux.Bu_Sec' | translate}}
+                    </legend>
+                    <span ng-if="editedBureau.secretaires.length === 0" class="text-warning">
+                        <i class="fa fa-info-circle"></i> {{'Admin.Bureaux.BuMod_None_Sec' | translate}}
+                    </span>
+                    <ul>
+                        <li ng-repeat="user in editedBureau.secretaires" class="text-warning hover-li pointer" ng-click="editedBureau.secretaires.splice($index, 1); listUsersHandler.getNewList();">
+                            <i class="fa fa-times-circle text-danger"></i>
+                            {{user.firstName}} {{user.lastName}} ({{user.username}})
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class='tab-pane' id='habilitation'>
+                <span class="text-info" ng-if="!editedBureau.hab_enabled"><i class="fa fa-info-circle"></i> {{'Admin.Bureaux.BuMod_Habil_All' | translate}}</span>
+                <div class="checkbox">
+                    <label for="hab_enabled">
+                        <input class="unvalidate" type="checkbox" id="hab_enabled" name="hab_enabled" ng-model="editedBureau.hab_enabled" ng-change="changeHabilitations()"> {{'Admin.Bureaux.BuMod_Habil_Select' | translate}}
+                    </label>
+                </div>
+                <div ng-show="editedBureau.hab_enabled" class="col-md-offset-1">
+                    <div class="checkbox">
+                        <label for="hab_transmettre">
+                            <input class="unvalidate" type="checkbox" id="hab_transmettre" name="hab_transmettre" ng-change="editedBureau.hab_traiter = editedBureau.hab_transmettre" ng-model="editedBureau.hab_transmettre"> {{'Admin.Bureaux.BuMod_Habil_Create' | translate}}
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label for="hab_traiter">
+                            <input class="unvalidate" type="checkbox" id="hab_traiter" name="hab_traiter" ng-model="editedBureau.hab_traiter" ng-disabled="editedBureau.hab_transmettre"> {{'Admin.Bureaux.BuMod_Habil_Handle' | translate}}
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label for="hab_archivage">
+                            <input class="unvalidate" type="checkbox" id="hab_archivage" name="hab_archivage" ng-model="editedBureau.hab_archivage"> {{'Admin.Bureaux.BuMod_Habil_Archive' | translate}}
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label for="hab_enchainement">
+                            <input class="unvalidate" type="checkbox" id="hab_enchainement" name="hab_enchainement" ng-model="editedBureau.hab_enchainement"> {{'Admin.Bureaux.BuMod_Habil_Chain' | translate}}
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label for="hab_secretariat">
+                            <input class="unvalidate" type="checkbox" id="hab_secretariat" name="hab_secretariat" ng-model="editedBureau.hab_secretariat"> {{'Admin.Bureaux.BuMod_Habil_Send' | translate}}
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class='tab-pane' id='metadata'>
+                <div class="col-md-12">
+                    <span class="text text-info">
+                        <i class="fa fa-info-circle"></i> {{'Admin.Bureaux.BuMod_Meta_Info' | translate}}
+                    </span>
+
+                    <div class="well">
+
+                        <label>
+                            <input class="unvalidate" type="checkbox"  ng-click="
+                                editedBureau['metadatas-visibility'].length === metadatas.length ?
+                                    unselectAllMetadatas() :
+                                    selectAllMetadatas()" ng-checked="editedBureau['metadatas-visibility'].length === metadatas.length"/>
+                            Tout sélectionner / tout désélectionner
+                        </label>
+
+                        <div class="nav nav-list nav-pills nav-stacked">
+                            <ul>
+                                <li ng-repeat="metadata in metadatas">
+                                    <div class="checkbox">
+                                        <label for="{{metadata.id}}">
+                                            <input class="unvalidate" type="checkbox" id="{{metadata.id}}" name="{{metadata.id}}" ng-click="checkMetadataVisibility($event, metadata.id)" ng-checked="editedBureau['metadatas-visibility'].indexOf(metadata.id) != -1"> {{metadata.name}}
+                                        </label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='tab-pane' id='restriction'>
+                <span class="text-info">
+                    <i class="fa fa-info-circle"></i> {{'Admin.Bureaux.BuMod_Assoc_Info' | translate}}
+                </span>
+                <div class="well row">
+                    <div class="col-md-6">
+                        <div>
+                            <input placeholder="Recherche" ng-model="searchBureauSuperieur" ng-change="listHandler.search(searchBureauSuperieur)" class="form-control unvalidate" type="text">
+                            <div class="row" style="margin-bottom: 5px; margin-top:5px;">
+                                <span class="btn btn-success col-md-5 force-display" ng-click="listHandler.selectAllResults()">
+                                    <i class="fa fa-plus-circle"></i>
+                                    {{'Admin.Bureaux.BuMod_Assoc_All' | translate}}
+                                </span>
+                                <span class="btn btn-danger col-md-5 col-md-offset-2 force-display" ng-click="listHandler.unselectAll()">
+                                    <i class="fa fa-times-circle"></i>
+                                    {{'Admin.Bureaux.BuMod_Assoc_SelNone' | translate}}
+                                </span>
+                            </div>
+                            <div style="height:15px;" ng-if="listHandler.maxSize < listHandler.total">
+                                <span class="text-warning float-right">
+                                    {{listHandler.page*listHandler.maxSize +1}}-{{(listHandler.page+1)*listHandler.maxSize < listHandler.total ? (listHandler.page+1)*listHandler.maxSize : listHandler.total}} {{'On' | translate}} {{listHandler.total}}
+                                    <span class="btn btn-default fa fa-chevron-left force-display" ng-disabled="listHandler.page === 0" ng-click="listHandler.pagine(-1)"></span>
+                                    <span class="btn btn-default fa fa-chevron-right force-display" ng-disabled="listHandler.page+1 >= (listHandler.total/listHandler.maxSize)" ng-click="listHandler.pagine(1)"></span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <span class="text-info" ng-if="listHandler.total == 0 || (listHandler.subListDelegationPossible.length === 0 && editedBureau['delegations-possibles'].length === 0)"><i class="fa fa-info-circle"></i> {{'Admin.Bureaux.BuMod_Result_None' | translate}}</span>
+                        <ul class="list-unstyled nav nav-pills nav-stacked adminContent list-data">
+                            <li ng-repeat="bureau in listHandler.subListDelegationPossible" ng-switch on="editedBureau['delegations-possibles'].indexOf(bureau.id)">
+                                <a ng-click="listHandler.selectDelegationPossible(bureau)" ng-switch-when="-1">
+                                    <i tooltip-placement="right" tooltip="Sélectionner le bureau" class="fa fa-plus-circle text-success"></i> {{bureau.name}}
+                                </a>
+                                <a class="disabled" ng-switch-default>
+                                    {{bureau.name}}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h3>{{'Admin.Bureaux.BuMod_Assoc_Select' | translate}}</h3>
+                        <span ng-if="editedBureau['delegations-possibles'].length === 0" class="text-info"><i class="fa fa-info-circle"></i> {{'Admin.Bureaux.BuMod_Assoc_None' | translate}}</span>
+                        <ul class="list-unstyled pointer">
+                            <li class="hover-li" ng-click="listHandler.unselectDelegationPossible(bureau.id)" ng-repeat="bureau in (bureaux | sameId:editedBureau['delegations-possibles'])">
+                                <i tooltip="Désélectionner le bureau" class="text-danger fa fa-times-circle"></i> {{bureau.name}}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class='tab-pane' id='delegation'>
+                <div class="col-md-4">
+                    <legend>
+                        {{'Admin.Bureaux.BuMod_Deleg_State' | translate}} :
+                        <span class="label label-success" ng-show="delegationEnabled">{{'Admin.Bureaux.BuMod_Deleg_Enabled' | translate}}</span>
+                        <span class="label label-danger" ng-show="!delegationEnabled">{{'Admin.Bureaux.BuMod_Deleg_Disabled' | translate}}</span>
+                    </legend>
+                </div>
+                <div class="col-md-8">
+                    <div>
+                        <label style="margin-bottom: 0px;" ng-class="delegationActivated ? 'text-danger' : 'text-success'" for="activatedDelegation">
+                            <i ng-if="!delegationActivated" class="fa fa-2x fa-toggle-off"></i>
+                            <i ng-if="delegationActivated" class="fa fa-2x fa-toggle-on"></i>
+                            <span ng-if="!delegationActivated">{{'Admin.Bureaux.BuMod_Deleg_Enable' | translate}}</span>
+                            <span ng-if="delegationActivated">Désactiver la délégation</span>
+                            <input style="display: none;" class="unvalidate" id="activatedDelegation" type="checkbox" ng-click="selectedDelegation.idCible = undefined" ng-model="delegationActivated">
+                        </label>
+                    </div>
+                    <div ng-show="delegationActivated">
+                        <div class="form-group">
+                            <label class="control-label" for="parapheurCible">{{'Admin.Bureaux.Bu_Target' | translate}}</label>
+                            <div class="input-group">
+                                <div class="right-inner-addon">
+                                    <i class="fa fa-question-circle" tooltip-placement="bottom" tooltip="Seuls les bureaux associés pourront être sélectionnés"></i>
+                                    <input id="parapheurCible" type="text" class="form-control unvalidate" ng-model="selectedBureauForDelegation" placeholder="{{'Admin.Dossiers.Find_Desk' | translate}}"
+                                           typeahead="bureau as bureau.title for bureau in bureaux | sameId:editedBureau['delegations-possibles'] | filter:queryForFilter($viewValue) | limitTo:5"
+                                           typeahead-on-select="checkDelegation($item)"
+                                           name="parapheurCible">
+                                </div>
+
+                                <span class="input-group-addon" style="opacity: 0.7;" ng-class="!!selectedBureauForDelegation.id ? 'label-success' : 'label-warning'">
+                                {{!!selectedBureauForDelegation.id ? ('Admin.Dossiers.Find_Desk_Sel' | translate) : ('Admin.Dossiers.Find_Desk_None' | translate)}}
+                            </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="delegationFrom">{{'Admin.Bureaux.Bu_Begin' | translate}}</label>
+                            <div class="input-group col-md-6">
+                                <input type="text" id="delegationFrom" ng-change="checkDelegation()" min-date="0" from="true" name="delegationFrom" linked="#delegationTo" return-format="timestamp" ng-model="selectedDelegation['date-debut-delegation']" class="form-control unvalidate" readonly="true" ip-datepicker ng-required="delegationActivated"/>
+                                <span ng-if="!!selectedDelegation['date-debut-delegation']" ng-click="selectedDelegation['date-debut-delegation'] = undefined"
+                                      class="pointer input-group-addon">
+                                    <i class="fa fa-times"></i>
+                                </span>
+                                <label for="delegationFrom" ng-if="!selectedDelegation['date-debut-delegation']" class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </label>
+                            </div>
+                            <div class="input-help">
+                                <h4 ng-show="modalForm.delegationFrom.$error.required">{{'Admin.Bureaux.BuMod_Deleg_Required' | translate}}</h4>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="delegationTo">{{'Admin.Bureaux.Bu_Fin' | translate}}</label>
+                            <div class="input-group col-md-6">
+                                <input type="text" id="delegationTo" ng-change="checkDelegation()" min-date="0" name="delegationTo" linked="#delegationFrom" return-format="timestamp" ng-model="selectedDelegation['date-fin-delegation']" class="form-control unvalidate" readonly="true" ip-datepicker ng-required="!selectedDelegation['date-debut-delegation'] && delegationActivated"/>
+                                <span ng-if="!!selectedDelegation['date-fin-delegation']" ng-click="selectedDelegation['date-fin-delegation'] = undefined"
+                                      class="pointer input-group-addon">
+                                    <i class="fa fa-times"></i>
+                                </span>
+                                <label for="delegationTo" ng-if="!selectedDelegation['date-fin-delegation']" class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </label>
+                            </div>
+
+                            <div class="input-help">
+                                <h4 ng-show="modalForm.delegationTo.$error.required">{{'Admin.Bureaux.BuMod_Deleg_Required' | translate}}</h4>
+                            </div>
+                        </div>
+                        <div class="checkbox">
+                            <label for="dossiersActuels">
+                                <input type="checkbox" class="unvalidate" id="dossiersActuels" ng-model="selectedDelegation['deleguer-presents']">
+                                {{'Admin.Bureaux.BuMod_Deleg_Current' | translate}}
+                            </label>
+                        </div>
+                        <span class="text-danger" ng-if="selectedDelegation.willItLoop"><i class="fa fa-warning"></i> {{'Admin.Bureaux.BuMod_Deleg_Loop' | translate}}</span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<div class="modal-footer">
+    <div style="position: absolute; z-index: 2000000000; left: 20px;" ng-if="isSaving">
+        <span style="position: absolute; z-index: 2000000000; left: 10px;" us-spinner="{radius:10, width:4, length: 8}" ></span>
+        <span class="text text-info" style="margin-left:50px;">
+            {{'Admin.Bureaux.BuMod_Saving' | translate}}
+        </span>
+    </div>
+    <button class="btn btn-warning" ng-click="cancel()">
+        <i class="fa fa-times-circle-o"></i>
+        {{'Back' | translate}}
+    </button>
+    <button class="btn btn-primary" ng-click="ok()" ng-disabled="!modalForm.$valid">
+        <i class="fa fa-floppy-o"></i>
+        {{'Save' | translate}}
+    </button>
+</div>

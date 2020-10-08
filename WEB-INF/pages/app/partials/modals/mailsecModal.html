@@ -1,0 +1,80 @@
+<div class="modal-header">
+    <h3>{{'mailsecModal.send_by_secure_mail' | translate}}</h3>
+</div>
+<div class="modal-body row">
+    <form name="modalForm" class="row form-horizontal">
+        <div class="col-md-6">
+            <label class="col-xs-12 mandatory-group">
+                <span class="label label-danger"><i class="fa fa-warning"></i> {{'Mandatory' | translate}}</span>
+                {{'mailsecModal.to' | translate}} : <input type="text" class="form-control" ng-pattern="/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5}){1,25}(;[ ]{0,1}([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5}){1,25})*$/" ng-model="action.destinataires" required>
+            </label>
+            <label class="col-xs-12">
+                {{'mailsecModal.cc' | translate}} : <input type="text" class="form-control" ng-pattern="/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5}){1,25}(;[ ]{0,1}([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5}){1,25})*$/" ng-model="action.destinatairesCC">
+            </label>
+            <label class="col-xs-12">
+                {{'mailsecModal.cci' | translate}} : <input type="text" class="form-control" ng-pattern="/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5}){1,25}(;[ ]{0,1}([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5}){1,25})*$/" ng-model="action.destinatairesCCI">
+            </label>
+            <label class="col-xs-12 mandatory-group">
+                <span class="label label-danger"><i class="fa fa-warning"></i> {{'Mandatory' | translate}}</span>
+                {{'mailsecModal.object' | translate}} : <input type="text" class="form-control unvalidate" ng-model="action.objet" required>
+            </label>
+            <label class="col-xs-12 mandatory-group">
+                <span class="label label-danger"><i class="fa fa-warning"></i> {{'Mandatory' | translate}}</span>
+                {{'mailsecModal.message' | translate}} :
+                <div>
+                    <textarea class="form-control mailCore unvalidate" ng-model="action.message" required></textarea>
+                    <i class="fa fa-4x fa-envelope-o textarea-icon"></i>
+                </div>
+            </label>
+            <label class="col-xs-12" ng-if="dossiers[0].actionDemandee !== 'MAILSECPASTELL'">
+                {{'mailsecModal.password' | translate}} : <input type="text" class="form-control unvalidate" ng-model="action.password">
+            </label>
+            <label class="col-xs-12" ng-if="dossiers[0].actionDemandee !== 'MAILSECPASTELL'">
+                {{'mailsecModal.sending_password_uncrypted' | translate}}
+                <div class="checkbox-inline">
+                    <input class="unvalidate" type="checkbox" ng-model="action.showpass">
+                </div>
+            </label>
+            <label class="col-xs-12">
+                {{'mailsecModal.include_bord' | translate}}
+                <div class="checkbox-inline">
+                    <input class="unvalidate" type="checkbox" ng-model="action.includeFirstPage">
+                </div>
+            </label>
+        </div>
+        <div class="col-md-6">
+            <div class="col-xs-12">
+                <span class="legend">{{'mailsecModal.folder_list' | translate}}<hr></span>
+                <ul class="listeDossiers">
+                    <li ng-repeat="dossier in dossiers" class="btn btn-default col-md-12 force-display"><span class="label label-info">{{dossier.actionDemandee}}</span>{{dossier.title}}</li>
+                </ul>
+            </div>
+            <div class="col-xs-12" ng-show="hasAnnexes">
+                <span class="legend">{{'mailsecModal.annexes_to_add' | translate}}<hr></span>
+                <label ng-show="dossiers.length > 1">
+                    <input type="checkbox" class="checkbox-inline unvalidate" ng-model="action.annexesIncluded">
+                    Inclure les annexes
+                </label>
+                <ul ng-show="dossiers.length === 1">
+                    <li ng-repeat="annexe in action.attachments">
+                        <label>
+                            <input type="checkbox" name="selectedAnnexes[]" class="checkbox-inline unvalidate" ng-model="annexe.selected">
+                            {{annexe.name}}
+                        </label>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="modal-footer">
+    <button ng-disabled="spin" class="btn btn-warning" ng-click="cancel()">
+        <i class="fa fa-times-circle-o"></i>
+        {{'Back' | translate}}
+    </button>
+    <button ng-disabled="!modalForm.$valid" class="btn btn-primary" ng-click="ok()">
+        <i class="fa fa-check"></i>
+        {{'Send' | translate}}
+    </button>
+</div>

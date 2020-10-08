@@ -1,0 +1,10 @@
+{
+  "notificationModal": {
+    "notify_and_add_consultation_credentials": "Notify and add consultation credentials",
+    "available_desks": "Available desks",
+    "desks_to_notify": "Desks to notify",
+    "notify": "Notify",
+    "remove": "Remove",
+    "no_desk": "No desk"
+  }
+}

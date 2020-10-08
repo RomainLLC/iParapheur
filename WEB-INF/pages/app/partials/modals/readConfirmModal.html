@@ -1,0 +1,21 @@
+<div class="modal-header">
+    <h3>{{title | i18n}} {{titleComplement}}</h3>
+</div>
+<div class="modal-body row">
+    <div class="checkbox">
+        <label>
+            <input ng-model="confirm" type="checkbox"> {{message}}
+        </label>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-warning" ng-click="cancel()">
+        <i class="fa fa-times-circle-o"></i>
+        {{'Back' | translate}}
+    </button>
+    <button class="btn btn-primary" ng-disabled="!confirm" ng-click="ok()">
+        <i class="fa fa-check"></i>
+        {{'Confirm' | translate}}
+    </button>
+</div>

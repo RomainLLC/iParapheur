@@ -1,0 +1,7 @@
+{
+  "signPapeConfirmationModal": {
+    "paper_signature_confirmation": "Paper signature confirmation",
+    "do_you_really_want_change_signature_to_paper_signature": "Do you really want to change signature mode to paper signature ?",
+    "link_to_the_document_to_print": "Link to the document to print"
+  }
+}

@@ -1,0 +1,51 @@
+<script type="text/ng-template"  id="popover_renderer">
+    <div ng-show="row.branch.proprietaires.length > 0" class="text-success">
+        {{'Admin.Bureaux.Bu_Prop' | translate}} :
+        <ul>
+            <li ng-repeat="user in row.branch.proprietaires">{{user.firstName}} {{user.lastName}} ({{user.username}})</li>
+        </ul>
+    </div>
+    <hr ng-show="row.branch.secretaires.length > 0 && row.branch.proprietaires.length > 0"/>
+    <div ng-show="row.branch.secretaires.length > 0" class="text-warning">
+        {{'Admin.Bureaux.Bu_Sec' | translate}} :
+        <ul>
+            <li ng-repeat="user in row.branch.secretaires">{{user.firstName}} {{user.lastName}} ({{user.username}})</li>
+        </ul>
+    </div>
+</script>
+
+<script type="text/ng-template"  id="popover_delegation">
+    <div class="text-muted">
+        <h4>{{'Admin.Bureaux.Bu_Deleg' | translate}} :</h4>
+        <div>
+            <span ng-if="row.branch.delegation['date-debut-delegation']"><strong>{{'Admin.Bureaux.Bu_Begin' | translate}} :</strong> Le {{row.branch.delegation['date-debut-delegation'] | date:'fullDate'}}</span><br>
+            <span ng-if="row.branch.delegation['date-fin-delegation']"><strong>{{'Admin.Bureaux.Bu_Fin' | translate}} :</strong> Le {{row.branch.delegation['date-fin-delegation'] | date:'fullDate'}}</span><br>
+            <span><strong>{{'Admin.Bureaux.Bu_Target' | translate}} :</strong> {{row.branch.delegation.titreCible}}</span><br>
+        </div>
+    </div>
+</script>
+
+<ul class="nav nav-list nav-pills nav-stacked abn-tree">
+    <li ng-show="header" class="nav-header">{{ header }}</li>
+    <li ng-hide="checkRights && !isAdminFonctionnelOf(row)" ng-repeat="row in tree_rows | filter:{visible:true} | filter:search track by row.branch.id" ng-class="'level-' + (row.branch.profondeur +1) + (row.branch.selected ? ' active':'')" class="abn-tree-row abn-tree-animate">
+
+        <a ng-if="!showCheck" ng-click="user_clicks_branch(row.branch)">
+            <i ng-class="row.tree_icon" ng-click="row.branch.expanded = !row.branch.expanded" class="indented tree-icon fa"> </i>
+            <span class="indented tree-label">{{ row.branch.title }}</span>
+            <div ng-if="row.branch.proprietaires.length > 0 || row.branch.secretaires.length > 0" ng-show="showDetail" class="fa fa-user pull-right" popover-placement="right"
+               bs-popover="'popover_renderer'" data-trigger="hover">
+            </div>
+            <div ng-if="row.branch.delegation.idCible" ng-show="showDetail" ng-class="row.branch.selected ? '' : 'text-warning'" class="fa fa-share icon2-tree" popover-placement="right"
+                 bs-popover="'popover_delegation'" data-trigger="hover">
+            </div>
+        </a>
+        <div ng-if="showCheck">
+            <input class="unvalidate" ng-show="showCheck" id="{{row.branch.id + identifier}}" name="{{row.branch.id + identifier}}" type="checkbox" ng-click="change_check_value($event, row.branch.id)" ng-checked="array.indexOf(row.branch.id) != -1" ng-disabled="row.branch.id == remove">
+            <i ng-class="row.tree_icon" ng-click="row.branch.expanded = !row.branch.expanded" class="indented tree-icon fa"> </i>
+            <label for="{{row.branch.id + identifier}}" style="font-weight: normal;"  class="indented tree-label">{{ row.branch.title }}</label>
+            <div ng-show="showDetail" class="fa fa-user pull-right" popover-placement="right"
+                 bs-popover="'popover_renderer'" data-trigger="hover">
+            </div>
+        </div>
+    </li>
+</ul>

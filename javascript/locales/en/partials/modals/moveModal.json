@@ -1,0 +1,7 @@
+{
+  "moveModal": {
+    "move_folder": "Move folder",
+    "available_desks": "Available desks",
+    "moving_a_folder_implies_workflow_modification": "Warning : Moving a folder implies a modification of its workflow"
+  }
+}

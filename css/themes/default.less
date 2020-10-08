@@ -1,0 +1,60 @@
+//Importer les composants de bootstrap, principalement les mixins et variables.
+@import "../bootstrap/variables.less";
+@import "../bootstrap/mixins.less";
+@import "theme-factory.less";
+
+//Définir les images (sprites) (voir Sprites.less de bootstrap pour exemple)
+[class^="paraph-icon-"] {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    vertical-align: text-top;
+    background-image: url(../../images/themes/default/glyphicons.png);
+    background-position: 32px 32px;
+    background-repeat: no-repeat; //border: 1px solid;
+  //.ie7-restore-right-whitespace();
+}
+
+/*.default-template-content  {
+    padding-top:50px;
+}*/
+
+.paraph-icon-secretary {
+    background-position: -240px  -140px;
+}
+
+.paraph-icon-validate {
+    background-position: -286px  -957px;
+}
+
+.paraph-icon-reject {
+    background-position: -334px  -957px;
+}
+
+.paraph-icon-delete {
+    background-position: -288px   -44px;
+}
+
+.paraph-icon-email {
+    background-position: -192px  -575px;
+}
+
+.paraph-icon-print {
+    background-position: -240px   -45px;
+}
+
+.paraph-icon-remorse {
+    background-position: -48px  -1052px;
+}
+
+.paraph-icon-pencil {
+    background-position: -0px    -140px;
+}
+
+.paraph-icon-save {
+    background-position: -240px  -669px;
+}
+
+.paraph-icon-load {
+    background-position: -192px  -671px;
+}

@@ -1,0 +1,15 @@
+{
+  "chainModal": {
+    "circuit_chaining": "Circuit chaining",
+    "type_selection": "Type selection",
+    "subtype_selection": "Subtype selection",
+    "you_should_set_metadata_before_reloading_the_circuit": "You should set metadata before reloading the circuit",
+    "circuit_selection_script_detected": "Circuit selection script detected.",
+    "reload_circuit": "Reload circuit",
+    "type": "Type",
+    "subtype": "Subtype",
+    "validation_circuit": "Validation circuit",
+    "once_chain_set_you_have_to_validate_the_folder_transfer_it": "Once the circuit chaining set, you have to validate the folder to transfer it in the next circuit.",
+    "chain_circuit": "Enchaîner un circuit"
+  }
+}

@@ -1,0 +1,178 @@
+<div class="modal-header">
+    <h3>{{'chainModal.circuit_chaining' | translate}}</h3>
+</div>
+<div class="modal-body row">
+    <div class="col-md-12">
+        <form novalidate name="chainCircuit" class="form-horizontal" ng-submit="ok()">
+            <div class="col-md-6">
+                <div class="form-group col-md-8">
+                    <label for="select-type">{{'chainModal.type' | translate}}</label>
+                    <select class="form-control" id="select-type" ng-disabled="flags.disabled" ng-model="action.type"
+                            ng-change="action.sousType = ''" ng-options="value.id as value.id for value in typo"
+                            required>
+                        <option value="">-- {{'chainModal.type_selection' | translate}} --</option>
+                    </select>
+                    <div class="input-help">
+                        <h4>Requis</h4>
+                    </div>
+                </div>
+                <div class="form-group col-md-8">
+                    <label for="select-sous-type">{{'chainModal.subtype' | translate}}</label>
+                    <select class="form-control" id="select-sous-type" ng-disabled="flags.disabled"
+                            ng-model="action.sousType"
+                            ng-options="value for value in (typo | findWithId:action.type).sousTypes" required>
+                        <option value="">-- {{'chainModal.subtype_selection' | translate}} --</option>
+                    </select>
+                    <div class="input-help">
+                        <h4>{{'Mandatory' | translate}}</h4>
+                    </div>
+                </div>
+                <span style="margin-bottom:15px;" class="col-md-8 text text-danger" ng-if="!!circuit.sigFormat && circuit.sigFormat !== dossier.circuit.sigFormat">
+                    <i class="fa fa-warning"></i>
+                    Attention ! <br/>
+                    Le format de signature du dossier est incompatible avec le format de signature de la typologie sélectionnée
+                </span>
+                <div class="form-group col-md-8">
+
+                    <div>
+                        <p class="label label-info label-block" ng-show="circuit.hasSelectionScript">
+                            <span>
+                                {{'chainModal.circuit_selection_script_detected' | translate}}
+                                {{'chainModal.you_should_set_metadata_before_reloading_the_circuit' | translate}}
+                            </span>
+                        </p>
+                        <div ng-show="circuit.hasSelectionScript" class="btn btn-info col-md-12"
+                             style="margin-bottom:10px;" ng-click="updateCircuit()">
+                            <i class="fa fa-refresh"></i>
+                            {{'chainModal.reload_circuit' | translate}}
+                        </div>
+                        <ol class="col-md-12">
+                            <li ng-repeat="etape in circuit.etapes">
+                                <i class="fa fa-fw fa-lg" ng-class="getIconClass(etape.actionDemandee)" tooltip="{{getActionTooltip(etape)}}"></i>
+                                    <span ng-if="etape.transition === 'VARIABLE'" class="little-select">
+                                        <i class="fa fa-fw"
+                                           ng-class="action.acteursVariables[$index] ? 'text-success fa-check-square-o' : 'fa-question'"></i>
+                                        <select required class="unvalidate"
+                                                ng-options="acteur.id as acteur.name for acteur in currentBureau.associes"
+                                                ng-model="action.acteursVariables[$index]">
+                                            <option></option>
+                                        </select>
+                                    </span>
+                                    <span ng-if="etape.transition !== 'VARIABLE'">
+                                        {{etape.parapheurName}}
+                                    </span>
+                            </li>
+
+                        </ol>
+                    </div>
+                    <div ng-if="errorMessage" class="alert alert-danger">
+                        {{errorMessage}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <legend ng-show="metaInfos.length > 0" class="mini">{{'app.nouveau.meta' | i18n}}</legend>
+                <div>
+                    <div ng-switch on="metaInfo.type" class="control-group"
+                         ng-repeat="(metaName, metaInfo) in metaInfos">
+                        <div class="form-group col-md-8"
+                             ng-class="{true:'mandatory-group', false:''}[metaInfo.mandatory === 'true']"
+                             ng-switch-when="DATE" ng-hide="metaInfo.values">
+                            <label class="control-label" for="{{metaInfo.id}}">{{metaInfo.realName}}</label>
+                            <span class="fa fa-warning label label-danger" ng-show="{{metaInfo.mandatory === 'true'}}"> Obligatoire</span>
+                            <div class="input-group">
+                                <input name="{{'date' + $index}}" ng-change="metaChanged()" ng-cloak="" ip-id="'date' + $index"
+                                       return-format="timestamp" readonly="true" ip-datepicker type="text"
+                                       ng-model="action.metadatas[metaInfo.id].value" class="form-control"
+                                       ng-required="metaInfo.mandatory === 'true' && !metaInfo.values"
+                                       ng-class="{true:'', false:'unvalidate'}[metaInfo.mandatory === 'true']">
+                                <span ng-click="action.metadatas[metaInfo.id].value = ''"
+                                      class="pointer input-group-addon">X</span>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-8"
+                             ng-class="{true:'mandatory-group', false:''}[metaInfo.mandatory === 'true']"
+                             ng-switch-when="STRING" ng-hide="metaInfo.values">
+                            <label class="control-label" for="{{metaInfo.id}}">{{metaInfo.realName}}</label>
+                            <span class="fa fa-warning label label-danger" ng-show="{{metaInfo.mandatory === 'true'}}"> Obligatoire</span>
+                            <input ng-cloak type="text" ng-change="metaChanged()" id="{{metaInfo.id}}"
+                                   ng-model="action.metadatas[metaInfo.id].value"
+                                   ng-class="{true:'', false:'unvalidate'}[metaInfo.mandatory === 'true']"
+                                   class="form-control"
+                                   ng-required="metaInfo.mandatory === 'true'  && !metaInfo.values">
+                        </div>
+                        <div class="form-group col-md-8"
+                             ng-class="{true:'mandatory-group', false:''}[metaInfo.mandatory === 'true']"
+                             ng-switch-when="INTEGER" ng-hide="metaInfo.values">
+                            <label class="control-label" for="{{metaInfo.id}}">{{metaInfo.realName}}</label>
+                            <span class="fa fa-warning label label-danger" ng-show="{{metaInfo.mandatory === 'true'}}"> Obligatoire</span>
+                            <input type="text" integer ng-change="metaChanged()" id="{{metaInfo.id}}"
+                                   ng-model="action.metadatas[metaInfo.id].value"
+                                   ng-class="{true:'', false:'unvalidate'}[metaInfo.mandatory === 'true']"
+                                   class="form-control"
+                                   ng-required="metaInfo.mandatory === 'true'  && !metaInfo.values">
+                        </div>
+                        <div class="form-group col-md-8"
+                             ng-class="{true:'mandatory-group', false:''}[metaInfo.mandatory === 'true']"
+                             ng-switch-when="DOUBLE" ng-hide="metaInfo.values">
+                            <label class="control-label" for="{{metaInfo.id}}">{{metaInfo.realName}}</label>
+                            <span class="fa fa-warning label label-danger" ng-show="{{metaInfo.mandatory === 'true'}}"> Obligatoire</span>
+                            <input type="text" decimal ng-change="metaChanged()" id="{{metaInfo.id}}"
+                                   ng-model="action.metadatas[metaInfo.id].value"
+                                   ng-class="{true:'', false:'unvalidate'}[metaInfo.mandatory === 'true']"
+                                   class="form-control"
+                                   ng-required="metaInfo.mandatory === 'true'  && !metaInfo.values">
+                        </div>
+                        <div class="form-group col-md-8"
+                             ng-class="{true:'mandatory-group', false:''}[metaInfo.mandatory === 'true']"
+                             ng-switch-when="BOOLEAN">
+                            <label class="control-label" for="{{metaInfo.id}}">{{metaInfo.realName}}</label>
+                            <span class="fa fa-warning label label-danger" ng-show="{{metaInfo.mandatory === 'true'}}"> Obligatoire</span>
+                            <select id="{{metaInfo.id}}" ng-change="metaChanged()"
+                                    ng-model="action.metadatas[metaInfo.id].value"
+                                    ng-class="{true:'', false:'unvalidate'}[metaInfo.mandatory === 'true']"
+                                    class="form-control" ng-required="metaInfo.mandatory === 'true'">
+                                <option ng-hide="metaInfo.mandatory === 'true'" value=""></option>
+                                <option value="true">Oui</option>
+                                <option value="false">Non</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-8" ng-show="metaInfo.values">
+                            <label class="control-label" for="{{metaInfo.id}}">{{metaInfo.realName}}</label>
+                            <span class="fa fa-warning label label-danger float-right"
+                                  ng-show="{{metaInfo.mandatory === 'true'}}"> {{'Mandatory' | translate}}</span>
+                            <select id="{{metaInfo.id}}" ng-change="metaChanged()"
+                                    ng-change="valuesMetaUndefined(metaInfo.id)"
+                                    ng-model="action.metadatas[metaInfo.id].value"
+                                    ng-class="{true:'', false:'unvalidate'}[metaInfo.mandatory === 'true']"
+                                    class="form-control"
+                                    ng-required="metaInfo.mandatory === 'true'  && metaInfo.values">
+                                <option ng-hide="metaInfo.mandatory === 'true'" value=""></option>
+                                <option ng-repeat="value in metaInfo.values" ng-value="value">{{value}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Pour l'envoi du formulaire avec touche entrée -->
+            <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/>
+        </form>
+    </div>
+
+</div>
+
+<div class="modal-footer">
+    <div class="message-modal">
+        <span class="text-info">
+            <i class="fa fa-info-circle"></i> {{'chainModal.once_chain_set_you_have_to_validate_the_folder_transfer_it' | translate}}
+        </span>
+    </div>
+    <button class="btn btn-warning" ng-click="cancel()">
+        <i class="fa fa-times-circle-o"></i>
+        {{'Back' | translate}}
+    </button>
+    <button type="submit" class="btn btn-primary" ng-disabled="!chainCircuit.$valid" ng-click="ok()">
+        <i class="fa fa-road"></i>
+        {{'chainModal.chain_circuit' | translate}}
+    </button>
+</div>

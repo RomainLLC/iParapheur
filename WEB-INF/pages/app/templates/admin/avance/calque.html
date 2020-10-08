@@ -1,0 +1,398 @@
+<div>
+    <script type="text/ng-template" id="popover_commentaire">
+        <textarea class="form-control unvalidate" ng-model="calques.currentSub.texte"></textarea>
+    </script>
+
+    <div style="top:100px;" class="nextDossierInfo" ng-if="!calques.isInit">
+                    <span class="text text-info">
+                        {{'Admin.Avance.getting_infos' | translate}}
+                    </span>
+        <span style="position: relative; width: 0px; z-index: 2000000000; right: 140px; top: 100px;"
+              us-spinner="{radius:20, width:8, length: 16}"></span>
+    </div>
+    <div class="col-md-12" ng-if="calques.isInit">
+        <div class="row">
+            <div class="col-md-3">
+                <h3>{{'Admin.Avance.Calque.title' | translate}}</h3>
+                <span ng-click="calques.create()" class="btn btn-success"><i class="fa fa-plus"></i> {{'Admin.Avance.Calque.create' | translate}}</span>
+                <ul class="list-unstyled nav nav-pills nav-stacked adminContent list-data">
+                    <li ng-repeat="calque in calques.list | orderBy:'name':false"
+                        ng-class="calques.current.id == calque.id ? 'active' : ''">
+                        <a ng-click="calques.select(calque)">
+                            {{calque.name}}
+                            <i ng-click="calques.remove(calque)"
+                               ng-class="calques.current.id == calque.id ? 'text-inverse' : 'text-danger'"
+                               tooltip="Supprimer" class="fa fa-trash-o icon-right pointer"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-9">
+                <div class="row" ng-if="!empty(calques.current)">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4>{{'Admin.Avance.Calque.edit' | translate}} {{calques.current.name}}</h4>
+                                <a class="btn btn-success"
+                                   href="{{context + '/proxy/alfresco/parapheur/calques/' + calques.current.id + '/preview'}}"
+                                   target="_blank"><i class="fa fa-eye"></i> {{'Admin.Avance.Calque.preview' |
+                                    translate}}</a>
+                            </div>
+                            <div class="col-md-6">
+                                <img style="float:right;" ng-src="{{context + '/res/images/a4.jpg'}}">
+                                <div>
+                                    <div class="text-info"><i class="fa fa-info-circle"></i>
+                                        {{'Admin.Avance.Calque.rank_info' | translate}}
+                                    </div>
+                                    <div class="text-info"><i class="fa fa-info-circle"></i>
+                                        {{'Admin.Avance.Calque.page_info' | translate}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#signatures" bs-tab><i class="fa ls-signature"></i>
+                            {{'Admin.Avance.Calque.signatures' | translate}} <span class="badge">{{calques.current.signature.length}}</span></a>
+                        </li>
+                        <li><a href="#images" bs-tab><i class="fa fa-picture-o"></i> {{'Admin.Avance.Calque.images' |
+                            translate}} <span class="badge">{{calques.current.image.length}}</span></a></li>
+                        <li><a href="#commentaires" bs-tab><i class="fa fa-comments-o"></i> {{'Admin.Avance.Calque.comments' |
+                            translate}} <span class="badge">{{calques.current.commentaire.length}}</span></a></li>
+                        <li><a href="#metadatas" bs-tab><i class="fa fa-code"></i> {{'Admin.Avance.Calque.metadatas' |
+                            translate}} <span class="badge">{{calques.current.metadata.length}}</span></a></li>
+                    </ul>
+
+
+                    <div class="tab-content">
+                        <div class='tab-pane' ng-class="'active'" id='signatures'>
+                            <div class="col-md-12">
+                                <h5>{{'Admin.Avance.Calque.signatures' | translate}}</h5>
+                                <span class="btn btn-success"
+                                      ng-click="calques.newSub('signature')">
+                                    <i class="fa fa-plus"></i>
+                                    Ajouter une signature
+                                </span>
+                                <form name="signature">
+                                    <span ng-if="!(calques.current.signature.length > 0 || (!empty(calques.currentSub) && calques.currentSub.type === 'signature'))">{{'Admin.Avance.Calque.sig_none' | translate}}</span>
+                                    <table ng-if="calques.current.signature.length > 0 || (!empty(calques.currentSub) && calques.currentSub.type === 'signature')"
+                                           class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>{{'Admin.Avance.Calque.rank' | translate}}</th>
+                                            <th>{{'Admin.Avance.Calque.x_coord' | translate}}</th>
+                                            <th>{{'Admin.Avance.Calque.y_coord' | translate}}</th>
+                                            <th>{{'Admin.Avance.Calque.page' | translate}}</th>
+                                            <th>{{'Admin.Avance.Calque.after_sig' | translate}}</th>
+                                            <th>{{'Admin.Avance.Calque.action' | translate}}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="signature in calques.current.signature">
+                                            <td>{{signature.rang}}</td>
+                                            <td>{{signature.coordonneeX}}</td>
+                                            <td>{{signature.coordonneeY}}</td>
+                                            <td>{{signature.page}}</td>
+                                            <td><input type="checkbox" disabled class="checkbox unvalidate"
+                                                       ng-model="signature.postSignature"></td>
+                                            <td>
+                                                    <span ng-click="calques.deleteSub(signature, 'signature')"
+                                                          class="btn btn-danger force-display" title="Supprimer">
+                                                        <i class="fa fa-trash-o"></i>
+                                                    </span>
+                                            </td>
+                                        </tr>
+                                        <tr ng-if="!empty(calques.currentSub) && calques.currentSub.type === 'signature'">
+                                            <td><input class="form-control unvalidate"
+                                                       ng-model="calques.currentSub.rang" required="required"></td>
+                                            <td><input class="form-control unvalidate"
+                                                       ng-model="calques.currentSub.coordonneeX" required="required">
+                                            </td>
+                                            <td><input class="form-control unvalidate"
+                                                       ng-model="calques.currentSub.coordonneeY" required="required">
+                                            </td>
+                                            <td><input class="form-control unvalidate"
+                                                       ng-model="calques.currentSub.page" required="required"></td>
+                                            <td><input type="checkbox" class="unvalidate"
+                                                       ng-model="calques.currentSub.postSignature"></td>
+                                            <td>
+                                                    <span ng-click="calques.saveSub('signature')"
+                                                          class="btn btn-info force-display"
+                                                          ng-disabled="!signature.$valid" title="Enregistrer">
+                                                        <i class="fa fa-save"></i>
+                                                    </span>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </form>
+                            </div>
+                        </div>
+
+
+                        <div class='tab-pane' id='images'>
+                            <div class="col-md-12">
+                                <h5>{{'Admin.Avance.Calque.images' | translate}}</h5>
+                                <span class="btn btn-success"
+                                      ng-click="calques.newSub('image')">
+                                    <i class="fa fa-plus"></i>
+                                    Ajouter une image
+                                </span>
+                                <form submit-button=".launchUploadImage" one-file="true" fileupload="image"
+                                      file-added="calques.fileAdded(files)" wrong-type="calques.wrongType(ext)"
+                                      fileinput="#fileinputImg" upload-success="calques.fileEncoded(data)"
+                                      action="{{context + '/base64encode'}}" method="POST" enctype="multipart/form-data"
+                                      novalidate="novalidate" name="images">
+                                    <span ng-if="!(calques.current.image.length > 0 || (!empty(calques.currentSub) && calques.currentSub.type === 'image'))">{{'Admin.Avance.Calque.img_none' | translate}}</span>
+                                    <table ng-show="calques.current.image.length > 0 || (!empty(calques.currentSub) && calques.currentSub.type === 'image')"
+                                           class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>{{'Admin.Avance.Calque.image' | translate}}</th>
+                                            <th>{{'Admin.Avance.Calque.x_coord' | translate}}</th>
+                                            <th>{{'Admin.Avance.Calque.y_coord' | translate}}</th>
+                                            <th>{{'Admin.Avance.Calque.page' | translate}}</th>
+                                            <th>{{'Admin.Avance.Calque.after_sig' | translate}}</th>
+                                            <th>{{'Admin.Avance.Calque.action' | translate}}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="image in calques.current.image">
+                                            <td>{{image.nomImage}}</td>
+                                            <td>{{image.coordonneeX}}</td>
+                                            <td>{{image.coordonneeY}}</td>
+                                            <td>{{image.page}}</td>
+                                            <td><input type="checkbox" disabled class="checkbox unvalidate"
+                                                       ng-model="image.postSignature"></td>
+                                            <td>
+                                                <span ng-click="calques.deleteSub(image, 'image')"
+                                                      class="btn btn-danger force-display" title="Supprimer">
+                                                    <i class="fa fa-trash-o"></i>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr ng-show="!empty(calques.currentSub) && calques.currentSub.type === 'image'">
+                                            <td>
+                                                <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+                                                <div class="fileupload-buttonbar form-group" style="margin-bottom:0;">
+                                                    <!-- The fileinput-button span is used to style the file input field as button -->
+                                                    <div>
+                                                        <div>
+                                                            <span style="display:block !important;"
+                                                                  class="btn btn-default fileinput-button">
+                                                                <i class="fa fa-folder-open-o"></i>
+                                                                <span>{{'Browse' | translate}}</span>
+                                                                <input id="fileinputImg" type="file" name="file"
+                                                                       required="required">
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    {{calques.currentSub.nomImage}}
+                                                </div>
+
+                                            </td>
+                                            <td><input class="form-control unvalidate"
+                                                       ng-model="calques.currentSub.coordonneeX" required="required">
+                                            </td>
+                                            <td><input class="form-control unvalidate"
+                                                       ng-model="calques.currentSub.coordonneeY" required="required">
+                                            </td>
+                                            <td><input class="form-control unvalidate"
+                                                       ng-model="calques.currentSub.page" required="required"></td>
+                                            <td><input type="checkbox" class="unvalidate"
+                                                       ng-model="calques.currentSub.postSignature"></td>
+                                            <td>
+                                                <span class="btn btn-info force-display launchUploadImage"
+                                                      ng-disabled="!images.$valid || !calques.currentSub.nomImage" title="Enregistrer">
+                                                    <i class="fa fa-save"></i>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </form>
+                            </div>
+                        </div>
+
+
+                        <div class='tab-pane' id='commentaires'>
+                            <div class="col-md-12">
+                                <h5>{{'Admin.Avance.Calque.comments' | translate}}</h5>
+                                <span class="btn btn-success"
+                                        ng-click="calques.newSub('commentaire')">
+                                    <i class="fa fa-plus"></i>
+                                    Ajouter un commentaire
+                                </span>
+                                <form name="commentaires">
+                                    <span ng-if="!(calques.current.commentaire.length > 0 || (!empty(calques.currentSub) && calques.currentSub.type === 'commentaire'))">{{'Admin.Avance.Calque.comment_none' | translate}}</span>
+                                    <table ng-if="calques.current.commentaire.length > 0 || (!empty(calques.currentSub) && calques.currentSub.type === 'commentaire')"
+                                           class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>{{'Admin.Avance.Calque.txt' | translate}}</th>
+                                            <th>{{'Admin.Avance.Calque.font_size' | translate}}</th>
+                                            <th>{{'Admin.Avance.Calque.txt_color' | translate}}</th>
+                                            <th>{{'Admin.Avance.Calque.x_coord' | translate}}</th>
+                                            <th>{{'Admin.Avance.Calque.y_coord' | translate}}</th>
+                                            <th>{{'Admin.Avance.Calque.page' | translate}}</th>
+                                            <th>{{'Admin.Avance.Calque.after_sig' | translate}}</th>
+                                            <th>{{'Admin.Avance.Calque.action' | translate}}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="comm in calques.current.commentaire">
+                                            <td>{{comm.texte}}</td>
+                                            <td>{{comm.taillePolice}}</td>
+                                            <td>{{comm.couleurTexte}}</td>
+                                            <td>{{comm.coordonneeX}}</td>
+                                            <td>{{comm.coordonneeY}}</td>
+                                            <td>{{comm.page}}</td>
+                                            <td><input type="checkbox" disabled class="checkbox unvalidate"
+                                                       ng-model="comm.postSignature"></td>
+                                            <td>
+                                                <span ng-click="calques.deleteSub(comm, 'commentaire')"
+                                                      class="btn btn-danger force-display" title="Supprimer">
+                                                    <i class="fa fa-trash-o"></i>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr ng-if="!empty(calques.currentSub) && calques.currentSub.type === 'commentaire'">
+                                            <td style="position: relative;">
+                                                <i ng-if="calques.editComment"
+                                                   class="fa fa-save text-primary pointer fa-2x"
+                                                   ng-click="calques.editComment = false"
+                                                   style="position:absolute; bottom:10px; right:25px;"
+                                                   tooltip=" {{'Save' | translate}}"></i>
+                                                <textarea focus-me="{{calques.editComment}}"
+                                                          ng-show="calques.editComment"
+                                                          class="form-control unvalidate"
+                                                          ng-model="calques.currentSub.texte"
+                                                          style="min-height:150px;min-width:150px;"></textarea>
+                                                <span ng-if="!calques.editComment"
+                                                      tooltip=" {{'Admin.Avance.Calque.define_comment' | translate}}"
+                                                      ng-click="calques.editComment = true">
+                                                    <span class="text-info pointer">
+                                                        <i class="fa fa-pencil"></i>
+                                                        <span ng-if="!calques.currentSub.texte">{{'Admin.Avance.Calque.define_comment' | translate}}</span>
+                                                    </span>
+                                                    {{calques.currentSub.texte}}
+                                                </span>
+                                            </td>
+                                            <td><input class="form-control unvalidate"
+                                                       ng-model="calques.currentSub.taillePolice" required></td>
+                                            <td>
+                                                <select class="form-control unvalidate"
+                                                        ng-model="calques.currentSub.couleurTexte" required>
+                                                    <option value="noir">{{'Admin.Avance.Calque.black' | translate}}
+                                                    </option>
+                                                    <option value="rouge">{{'Admin.Avance.Calque.red' | translate}}
+                                                    </option>
+                                                </select>
+                                            </td>
+                                            <td><input class="form-control unvalidate"
+                                                       ng-model="calques.currentSub.coordonneeX" required></td>
+                                            <td><input class="form-control unvalidate"
+                                                       ng-model="calques.currentSub.coordonneeY" required></td>
+                                            <td><input class="form-control unvalidate"
+                                                       ng-model="calques.currentSub.page" required></td>
+                                            <td><input type="checkbox" class="unvalidate"
+                                                       ng-model="calques.currentSub.postSignature"></td>
+                                            <td>
+                                                <span ng-click="calques.saveSub('commentaire')"
+                                                      class="btn btn-info force-display"
+                                                      ng-disabled="!commentaires.$valid" title="Enregistrer">
+                                                    <i class="fa fa-save"></i>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </form>
+                            </div>
+                        </div>
+
+
+                        <div class='tab-pane' id='metadatas'>
+                            <div class="col-md-12">
+                                <h5>{{'Admin.Avance.Calque.metadatas' | translate}}</h5>
+                                <span class="btn btn-success"
+                                      ng-click="calques.newSub('metadata')">
+                                    <i class="fa fa-plus"></i>
+                                    Ajouter une metadonnée
+                                </span>
+                                <form name="metadonnees">
+                                    <span ng-if="!(calques.current.metadata.length > 0 || (!empty(calques.currentSub) && calques.currentSub.type === 'metadata'))">{{'Admin.Avance.Calque.metadata_none' | translate}}</span>
+                                    <table ng-if="calques.current.metadata.length > 0 || (!empty(calques.currentSub) && calques.currentSub.type === 'metadata')"
+                                           class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>{{'Admin.Avance.Calque.metadata' | translate}}</th>
+                                            <th>{{'Admin.Avance.Calque.font_size' | translate}}</th>
+                                            <th>{{'Admin.Avance.Calque.x_coord' | translate}}</th>
+                                            <th>{{'Admin.Avance.Calque.y_coord' | translate}}</th>
+                                            <th>{{'Admin.Avance.Calque.page' | translate}}</th>
+                                            <th>{{'Admin.Avance.Calque.after_sig' | translate}}</th>
+                                            <th>{{'Admin.Avance.Calque.action' | translate}}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="meta in calques.current.metadata">
+                                            <td>{{calques.selectOptions[meta.qnameMD]}}</td>
+                                            <td>{{meta.taillePolice}}</td>
+                                            <td>{{meta.coordonneeX}}</td>
+                                            <td>{{meta.coordonneeY}}</td>
+                                            <td>{{meta.page}}</td>
+                                            <td><input type="checkbox" disabled class="checkbox unvalidate"
+                                                       ng-model="meta.postSignature"></td>
+                                            <td>
+                                                <span ng-click="calques.deleteSub(meta, 'metadata')"
+                                                      class="btn btn-danger force-display" title="Supprimer">
+                                                    <i class="fa fa-trash-o"></i>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr ng-if="!empty(calques.currentSub) && calques.currentSub.type === 'metadata'">
+                                            <td>
+                                                <select class="form-control unvalidate"
+                                                        ng-model="calques.currentSub.qnameMD" required="required"
+                                                        ng-options="opt.id as opt.value for opt in calques.selectOptions | orderObjectById">
+
+                                                </select>
+                                            </td>
+                                            <td><input class="form-control unvalidate"
+                                                       ng-model="calques.currentSub.taillePolice" required="required"
+                                                       type="number" min="1" step="0.5"></td>
+                                            <td><input class="form-control unvalidate"
+                                                       ng-model="calques.currentSub.coordonneeX" required="required">
+                                            </td>
+                                            <td><input class="form-control unvalidate"
+                                                       ng-model="calques.currentSub.coordonneeY" required="required">
+                                            </td>
+                                            <td><input class="form-control unvalidate"
+                                                       ng-model="calques.currentSub.page" required="required"></td>
+                                            <td><input type="checkbox" class="unvalidate"
+                                                       ng-model="calques.currentSub.postSignature"></td>
+                                            <td>
+                                                <span ng-click="calques.saveSub('metadata')"
+                                                      class="btn btn-info force-display"
+                                                      ng-disabled="!metadonnees.$valid" title="Enregistrer">
+                                                    <i class="fa fa-save"></i>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

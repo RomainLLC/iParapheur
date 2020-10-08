@@ -1,0 +1,156 @@
+<div class="row-fluid">
+    <div class="col-md-4">
+        <!-- contenu -->
+        <div class="col-md-11 col-md-offset-1">
+            <form name="statistiques" novalidate="novalidate">
+
+                <div class="row">
+                    <h2 class="col-md-6">{{'stats.my_stats' | translate}}</h2>
+                </div>
+
+
+                <h3>{{'Admin.Stats.Period' | translate}}</h3>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="debut">{{'Admin.Stats.Begin' | translate}}
+
+                            </label>
+                            <span class="float-right label label-danger"><i class="fa fa-warning"></i> {{'Mandatory' | translate}}</span>
+
+                            <div class="input-group col-md-12" style="padding: 0;">
+                                <input id="debut" name="debut" placeholder="{{'Admin.Stats.Begin' | translate}}"
+                                       ng-cloak="" from="true" linked="#fin" ip-id="debut" return-format="@"
+                                       readonly="true" ip-datepicker type="text" ng-model="opt.fromTime"
+                                       class="form-control unvalidate" required>
+                                <span ng-if="!!opt.fromTime" ng-click="opt.fromTime = undefined"
+                                      class="pointer input-group-addon">
+                                    <i class="fa fa-times"></i>
+                                </span>
+                                <label for="debut" ng-if="!opt.fromTime" class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="fin">{{'Admin.Stats.End' | translate}}
+
+
+                            </label>
+                            <span class="float-right label label-danger"><i class="fa fa-warning"></i> {{'Mandatory' | translate}}</span>
+
+                            <div class="input-group col-md-12" style="padding: 0;">
+                                <input id="fin" name="fin" placeholder="{{'Admin.Stats.End' | translate}}" ng-cloak=""
+                                       linked="#debut" ip-id="fin" return-format="@" readonly="true" ip-datepicker
+                                       type="text" ng-model="opt.toTime" class="form-control unvalidate" required>
+                                <span ng-if="!!opt.toTime" ng-click="opt.toTime = undefined"
+                                      class="pointer input-group-addon">
+                                        <i class="fa fa-times"></i>
+                                    </span>
+                                <label for="fin" ng-if="!opt.toTime" class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="cumul">{{'Admin.Stats.Cumulation' | translate}}</label>
+                    <select class="form-control unvalidate" id="cumul" name="cumul" ng-model="cumul">
+                        <option value="1">{{'Admin.Stats.Day' | translate}}</option>
+                        <option value="2">{{'Admin.Stats.Week' | translate}}</option>
+                        <option value="3">{{'Admin.Stats.Month' | translate}}</option>
+                        <option value="4">{{'Admin.Stats.Year' | translate}}</option>
+                    </select>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3>{{'Admin.Stats.Filter_Types' | translate}}</h3>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="type">{{'Admin.Stats.Types' | translate}}</label>
+                                <select id="type" ng-model="opt.options.type" name="type"
+                                        class="form-control unvalidate"
+                                        ng-options="type.id as type.id for type in types">
+                                    <option value="">{{'None' | translate}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="subType">{{'Admin.Stats.Sub' | translate}}</label>
+                                <select id="subType" ng-model="opt.options.sousType" name="subType"
+                                        class="form-control unvalidate"
+                                        ng-options="sousType for sousType in (types | findWithId:opt.options.type).sousTypes">
+                                    <option value="">{{'None' | translate}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h3>{{'Admin.Stats.Filter_Desks' | translate}}</h3>
+
+                        <div>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-search fa-fw"></i></span>
+                                <input placeholder="{{'Search' | translate}}" ng-model="searchBureau"
+                                       ng-change="listHandler.search(searchBureau)" class="form-control unvalidate"
+                                       type="text">
+                            </div>
+
+                            <div style="height:15px;" ng-if="listHandler.maxSize < listHandler.total">
+                                        <span class="text-warning float-right">
+                                            {{listHandler.page*listHandler.maxSize +1}}-{{(listHandler.page+1)*listHandler.maxSize < listHandler.total ? (listHandler.page+1)*listHandler.maxSize : listHandler.total}} {{'On' | translate}} {{listHandler.total}}
+                                            <span class="btn btn-default fa fa-chevron-left force-display"
+                                                  ng-disabled="listHandler.page === 0"
+                                                  ng-click="listHandler.pagine(-1)"></span>
+                                            <span class="btn btn-default fa fa-chevron-right force-display"
+                                                  ng-disabled="listHandler.page+1 >= (listHandler.total/listHandler.maxSize)"
+                                                  ng-click="listHandler.pagine(1)"></span>
+                                        </span>
+                            </div>
+                        </div>
+
+                        <span class="text-info" ng-if="listHandler.searchResultSubList.length === 0"><i
+                                class="fa fa-info-circle"></i> {{'Admin.Stats.No_Result' | translate}}</span>
+
+                        <ul class="list-unstyled nav nav-pills nav-stacked adminContent list-data">
+                            <li ng-repeat="bureau in listHandler.searchResultSubList">
+                                <a ng-click="listHandler.selectElement(bureau)">
+                                    <i ng-if="bureau.id === listHandler.selectedBureau.id"
+                                       class="fa fa-check text-success"></i> {{bureau.name}}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <span class="btn btn-success force-display" ng-disabled="!statistiques.$valid"
+                      ng-click="updateChartData()">
+                            <i class="fa fa-eye"></i>
+                            {{'stats.visual' | translate}}</span>
+            </form>
+        </div>
+    </div>
+    <div class="col-md-8" ng-if="gettingStats || datalength > 0">
+        <div>
+            <h2 style="display:inline-block">{{'Admin.Stats.Result' | translate}} - {{'Admin.Circuits.Wo_Desk' |
+                translate }} {{currentBureauName}}</h2>
+        </div>
+
+        <div style="top:100px;" class="nextDossierInfo" ng-if="gettingStats">
+                    <span class="text text-info">
+                        {{'Admin.Stats.Getting_Info' | translate}}
+                    </span>
+            <span style="position: relative; width: 0px; z-index: 2000000000; right: 120px; top: 100px;"
+                  us-spinner="{radius:20, width:8, length: 16}"></span>
+        </div>
+        <div ng-if="datalength > 0" chart id="chartstat" dataset="data" cumul="savedCumul" datalength="datalength"/>
+    </div>
+</div>

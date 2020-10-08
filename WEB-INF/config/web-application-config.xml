@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+      http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+      http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+    <!-- SURF: required infrastructure imports -->
+    <import resource="surf-config.xml"/>
+
+    <!-- The controllers are autodetected POJOs labeled with the @Controller annotation. -->
+    <context:component-scan base-package="surf.controllers" use-default-filters="false">
+        <context:include-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
+    </context:component-scan>
+
+
+    <!--context:component-scan base-package="surf.controllers"/-->
+
+    <!-- Maps requests to @Controllers based on @RequestMapping("path") annotation values
+If no annotation-based path mapping is found, Spring MVC sends a 404 response and logs a pageNotFound warning. -->
+    <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+        <property name="order" value="1"/>
+
+        <!-- SURF: required interceptors -->
+        <property name="interceptors">
+            <list>
+                <ref bean="requestContextInterceptor"/>
+                <ref bean="themeInterceptor"/>
+                <ref bean="previewContextInterceptor"/>
+            </list>
+        </property>
+        <property name="defaultHandler">
+            <!-- If no @Controller match, map path to a view to render; e.g. the "/index" path would map to the view named "index" -->
+            <bean class="org.springframework.web.servlet.mvc.UrlFilenameViewController"/>
+        </property>
+    </bean>
+    
+    <bean id="connector.remoteclient" parent="connector.remoteclient.abstract"
+          class="org.springframework.extensions.webscripts.connector.RemoteClient" scope="prototype" />
+    <bean id="connector.remoteclient.abstract" abstract="true">
+        <!-- name of authentication ticket that can be optionally applied to proxied URLs -->
+        <!-- the ticket value is set programmatically by the connector making use of the RemoteClient instance -->
+        <property name="ticketName"><value>alf_ticket</value></property>
+        <!-- default encoding to use when decoded responses when none is set in the response - set to null for platform default -->
+        <property name="defaultEncoding"><null/></property>
+        <!-- default Content-Type header value to use for PUT or POST responses when none is supplied -->
+        <property name="defaultContentType"><value>application/octet-stream</value></property>
+        <!-- size of the internal byte buffer used when proxying responses -->
+        <property name="bufferSize"><value>4096</value></property>
+        <!-- the http.connection.timeout value in milliseconds to apply to HTTP connections -->
+        <property name="connectTimeout"><value>10000</value></property>
+        <!-- the http.socket.timeout value in milliseconds to apply to HTTP connections -->
+        <property name="readTimeout"><value>600000</value></property>
+        <!-- the maximum number of redirects to process from a GET request while maintaining cookies -->
+        <property name="maxRedirects"><value>10</value></property>
+        <!-- the RemoteClient will automatically use an HTTP proxy if the JVM property 'http.proxyHost' is set
+             but this feature can be disabled by setting this bean property to false -->
+        <property name="allowHttpProxy"><value>true</value></property>
+        <!-- the RemoteClient will automatically use an HTTPS proxy if the JVM property 'https.proxyHost' is set
+             but this feature can be disabled by setting this bean property to false -->
+        <property name="allowHttpsProxy"><value>true</value></property>
+        <!-- the set of headers to remove when proxying a request from a client to a remote endpoint -->
+        <property name="removeRequestHeaders">
+            <set>
+                <value>Cookie</value>
+            </set>
+        </property>
+        <!-- the set of headers to remove when proxying a response from a remote endpoint to a client -->
+        <property name="removeResponseHeaders">
+            <set>
+                <value>Set-Cookie</value>
+            </set>
+        </property>
+        <!-- http.tcp.nodelay setting - default is true -->
+        <property name="httpTcpNodelay"><value>true</value></property>
+        <!-- http.connection.stalecheck setting - default is true -->
+        <property name="httpConnectionStalecheck"><value>true</value></property>
+    </bean>
+
+    <bean id="phSession" parent="baseScriptExtension" class="org.adullact.iparapheur.surf.Session">
+        <property name="extensionName" value="session"/>
+    </bean>
+    
+    <bean id="fileFactory" class="org.adullact.iparapheur.surf.ParapheurDossierFactory">
+        <property name="connectorService" ref="connector.service"/>
+    </bean>
+    
+    <bean id="iParapheur" parent="baseScriptExtension" class="org.adullact.iparapheur.surf.IParapheurController">
+        <property name="extensionName" value="iparapheur"/>
+        <property name="fileFactory" ref="fileFactory"/>
+    </bean>
+   
+    <bean id="setBureauController" class="surf.webscripts.ParapheurController">
+    </bean>
+
+    <bean id="createDossierController" class="surf.webscripts.CreateDossierController">
+
+    </bean>
+
+    <bean id="base64Encode" class="surf.webscripts.Base64Encode">
+
+    </bean>
+
+    <bean id="serverInformationsController" class="surf.webscripts.ServerInformationsController">
+
+    </bean>
+
+    <bean id="certificateInformationController" class="surf.webscripts.CertificateInformationController">
+
+    </bean>
+    
+    <bean id="printController" class="surf.webscripts.PrintController">
+
+    </bean>
+
+    <bean id="reloadPropertiesController" class="surf.webscripts.ReloadPropertiesController">
+
+    </bean>
+
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+
+    <!-- Surcharge du bean Surf cacheSeconds=-1 ne produit pas les effets attendus -->
+    <bean id="resourceController" class="org.springframework.extensions.webscripts.servlet.mvc.ResourceController">
+        <property name="cacheSeconds" value="2800" />
+        <property name="useExpiresHeader"><value>true</value></property>
+        <property name="useCacheControlHeader"><value>true</value></property>
+
+    </bean>
+
+    <bean id="logoutController" class="surf.webscripts.LogoutController">
+        <property name="cacheSeconds" value="-1" />
+        <property name="useExpiresHeader"><value>true</value></property>
+        <property name="useCacheControlHeader"><value>true</value></property>
+    </bean>
+    <!--
+    <bean id="encodeFileController" class="surf.webscripts.EncodeFileController">
+        <property name="commandClass" value="surf.webscripts.MultiPartFileUploadBean"/>
+    </bean-->
+
+    <bean id="webframework.factory.user.parapheur" class="org.adullact.iparapheur.surf.ParapheurUserFactory" parent="webframework.factory.base" />
+
+    <bean id="webframeworkHandlerMappings" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping"
+          abstract="true">
+        <property name="urlPathHelper" ref="urlPathHelper"/>
+        <property name="pathMatcher" ref="pathMatcher"/>
+        <property name="interceptors">
+            <list>
+                <ref bean="requestContextInterceptor"/>
+                <ref bean="themeInterceptor"/>
+                <ref bean="previewContextInterceptor"/>
+            </list>
+        </property>
+        <property name="mappings">
+            <value>
+                /preview/**=previewController
+                /remote/**=remoteController
+                /proxy/**=endpointController
+                /resource/**=resourceController
+                /dologin/**=loginController
+                /dologout/**=logoutController
+                /setCurrentBureau/**=setBureauController
+                /createDossier/**=createDossierController
+                /editDossier/**=createDossierController
+                /addDocument/**=createDossierController
+                /addSignature/**=createDossierController
+                /addVisuel/**=createDossierController
+                /changeSignature/**=createDossierController
+                /print/**=printController
+                /reloadProperties/**=reloadPropertiesController
+                /informations/**=serverInformationsController
+                /attestStatus/**=serverInformationsController
+                /base64encode/**=base64Encode
+                /certInfo/**=certificateInformationController
+            </value>
+        </property>
+    </bean>
+
+    <bean id="PHRequestProxy" class ="org.adullact.iparapheur.surf.RequestProxy">
+    </bean>
+
+    <bean id="AuthenticationFilter" class ="org.adullact.iparapheur.surf.AuthenticationFilter">
+    </bean>
+
+    <!--mvc:view-controller path="/" view-name="bureau"/-->
+
+    <!-- SURF: interoperability with annotated controllers -->
+    <!-- Enables annotated @Controllers; responsible for invoking an annotated POJO @Controller when one is mapped. -->
+    <bean id="annotationMethodHandlerAdapter"
+          class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+        <property name="alwaysUseFullPath" value="true"/>
+
+        <property name="order" value="1"/>
+    </bean>
+
+    <!-- SURF: interoperability with simple controllers -->
+    <!-- Support for Default Surf Controllers -->
+    <bean id="simpleControllerHandlerAdapter"
+          class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter">
+    </bean>
+
+    <bean id="themeManager" parent="baseScriptExtension" class="org.adullact.iparapheur.repo.ThemeServiceImpl">
+        <property name="extensionName" value="themeManager"/>
+    </bean>
+
+    <bean id="defaultThemeLoader" class="org.adullact.iparapheur.repo.DefaultThemeLoaderImpl" autowire="constructor">
+        <property name="locations">
+            <list>
+                <value>/css/themes/*.css</value>
+            </list>
+        </property>
+    </bean>
+    
+    <bean id="viewResolver"
+          class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
+          <property name="prefix">
+              <value>/WEB-INF/pages/</value>
+           </property>
+          <property name="suffix">
+             <value>.html</value>
+          </property>
+    </bean>
+
+    <!-- SURF: support for Surf application config -->
+    <import resource="classpath*:org/springframework/extensions/surf/application/*-context.xml"/>
+
+    <!-- SURF: support for custom application configuration overrides -->
+    <import resource="classpath*:org/springframework/extensions/surf/override/*-context.xml"/>
+
+</beans>

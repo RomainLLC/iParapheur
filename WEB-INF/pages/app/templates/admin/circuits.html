@@ -1,0 +1,334 @@
+<script type="text/ng-template" id="popover_detail_circuit">
+    <ul class="list-unstyled">
+        <li ng-repeat="etape in circuit.etapes">
+            <span ng-switch="etape.actionDemandee.toLowerCase()">
+                <i ng-switch-when="visa" class="fa fa-check-square-o"></i>
+                <i ng-switch-when="signature" class="fa ls-signature"></i>
+                <i ng-switch-when="mailsecpastell" class="fa fa-envelope-o"></i>
+                <i ng-switch-when="mailsec" class="fa fa-envelope"></i>
+                <i ng-switch-when="tdt" class="fa fa-cloud-upload"></i>
+                <i ng-switch-when="cachet" class="fa ls-stamp"></i>
+                <i ng-switch-when="archivage" class="fa fa-flag-checkered"></i>
+            </span>
+            <span ng-if="!etape.parapheur">
+                {{(etape.transition | translate) + "..."}}
+            </span>
+            <span ng-if="!!etape.parapheur">
+                {{etape.parapheurName}}
+            </span>
+        </li>
+    </ul>
+</script>
+
+<script type="text/ng-template" id="popover_used_by">
+    <div class="text text-success wrap"><i class="fa fa-info-circle"></i> {{'Admin.Circuits.Wo_Used_Info' | translate}} :<ul style="padding-left:15px; "><li ng-repeat="(key, value) in selectedCircuit.usedBy">{{key}}<ul style="padding-left:10px;"><li ng-repeat="subtype in value">{{subtype}}</li></ul></li></ul></div>
+</script>
+
+<div class="row-fluid">
+    <div class="menuAdmin col-md-3 label label-info headertop" removeonsize="992" classes-list="label label-info" ng-include src="'partials/adminNavbar.html'"></div>
+    <div>
+        <!-- contenu -->
+        <div class="col-md-3 adminContent">
+            <div class="col-md-12">
+                <h2 class="helper-inline-block">{{'Admin.Circuits.Wo_Title' | translate}}</h2>
+                <span style="float: right; margin-bottom:10px;" class="btn btn-success" ng-click="newCircuit()">
+                    <i class="fa fa-plus"></i>
+                    {{'Admin.Circuits.Wo_Create' | translate}}
+                </span>
+            </div>
+
+            <div class="well col-md-12">
+                <form role="form" name='searchCircuitForm' novalidate>
+                    <div>
+                        <div class="input-group">
+                            <input placeholder="{{'Search' | translate}}" ng-model="search" class="form-control unvalidate" type="text">
+                            <span class="input-group-btn">
+                                <button class="btn btn-success force-display" ng-click="searchCircuit(search)" type="submit">
+                                    <i class="fa fa-search"></i>
+                                    {{'Search' | translate}}
+                                </button>
+                            </span>
+                        </div>
+                        <div style="height:18px;" ng-if="circuits[0].total != circuits.length && total > 0">
+                            <span class="text-warning float-right">
+                                {{page*maxSize +1}}-{{(page+1)*maxSize < total ? (page+1)*maxSize : total}} {{'On' | translate}} {{total}}
+                                <span class="btn btn-default fa fa-chevron-left force-display" ng-disabled="page === 0" ng-click="pagine(-1)"></span>
+                                <span class="btn btn-default fa fa-chevron-right force-display" ng-disabled="page+1 >= (total/maxSize)" ng-click="pagine(1)"></span>
+                            </span>
+                        </div>
+                    </div>
+                </form>
+
+                <ul class="list-unstyled nav nav-pills nav-stacked adminContent list-data">
+                    <li ng-repeat="circuit in circuits | filter:{name:filter} | orderBy:'name'" ng-class="selectedCircuit.name == circuit.name ? 'active' : ''" data-placement="bottom"
+                        bs-popover="'popover_detail_circuit'" data-trigger="hover">
+                        <a style="padding-left:34px !important;" ng-click="circuit.editable ? selectCircuit(circuit) : undefined">
+                            <span style="left:15px; top:2px; position:absolute;">
+                                <i class="fa fa-code" ng-if="hasMetadataMandatory(circuit)" tooltip="Métadonnées obligatoires définies"></i>
+                            </span>
+                            <span style="display:inline-block; padding-right:50px;">{{circuit.name}}</span>
+
+                            <span style="right:15px; top:2px; position:absolute;">
+                                <i ng-if="circuit.isUsed" tooltip="{{'Admin.Circuits.Wo_Used' | translate}}" class="fa fa-info-circle pull-right" ng-class="selectedCircuit.name == circuit.name ? 'text-inverse' : 'text-success'"></i>
+                                <i tooltip="Supprimer" ng-if="circuit.editable && !circuit.isUsed" ng-click="deleteCircuit(circuit); $event.stopPropagation();" ng-class="selectedCircuit.name == circuit.name ? 'text-inverse' : 'text-danger'" class="fa-trash-o fa pull-right"></i>
+                                <i tooltip="{{'Admin.Circuits.Wo_Copy' | translate}}" ng-click="newCircuit(circuit); $event.stopPropagation();" class="fa-copy fa pull-right text-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+        <div ng-show="!empty(selectedCircuit)" class="col-md-9 adminContent">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="col-md-8">
+                        <form name="creationCircuit">
+
+                            <div class="input-group">
+                                <input ng-disabled="selectedCircuit.isUsed" ng-pattern="/^[0-9a-zA-ZÀ-ÿ \-_.]+[0-9a-zA-ZÀ-ÿ]$/"
+                                       name="nomCircuit" id="nomCircuit" ng-model="selectedCircuit.name"
+                                       ng-change="saved = false;" type="text" class="form-control"
+                                       placeholder="{{'Admin.Circuits.Wo_New' | translate}}" ng-required="true">
+                                    <span class="input-group-btn">
+                                        <span ng-click="saveCircuit()" class="btn btn-primary">
+                                            <i class="fa fa-floppy-o"></i>
+                                            {{'Save' | translate}}
+                                        </span>
+                                        <span class="btn btn-primary" disabled>
+                                            <i class="fa fa-floppy-o"></i>
+                                            {{'Save' | translate}}
+                                        </span>
+                                        <span bs-popover="'popover_used_by'" data-placement="bottom" data-trigger="hover" ng-if="selectedCircuit.isUsed" class="btn btn-success">
+                                            <i class="fa fa-info-circle"></i>
+                                        </span>
+                                    </span>
+                            </div><!-- /input-group -->
+
+                        </form>
+                    </div>
+                    <div class="col-md-4">
+                        <span class="text-success" ng-if="saved"><i class="fa fa-check"></i> {{'Admin.Circuits.Wo_Saved' | translate}}</span>
+                        <span class="text-info" ng-if="selectedCircuit.isCopy"><i class="fa fa-info-circle"></i> {{'Admin.Circuits.Wo_Copied' | translate}}</span>
+                        <span class="text-warning" ng-if="((circuits | filter:{name:selectedCircuit.name}:true).length > 0 && selectedCircuit.name && selectedCircuit.name !== baseName && !saved) || alreadyExist"><i class="fa fa-warning"></i> {{'Admin.Circuits.Wo_Exist' | translate}}</span>
+                    </div>
+                </div><!-- /.col-lg-6 -->
+            </div><!-- /.row -->
+
+            <div class="col-md-3">
+                <div style="margin-top: 20px; margin-left: 20px; overflow-y: auto; margin-bottom:10px;" class="fixbottom">
+                    <div class="bubble step0">
+                        <span class="action">
+                            <i class="fa fa-check-square-o"></i>
+                        </span>
+                        <p>
+                            {{'Admin.Circuits.Wo_Creation' | translate}}  {{'EMETTEUR' | translate}}...
+                        </p>
+                    </div>
+                    <div ng-mouseover="overclass = 'showEtape'" ng-mouseleave="overclass = ''" ng-click="addEtape(0)" class="add-step" style="display: inline-block;">
+                        <div class="vertical-line">
+
+                            <p ng-class="overclass">
+                                <i class="fa fa-plus-circle"></i> {{'Admin.Circuits.Wo_Step' | translate}}
+                            </p>
+                        </div>
+                    </div>
+                    <ul class="circuit-graph" ui-sortable="sortableOpts" ng-model="selectedCircuit.etapes">
+                        <li ng-class="'step' + ($index+1)" ng-if="!$last" ng-repeat="etape in selectedCircuit.etapes">
+                            <div>
+                                <div class="{{'bubble ' + etape.actionDemandee + ' ' + (selectedEtape.index == $index ? 'active' : '')}}" ng-mousedown="selectEtape(etape, $index)">
+                                    <span style="position:absolute; left: 5%;">
+                                        <i class="fa fa-code" ng-if="etape.listeMetadatas.length > 0" tooltip="Métadonnées obligatoires définies" tooltip-placement="right"></i>
+                                    </span>
+                                    <span class="action" ng-switch="etape.actionDemandee.toLowerCase()">
+                                        <i ng-switch-when="visa" class="fa fa-check-square-o"></i>
+                                        <i ng-switch-when="signature" class="fa ls-signature"></i>
+                                        <i ng-switch-when="mailsecpastell" class="fa fa-envelope-o"></i>
+                                        <i ng-switch-when="mailsec" class="fa fa-envelope"></i>
+                                        <i ng-switch-when="tdt" class="fa fa-cloud-upload"></i>
+                                        <i ng-switch-when="cachet" class="fa ls-stamp"></i>
+                                        <i ng-switch-when="archivage" class="fa fa-flag-checkered"></i>
+                                    </span>
+                                    <p>
+                                        {{(etape.transition == 'PARAPHEUR') ? etape.parapheurName : (etape.transition | translate) + "..."}}
+                                    </p>
+                                    <span tooltip="{{'Admin.Circuits.Wo_RemoveStep' | translate}}" ng-click="deleteEtape($index)" class="deleteEtapeBtn text-danger fa fa-trash-o"></span>
+                                </div>
+                                <div ng-init="overclass=''" ng-mouseover="overclass = 'showEtape'" ng-mouseleave="overclass = ''" ng-click="addEtape($index+1)" class="add-step">
+                                    <div class="vertical-line">
+                                        <p ng-class="overclass">
+                                            <i class="fa fa-plus-circle"></i> {{'Admin.Circuits.Wo_Step' | translate}}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="bubble" ng-class="selectedCircuit.etapes[selectedCircuit.etapes.length-1].actionDemandee + (selectedEtape.index == selectedCircuit.etapes.length-1 ? ' active' : '') + (' step' + selectedCircuit.etapes.length)" ng-click="selectEtape(selectedCircuit.etapes[selectedCircuit.etapes.length-1], selectedCircuit.etapes.length-1)">
+
+                        <span class="action" ng-switch="selectedCircuit.etapes[selectedCircuit.etapes.length-1].actionDemandee.toLowerCase()">
+                            <i ng-switch-when="visa" class="fa fa-check-square-o"></i>
+                            <i ng-switch-when="signature" class="fa ls-signature"></i>
+                            <i ng-switch-when="mailsecpastell" class="fa fa-envelope-o"></i>
+                            <i ng-switch-when="mailsec" class="fa fa-envelope"></i>
+                            <i ng-switch-when="tdt" class="fa fa-cloud-upload"></i>
+                            <i ng-switch-when="cachet" class="fa ls-stamp"></i>
+                            <i ng-switch-when="archivage" class="fa fa-flag-checkered"></i>
+                        </span>
+
+                        <p>
+                            {{(selectedCircuit.etapes[selectedCircuit.etapes.length-1].transition == 'PARAPHEUR') ? selectedCircuit.etapes[selectedCircuit.etapes.length-1].parapheurName : (selectedCircuit.etapes[selectedCircuit.etapes.length-1].transition | translate) + "..."}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div ng-show="!empty(selectedEtape)" class="col-md-9" style="margin-top:20px;">
+                <div class="well">
+                    <div class="row">
+                        <div ng-if="selectedEtape.actionDemandee != 'ARCHIVAGE'" class="col-md-4">
+                            <h3 class="control-label">{{'Admin.Circuits.Wo_Action' | translate}}</h3>
+                            <div>
+                                <span class="step-select" ng-click="selectedEtape.actionDemandee = 'SIGNATURE'" ng-class="selectedEtape.actionDemandee == 'SIGNATURE' ? 'active' : ''">
+                                    <i class="fa fa-2x ls-signature"></i>
+                                    Signature
+                                </span>
+                                <span class="step-select" ng-click="selectedEtape.actionDemandee = 'VISA'" ng-class="selectedEtape.actionDemandee == 'VISA' ? 'active' : ''">
+                                    <i class="fa fa-2x fa-check-square-o"></i>
+                                    Visa
+                                </span>
+                                <span class="step-select" ng-click="selectedEtape.actionDemandee = 'MAILSEC'" ng-class="selectedEtape.actionDemandee == 'MAILSEC' ? 'active' : ''">
+                                    <i class="fa fa-2x fa-envelope"></i>
+                                    Mail sécurisé S²LOW
+                                </span>
+                                <span class="step-select" ng-click="selectedEtape.actionDemandee = 'MAILSECPASTELL'" ng-class="selectedEtape.actionDemandee == 'MAILSECPASTELL' ? 'active' : ''">
+                                    <i class="fa fa-2x fa-envelope-o"></i>
+                                    Mail sécurisé PASTELL
+                                </span>
+                                <span class="step-select" ng-click="selectedEtape.actionDemandee = 'TDT'" ng-class="selectedEtape.actionDemandee == 'TDT' ? 'active' : ''">
+                                    <i class="fa fa-2x fa-cloud-upload"></i>
+                                    Télé-transmission
+                                </span>
+                                <span class="step-select" ng-click="selectedEtape.actionDemandee = 'CACHET'" ng-class="selectedEtape.actionDemandee == 'CACHET' ? 'active' : ''">
+                                    <i class="fa fa-2x ls-stamp"></i>
+                                    Cachet serveur
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <h3 class="control-label">{{'Admin.Circuits.Wo_Desk' | translate}}</h3>
+                            <div>
+                                <p style="font-size: 14px;"><b>{{'Admin.Circuits.Wo_Actual' | translate}} :</b>
+                                    <span>
+                                        {{selectedEtape.transition == 'PARAPHEUR' ? selectedEtape.parapheurName : ((selectedEtape.transition | translate) + "...")}}
+                                    </span>
+                                </p>
+                                <div>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-search fa-fw"></i></span>
+                                        <input placeholder="{{'Search' | translate}}" ng-model="searchEtapeBureau" ng-change="listHandler.search(searchEtapeBureau)" class="form-control unvalidate" type="text">
+                                    </div>
+
+                                    <div style="height:15px;" ng-if="listHandler.total > 0 && listHandler.total > listHandler.maxSize">
+                                        <span class="text-warning float-right">
+                                            {{listHandler.page*listHandler.maxSize +1}}-{{(listHandler.page+1)*listHandler.maxSize < listHandler.total ? (listHandler.page+1)*listHandler.maxSize : listHandler.total}} {{'On' | translate}} {{listHandler.total}}
+                                            <span class="btn btn-default fa fa-chevron-left force-display" ng-disabled="listHandler.page === 0" ng-click="listHandler.pagine(-1)"></span>
+                                            <span class="btn btn-default fa fa-chevron-right force-display" ng-disabled="listHandler.page+1 >= (listHandler.total/listHandler.maxSize)" ng-click="listHandler.pagine(1)"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <ul class="list-unstyled nav nav-pills nav-stacked adminContent list-data">
+                                    <li>
+                                        <a ng-click="listHandler.selectEtape('EMETTEUR')">
+                                            <i ng-class="selectedEtape.transition === 'EMETTEUR' ? 'fa fa-arrow-right text-success' : ''"></i><i ng-if="selectedEtape.transition !== 'EMETTEUR'" style="width: 13px;display:inline-block;"></i> {{'EMETTEUR' | translate}}...
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a ng-click="listHandler.selectEtape('CHEF_DE')">
+                                            <i ng-class="selectedEtape.transition === 'CHEF_DE' ? 'fa fa-arrow-right text-success' : ''"></i><i ng-if="selectedEtape.transition !== 'CHEF_DE'" style="width: 13px;display:inline-block;"></i> {{'CHEF_DE' | translate}}...
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a ng-click="listHandler.selectEtape('VARIABLE')">
+                                            <i ng-class="selectedEtape.transition === 'VARIABLE' ? 'fa fa-arrow-right text-success' : ''"></i><i
+                                                ng-if="selectedEtape.transition !== 'VARIABLE'"
+                                                style="width: 13px;display:inline-block;"></i> {{'VARIABLE' |
+                                            translate}}...
+                                        </a>
+                                    </li>
+                                    <li ng-repeat="bureau in listHandler.bureaux.slice(listHandler.page*listHandler.maxSize, (listHandler.page*listHandler.maxSize) + listHandler.maxSize)">
+                                        <a ng-click="listHandler.selectEtape(bureau)">
+                                            <i ng-class="selectedEtape.parapheur === bureau.id ? 'fa fa-arrow-right text-success' : ''"></i><i ng-if="selectedEtape.parapheur !== bureau.id" style="width: 13px;display:inline-block;"></i> {{bureau.title}}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h3 class="control-label">{{'Admin.Circuits.Wo_Notifs' | translate}}</h3>
+                            <span class="text-info"><i class="fa fa-info-circle"></i> {{'Admin.Circuits.Wo_Search_Info' | translate}}</span>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-search fa-fw"></i></span>
+                                <input type="text" class="form-control unvalidate" placeholder="{{'Search' | translate}}" ng-model="filterBureau">
+                            </div>
+                            <div class="col-md-6" >
+                                <label class="control-label">{{'Admin.Circuits.Wo_Desks' | translate}} :</label>
+                                <ul class="list-unstyled">
+                                    <li class="hover-li pointer" ng-click="selectedEtape.listeNotification.push('_emetteur_')" ng-show="selectedEtape.listeNotification.indexOf('_emetteur_') == -1">
+                                        <i class="fa fa-plus-circle text-success" ></i>
+                                        {{'EMETTEUR' | translate}}...
+                                    </li>
+                                    <li class="hover-li pointer" ng-click="selectedEtape.listeNotification.push(bureau.id)" ng-repeat="bureau in listHandler.list | filter:filterBureau | notSameId:selectedEtape.listeNotification" ng-show="$index <= 9">
+                                        <i class="fa fa-plus-circle text-success"></i>
+                                        {{bureau.title}}
+                                    </li>
+                                </ul>
+                                <p class="label label-info" ng-if="(listHandler.list | filter:filterBureau | notSameId:selectedEtape.listeNotification).length > 10">Tous les bureaux ne sont pas affichés, merci d'affiner votre recherche</p>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="control-label">{{'Admin.Circuits.Wo_Notified' | translate}} :</label>
+                                <div class="text-info" ng-if="selectedEtape.listeNotification.length === 0"><i class="fa fa-info-circle"></i> {{'Admin.Circuits.Wo_Notified_None' | translate}}</div>
+                                <ul class="list-unstyled">
+                                    <li class="hover-li pointer" ng-repeat="notifie in selectedEtape.listeNotification" ng-click="selectedEtape.listeNotification.splice(selectedEtape.listeNotification.indexOf(notifie), 1)">
+                                        <i class="fa fa-times-circle text-danger"></i>
+                                        {{notifie | getNameWithId:listHandler.list}}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h3 class="control-label">Métadonnées obligatoires</h3>
+                            <span class="text-info col-md-12">
+                                <i class="fa fa-info-circle"></i>
+                                Ces métadonnées seront à renseigner lors de la validation de cette étape
+                            </span>
+                            <div class="col-md-6">
+                                <label class="control-label">Disponibles :</label>
+                                <ul class="list-unstyled">
+                                    <li class="hover-li pointer" ng-click="selectedEtape.listeMetadatas.push(meta.id)" ng-repeat="meta in listMetaHandler.list | notSameId:selectedEtape.listeMetadatas">
+                                        <i class="fa fa-plus-circle text-success"></i>
+                                        {{meta.name}}
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="control-label">Obligatoires :</label>
+                                <ul class="list-unstyled">
+                                    <li class="hover-li pointer" ng-repeat="meta in selectedEtape.listeMetadatas" ng-click="selectedEtape.listeMetadatas.splice(selectedEtape.listeMetadatas.indexOf(meta), 1)">
+                                        <i class="fa fa-times-circle text-danger"></i>
+                                        {{listMetaHandler.getNameWithId(meta).name}}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <button ng-click="deleteEtape()" ng-if="selectedEtape.actionDemandee != 'ARCHIVAGE'" class="btn-block btn btn-danger">
+                        <i class="fa fa-trash-o"></i>
+                        {{'Admin.Circuits.Wo_RemoveStep' | translate}}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

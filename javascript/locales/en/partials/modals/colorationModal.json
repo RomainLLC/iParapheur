@@ -1,0 +1,11 @@
+{
+  "colorationModal": {
+    "color_creation_for_the_dashboard": "Color creation for the dashboard",
+    "property": "Property",
+    "comparator": "Comparator",
+    "background_color": "Background color",
+    "text_color": "Text color",
+    "current_conditions": "Current conditions",
+    "text_sample": "Text sample"
+  }
+}

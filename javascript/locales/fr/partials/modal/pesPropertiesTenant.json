@@ -1,0 +1,8 @@
+{
+  "pesPropertiesTenant": {
+    "policy_identifier_id": "Policy Identifier ID",
+    "policy_identifier_description": "Policy Identifier Description",
+    "policy_digest": "Policy Digest",
+    "sp_uri": "SP URI"
+  }
+}

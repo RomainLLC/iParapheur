@@ -1,0 +1,31 @@
+{
+  "actions": {
+    "sendToSecretariat": "Envoyer au secrétariat",
+    "print": "Imprimer",
+    "sendByMail": "Envoyer par e-mail",
+    "chainCircuit": "Enchaîner un circuit",
+    "notifyAndAddConsultationCredentials": "Ajouter des bureaux à notifier",
+    "transferFolderToSign": "Transférer le dossier à signer",
+    "transferFolderToValid": "Transférer le dossier à viser",
+    "askingForAdditionalOpinion": "Demande d'avis complémentaire",
+    "eventLog": "Afficher le Journal d'événements",
+    "addSignatureToFolder": "Ajouter une signature au dossier",
+    "expectedExentions": "Extensions atendues",
+    "signatureSaved": "Signature sauvegardée",
+    "returnFolder": "Renvoyer le dossier",
+    "showSecureMailInformations": "Afficher les informations du Mail-Sécurisé",
+    "readingRequired": "Lecture obligatoire",
+    "applyRemorseRight": "Exercer mon droit de remords",
+    "correctAndReissue": "Corriger et émettre à nouveau",
+    "edit": "Modifier",
+    "sendToHeliosTdt": "Envoyer au TdT (Helios)",
+    "sendToActesTdt":"Envoyer au TdT (Actes)",
+    "paperSignature": "Signer Papier",
+    "reject": "Rejeter",
+    "archive": "Déplacer dans les dossiers à extraire",
+    "sendBySecureMail": "Envoyer par Mail-Sécurisé",
+    "delete": "Supprimer",
+    "refresh-attest": "Récupérer les attestations de signature en erreur",
+    "seal": "Cacheter"
+  }
+}

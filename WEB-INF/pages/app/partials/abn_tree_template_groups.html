@@ -1,0 +1,17 @@
+<ul class="nav nav-list nav-pills nav-stacked abn-tree">
+    <li ng-show="header" class="nav-header">{{ header }}</li>
+    <li ng-show="show" ng-repeat="row in tree_rows | filter:{visible:true} | filter:search track by row.branch.id" ng-class="'level-' + (row.branch.profondeur) + (row.branch.selected ? ' active':'')" class="abn-tree-row abn-tree-animate">
+
+        <a ng-if="!showCheck" ng-click="user_clicks_branch(row.branch)">
+            <i ng-class="row.tree_icon" ng-init="row.branch.expanded = true" ng-click="row.branch.expanded = !row.branch.expanded" class="indented tree-icon fa"> </i>
+            <span class="indented tree-label">{{row.branch.shortName}}</span>
+            <i ng-if="row.branch.shortName !== 'ALFRESCO_ADMINISTRATORS' && row.branch.shortName !== 'GESTIONNAIRE_CIRCUITS_IPARAPHEUR'" ng-click="user_delete_branch(row.branch)" tooltip="Supprimer" class="fa fa-trash-o" style="color:red; float:right;"></i>
+        </a>
+
+        <div ng-if="showCheck">
+            <input class="unvalidate" ng-show="showCheck" type="checkbox" name="{{row.branch.id + identifier}}" id="{{row.branch.id + identifier}}" ng-click="change_check_value($event, row.branch.id)" ng-checked="array.indexOf(row.branch.id) != -1" ng-disabled="row.branch.id == remove">
+            <i ng-class="row.tree_icon" ng-click="row.branch.expanded = !row.branch.expanded" class="indented tree-icon fa"> </i>
+            <label for="{{row.branch.id + identifier}}" style="font-weight: normal;" class="indented tree-label">{{ row.branch.shortName }}</label>
+        </div>
+    </li>
+</ul>

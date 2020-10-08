@@ -1,0 +1,15 @@
+{
+  "circuit": {
+    "validationCircuit": "Validation circuit",
+    "download": "Download",
+    "withCertificateOf": "With the certificate of",
+    "issuedBy": "Issued by",
+    "signatureDate": "Signature date",
+    "certificateValidity": "Certificate validity",
+    "from-start-to-end-": "From -start- to -end-",
+    "noCircuitDefinedForThisFolder": "No circuit defined for this folder",
+    "the-date-from-person-": "The -date- by -person-",
+    "dateFormat": "MM/dd/yyyy, at H:mm",
+    "signature_information": "Signature information"
+  }
+}

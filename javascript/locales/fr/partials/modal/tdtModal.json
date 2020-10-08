@@ -1,0 +1,14 @@
+{
+  "tdtModal": {
+    "sending_helios_folders": "Envoi de dossier(s) - HELIOS",
+    "public_annotation": "Annotation publique",
+    "private_annotation": "Annotation privée",
+    "acte_subject": "Nature de l'acte",
+    "type_selection": "Sélection du type",
+    "acte_number": "Numéro de l'acte",
+    "decision_date": "Date de la décision",
+    "required_input_help": "Requis",
+    "folder_list": "Liste des dossiers",
+    "handled_folders": "Dossier(s) traité(s)"
+  }
+}

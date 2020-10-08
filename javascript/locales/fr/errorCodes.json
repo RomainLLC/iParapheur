@@ -1,0 +1,38 @@
+{
+  "ErrorCodes": {
+    "_comment": "http://aduwiki.extranet.adullact.org/doku.php?id=open_parapheur#code_d_erreurs",
+
+    "401": "Re-connexion nécessaire",
+    "403": "Vous n'avez pas l'autorisation de modifier cette ressource",
+    "500": "Erreur au traitement de la requête",
+    "502": "Erreur de passerelle",
+    "503": "Le service est indisponible",
+    "504": "Le timeout de la requête a été atteint",
+
+    "999": "Erreur au traitement de la requête",
+
+    "1001": "L'id du dossier renseigné n'est pas valide",
+    "1002": "L'id du bureau renseigné n'est pas valide",
+    "1003": "L'id du document renseigné n'est pas valide",
+    "1004": "L'id de l'annotation renseigné n'est pas valide",
+
+    "2001": "Le Type/Sous-type sélectionné n'autorise pas les documents XML",
+    "2002": "Les documents XML sont interdits en annexes",
+    "2011": "Le protocole Helios requiert un XML en document principal",
+    "2012": "Le protocole Helios n'autorise pas les documents en annexes",
+    "2021": "La signature PAdES n'autorise que des PDF en documents principaux",
+
+    "3001": "Le document PDF est protégé",
+    "3002": "Document principal manquant",
+    "3003": "Le document existe déjà",
+    "3004": "Le document PDF est invalide ou protégé",
+    "3005": "Les documents DOCX, XLSX et PPTX ne sont pas acceptés",
+
+    "4000": "Erreur inconnue à la télétransmission",
+    "4001": "Aucun TDT sélectionné pour le Type du dossier",
+    "4002": "Le protocole ACTES n'est pas supporté par le TDT sélectionné",
+    "4050": "Erreur avec le certificat utilisé pour la télétransmission",
+    "4051": "Le certificat utilisé pour la télétransmission a expiré"
+
+  }
+}
